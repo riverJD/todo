@@ -2,6 +2,7 @@
 
 {"title": "My Project", 
 "description": "Useful information about my project goes here.",
-"priority": 2, // default priority (medium)
-"toDoCount": 0
+"priority": 2, 
+"toDoCount": 0,
+"deadline": "07/25/2022"
 }

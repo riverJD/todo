@@ -35,7 +35,11 @@ const createToDo = (title, deadline, priority, description) => {
 
 
         }
-        return {setDescription, getDescription, setTitle, getTitle, getContent}
+
+        
+        console.log(createToDo);
+
+        return {setDescription, getDescription, setTitle, getTitle, getContent,}
     })();
 
 
@@ -61,7 +65,7 @@ const getToDoUrgency = (toDoObject) => {
 
 
 
-export {createToDo as ToDo, getToDoUrgency as getUrgency};
+export {createToDo as Task, getToDoUrgency as getUrgency};
 
 
 
