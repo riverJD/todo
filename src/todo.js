@@ -13,14 +13,15 @@ const HIGHURGENCY = 3;
 
 
 // Factory to create a ToDo object
-const ToDo = (title = "My Project", deadline, urgency = MEDURGENCY, parentProject) => {
+const ToDo = (title, deadline, urgency, parentProject) => {
 
 
     // Object patitleters 
 
     this.title = title;
     this.urgency = urgency;
-    this.description = ""
+    this.description = "";
+    this.parentProject = parentProject;
 
     // timeline methods for getting 
     this.startDate = "Today"
@@ -38,18 +39,14 @@ const updateDeadline = (newDeadline) => {
     return this.deadline = newDeadline;
 }
 
-return {title, urgency, description, updateDescription }
+
 
 
 };
 
 
 
-
-
-
-
-export {ToDo};
+export { ToDo};
 
 
 

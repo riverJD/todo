@@ -1,6 +1,8 @@
 import './style.css';
-import { buildToDo, ToDo } from './todo';
+//import { ToDo} from './todo.js';
 
+const ToDo = require('./todo.js');
 
+console.log(ToDo);
 
-let testing = buildToDo("Test", "tomorrow", 3, null);
+let testing = new ToDo("Test", "tomorrow", 3, null);
