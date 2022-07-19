@@ -8,29 +8,22 @@ const destDate = new Date("7/25/2022");
 const test = Task("New ggTitle", destDate, 3, "Test Description");
 const test2 = Task("Seocnd Task", destDate, 1, "Nothin rly")
 //const restProject = Project("PROJECTO", destDate, 2, "Project Scription")
-const restProject = Project(Task("Project Title", destDate, 2, "PROJECT DESCRIPTION"))
+const testProject = Project("Project Title", destDate, 2, "PROJECT DESCRIPTION")
+
+const altProject = Project();
 
 
-for (let items in test){
-    console.log(items);
-}
-console.log(test.getContent())
+console.log(testProject)
+console.log(altProject)
 
 
-console.log(getUrgency(test));
+altProject.tasks.addTask(test)
+altProject.tasks.addTask(test2)
 
-console.log(test);
+testProject.tasks.addTask(test)
 
-console.log("\n\n\n")
+console.log(testProject.content.getTitle())
+console.log(altProject.content.getTitle())
 
-
-
-restProject.tasks.addTask(test);
-restProject.tasks.addTask(test2);
-
-console.log(restProject.tasks.getTaskList())
-
-console.log(restProject.tasks._taskList[0])
-
-restProject.tasks.completeTask(test2);
-console.log(restProject.tasks._taskList);
+console.log(altProject.tasks.getTaskList())
+console.log(testProject.tasks.getTaskList())

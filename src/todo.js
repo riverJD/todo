@@ -3,13 +3,13 @@
 // Helper functions located in utils file
 import { isThisSecond, isEqual, formatDistance, formatISO, format } from 'date-fns';
 import { setAttributes, createElement as element } from './utils.js';
-
+import task from "./default-task.json";
 // Constants
 
 // Factory to create a ToDo object
-const createToDo = (title, deadline, priority, description) => {
+const createToDo = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal) => {
 
-
+    
   
     // Time/Date based attributes
     const startDate = new Date(Date.now())
@@ -31,8 +31,6 @@ const createToDo = (title, deadline, priority, description) => {
     const getContent = () => {
 
         return {title, deadline, priority, description};
-
-
     }
 
  

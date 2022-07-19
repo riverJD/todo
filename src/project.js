@@ -5,16 +5,23 @@ import defaultProject from "./default-project.json"
 // Create an object containing todo objects
 
 
-const Project = (info) => {
+// Project object factory
+// Project(title, date, deadline, priority, description, goal)
+// Load defaults from default-project.json
+const Project = (title = defaultProject.title, deadline = defaultProject.deadline, priority = defaultProject.priority, description = defaultProject.description, goal = defaultProject.goal ) => {
 
     // Define own info with Task object
     //const info = Task(defaultProject.title, defaultProject.deadline, defaultProject.priority, defaultProject.description)
     
+    const startDate = new Date(Date.now())
+    const timeRemaining = deadline - Date.now();
+
     let _taskList = [];
     let _completedTasks = [];
     let _incompleteTasks = [];
 
-  
+
+    // task module
     const tasks = (() => {
 
         const addTask = (task) => {
@@ -36,16 +43,41 @@ const Project = (info) => {
         const getTaskList = () => _taskList;
         const getCompletedTasks = () => _completedTasks;
         const getInCompleteTasks = () => _incompleteTasks;
+        const taskCount = _taskList.length;
 
-        return {addTask, deleteTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks, _taskList}
+        return {taskCount, addTask, deleteTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks, _taskList}
 
     })();
   
+    const content = (() => {
 
-    const taskCount = _taskList.length;
+    // Modify Content
+    const setTitle = (newTitle) => {
+        title = newTitle;
+    }
 
-    return {...info, tasks,}
+    const getTitle = () => title;
+
+    const setDescription = (newDescription) => {
+        description = newDescription
+    }
+
+    const getDescription = () => description;
+
+    const getContent = () => {
+
+        return {title, deadline, priority, description};
+    }
+
+    return {setTitle, getTitle, setDescription, getDescription, getContent}
+
+
+    
+})();
+
+  return { tasks, _taskList, content}
 }
+
 
 
 
