@@ -15,35 +15,31 @@ const createToDo = (title, deadline, priority, description) => {
     const startDate = new Date(Date.now())
     const timeRemaining = deadline - Date.now();
 
-    const content = (() => {
 
-        const setTitle = (newTitle) => {
-            title = newTitle;
-        }
+    const setTitle = (newTitle) => {
+        title = newTitle;
+    }
 
-        const getTitle = () => title;
+    const getTitle = () => title;
 
-        const setDescription = (newDescription) => {
-            description = newDescription
-        }
-    
-        const getDescription = () => description;
-    
-        const getContent = () => {
+    const setDescription = (newDescription) => {
+        description = newDescription
+    }
 
-            return {title, deadline, priority, description};
+    const getDescription = () => description;
 
+    const getContent = () => {
 
-        }
-
-        
-        console.log(createToDo);
-
-        return {setDescription, getDescription, setTitle, getTitle, getContent,}
-    })();
+        return {title, deadline, priority, description};
 
 
-    return ({priority,  content, startDate, timeRemaining,});
+    }
+
+ 
+ 
+
+
+    return ({title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
 
 }
 

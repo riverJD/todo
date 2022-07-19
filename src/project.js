@@ -9,7 +9,6 @@ const Project = (info) => {
 
     // Define own info with Task object
     //const info = Task(defaultProject.title, defaultProject.deadline, defaultProject.priority, defaultProject.description)
-
     
     let _taskList = [];
     let _completedTasks = [];
@@ -38,14 +37,14 @@ const Project = (info) => {
         const getCompletedTasks = () => _completedTasks;
         const getInCompleteTasks = () => _incompleteTasks;
 
-        return {addTask, deleteTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks}
+        return {addTask, deleteTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks, _taskList}
 
     })();
   
 
     const taskCount = _taskList.length;
 
-    return {...info, tasks}
+    return {...info, tasks,}
 }
 
 
