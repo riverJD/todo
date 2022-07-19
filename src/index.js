@@ -1,8 +1,16 @@
 import './style.css';
-//import { ToDo} from './todo.js';
+import { getUrgency, ToDo} from './todo.js';
 
-const ToDo = require('./todo.js');
 
-console.log(ToDo);
+const destDate = new Date("7/25/2022");
 
-let testing = new ToDo("Test", "tomorrow", 3, null);
+const test = ToDo("New ggTitle", destDate, 3, "Test Description");
+
+
+for (let items in test){
+    console.log(items);
+}
+console.log(test.content.getContent())
+
+
+console.log(getUrgency(test));

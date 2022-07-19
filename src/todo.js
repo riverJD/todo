@@ -1,52 +1,67 @@
 //  To do object, creation and modification
 
 // Helper functions located in utils file
-import { isThisSecond } from 'date-fns';
+import { isThisSecond, isEqual, formatDistance, formatISO, format } from 'date-fns';
 import { setAttributes, createElement as element } from './utils.js';
 
 // Constants
-const LOWURGENCY = 1;
-const MEDURGENCY = 2;
-const HIGHURGENCY = 3;
-
-
-
 
 // Factory to create a ToDo object
-const ToDo = (title, deadline, urgency, parentProject) => {
+const createToDo = (title, deadline, priority, description) => {
 
 
-    // Object patitleters 
+  
+    // Time/Date based attributes
+    const startDate = new Date(Date.now())
+    const timeRemaining = deadline - Date.now();
 
-    this.title = title;
-    this.urgency = urgency;
-    this.description = "";
-    this.parentProject = parentProject;
+    const content = (() => {
 
-    // timeline methods for getting 
-    this.startDate = "Today"
-    this.curDate = "Today's Date"
-    this.deadline = deadline;
+        const setTitle = (newTitle) => {
+            title = newTitle;
+        }
+
+        const getTitle = () => title;
+
+        const setDescription = (newDescription) => {
+            description = newDescription
+        }
+    
+        const getDescription = () => description;
+    
+        const getContent = () => {
+
+            return {title, deadline, priority, description};
 
 
+        }
+        return {setDescription, getDescription, setTitle, getTitle, getContent}
+    })();
 
-const updateDescription = (description) => {
-    return this.description = description
+
+    return ({priority,  content, startDate, timeRemaining,});
+
 }
 
-const updateDeadline = (newDeadline) => {
-    console.log(this.deadline);
-    return this.deadline = newDeadline;
+
+// Lower urgency is considered more urgent. Closest to zero is most urgent.
+const getToDoUrgency = (toDoObject) => {
+        
+    // Get days onl
+    const urgency = format(toDoObject.timeRemaining, "dd");
+    console.log(urgency * toDoObject.priority);
+
+    return urgency;
 }
 
 
 
 
-};
 
 
 
-export { ToDo};
+
+export {createToDo as ToDo, getToDoUrgency as getUrgency};
 
 
 
