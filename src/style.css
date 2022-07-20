@@ -1,0 +1,38 @@
+:root{
+    --greyBlue: rgb(156, 164, 199);
+    --happyBlue: rgb(126, 150, 228);
+    --bg-color: var(--happyBlue, blue);
+
+    --low-priority: rgb(162, 178, 233);
+    --med-priority: rgb(162, 178, 233);
+}
+
+body{
+    background-color:var(--bg-color, blue)
+}
+
+.test{
+    background-color: rgba(243, 238, 210, 0.918);
+    height: 200px;
+    width: 200px;
+    display: fixed;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 10px 10px 5px 5px;
+}
+
+.sub{
+    
+    height: 50%;
+    width: 50%;
+    background-color: rgba(8, 199, 24, 0.76);
+    border-radius: 50%;
+}
+
+.task {
+    height: 200px;
+    width: 200px;
+
+    background-color: peachpuff;
+}

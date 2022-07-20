@@ -1,11 +1,12 @@
 // Helper functions
-// Restaurant page
 
+// create element of specific type, with attributes attached
 const createElement = (type, attributes) => {
     
     const newElement = document.createElement(`${type}`);
     if (attributes == null) return newElement;
     setAttributes(newElement, attributes);
+    
     return newElement;
 }
 

@@ -43,7 +43,7 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
 
 
 // Lower urgency is considered more urgent. Closest to zero is most urgent.
-const getToDoUrgency = (toDoObject) => {
+const getTaskUrgency = (toDoObject) => {
         
     // Get days onl
     const urgency = format(toDoObject.timeRemaining, "dd");
@@ -59,7 +59,7 @@ const getToDoUrgency = (toDoObject) => {
 
 
 
-export {createToDo as Task, getToDoUrgency as getUrgency};
+export {createToDo as Task, getTaskUrgency as getUrgency};
 
 
 
