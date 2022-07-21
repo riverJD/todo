@@ -52,17 +52,25 @@ function createImageLink(url, image, alt){
 
 // Make a generic display element, with a container, title, and content section
 // ID and class will be generated from name (string)
-
+// [Container]-->  [TitleContainer-->Title+Button] + Content
 const makeContainer = (name) => {
 
  
 
     const container = createElement('div', {'class': `${name.toLowerCase()}-container`})
+
+    // Title and Button
+    const titleContainer = createElement('div', {'class': "title-container", 'id': `${name.toLowerCase()}-title-container`});
     const title = createElement('h4', {'class': `${name.toLowerCase()}-header`});
+    const titleButton = createElement('button', {'class': 'container-button expand-content-btn'}, );
+    titleContainer.appendChild(title);
+    titleContainer.appendChild(titleButton);
+
+
     const content = createElement('div', {'class':  `${name.toLowerCase()}-content`});
 
     title.textContent = name;
-    container.appendChild(title);
+    container.appendChild(titleContainer);
     container.appendChild(content);
 
     return container;

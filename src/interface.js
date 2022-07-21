@@ -19,7 +19,7 @@ const renderProject = (projectObject) => {
     const project = element('div', {'class': "project", "id": `${projectTitle }-id`})
 
     const content = element('div', {'class': 'project-content', 'id': `${projectTitle}-content`})
-    project.appendChild(content)
+   
     
     const renderData = () => {
  
@@ -38,35 +38,53 @@ const renderProject = (projectObject) => {
     description.textContent = proj.getDescription();
     content.appendChild(description)
 
-    // Deadline/Priority/Urgency Container
+    // Deadline/Priority/Urgency Container (These will interact a lot)
     const deadlineContainer = makeContainer("Deadline");
-    const deadlineContent = deadlineContainer.querySelector('.deadline-content');
-    
-    
 
     const priorityButton = element('button', {'class': "priority-button project-item"});
+    const deadlineContent = deadlineContainer.querySelector('.deadline-content');    
+   
+    const deadline = element('div', {'class': "project-deadline project-item", "id": `${proj.deadline}-deadline`});
+    deadline.textContent = format(proj.getDeadline(), "MM.dd.yyyy");
+    deadlineContent.appendChild(deadline);
+    deadlineContainer.appendChild(deadlineContent)
+
 
     //const priority = element('div', {'class': "project-priority project-item", "id": `${projectTitle }-priority`});
     priorityButton.textContent = proj.getPriority();
     
     deadlineContent.appendChild(priorityButton);
    
-
+    //Objectives 
     const goal = element('div', {'class': "project-goal project-item", "id": `${projectTitle }-goal`});
     goal.textContent = proj.getGoal();
-    project.appendChild(goal);    
-    const deadline = element('div', {'class': "project-deadline project-item", "id": `${proj.deadline}-deadline`});
-    deadline.textContent = format(proj.getDeadline(), "MM.dd.yyyy");
-    deadlineContent.appendChild(deadline);
-    deadlineContainer.appendChild(deadlineContent)
+    content.appendChild(goal); 
+    
+    
+
     content.appendChild(deadlineContainer)
     
     }
 
-
     renderData();
 
+    const projectButtons = () => {
 
+        
+
+        const buttonContainer = element('div', {'class': 'button-bar'});
+
+        // Will replace with image
+        const closeProject = element('input', {'type': 'button', 'id': 'close-project', 'value': 'Close'});
+        
+        buttonContainer.appendChild(closeProject)
+
+        return buttonContainer;
+    }
+    
+    project.appendChild(projectButtons());
+
+    project.appendChild(content)
 
     console.log(project)
     return project;
