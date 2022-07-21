@@ -1,7 +1,7 @@
 import './style.css';
 import { getUrgency, Task} from './todo.js';
 import { Project } from './project';
-import { renderTask } from './interface';
+import { addProjectButton, renderProject, renderTask } from './interface';
 
 
 const destDate = new Date("7/25/2022");
@@ -23,12 +23,6 @@ altProject.tasks.addTask(test2)
 
 testProject.tasks.addTask(test)
 
-console.log(testProject.content.getTitle())
-console.log(altProject.content.getTitle())
-
-console.log(altProject.tasks.getTaskList())
-console.log(testProject.tasks.getTaskList())
-
 
 const content = document.querySelector("#content");
 
@@ -36,6 +30,9 @@ const test3 = renderTask(test);
 console.log(test3)
 
 content.appendChild(test3)
-content.appendChild(renderTask(test2))
-content.appendChild(renderTask(Task("Dynamic!", "07/30/22", 2, "Descripto Chjange")))
+const testProj = renderProject(testProject);
+
+content.append(testProj)
+
+
 

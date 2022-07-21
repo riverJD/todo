@@ -51,24 +51,38 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
     const content = (() => {
 
     // Modify Content
+    
     const setTitle = (newTitle) => {
         title = newTitle;
     }
-
     const getTitle = () => title;
+
+    const setDeadline = (newDeadline) => deadline = newDeadline;
+    const getDeadline = () => deadline;
+
 
     const setDescription = (newDescription) => {
         description = newDescription
     }
-
     const getDescription = () => description;
+
+    const setPriority = (newPriority) => {
+
+        priority = newPriority;
+    }
+
+    const getPriority = () => priority;
+
+    const setGoal = (newGoal) => goal = newGoal;
+
+    const getGoal = () => goal;
 
     const getContent = () => {
 
         return {title, deadline, priority, description};
     }
 
-    return {setTitle, getTitle, setDescription, getDescription, getContent}
+    return {setTitle, getTitle, getDeadline, setDeadline, setDescription, getDescription, getContent, setPriority, getPriority, setGoal, getGoal, }
 
 
     

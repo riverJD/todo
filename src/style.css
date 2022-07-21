@@ -1,7 +1,10 @@
 :root{
     --greyBlue: rgb(156, 164, 199);
-    --happyBlue: rgb(126, 150, 228);
+    --happyBlue: rgb(192, 204, 241);
+    --postityellow: rgb(222, 231, 222);
     --bg-color: var(--happyBlue, blue);
+
+    --project-color: var(--postityellow, white)
 
     --low-priority: rgb(162, 178, 233);
     --med-priority: rgb(162, 178, 233);
@@ -12,7 +15,7 @@ body{
 }
 
 .test{
-    background-color: rgba(243, 238, 210, 0.918);
+    background-color: rgba(192, 144, 144, 0.918);
     height: 200px;
     width: 200px;
     display: fixed;
@@ -30,9 +33,161 @@ body{
     border-radius: 50%;
 }
 
-.task {
-    height: 200px;
-    width: 200px;
+.task{
+    height: 150px;
+    width: 500px;
 
-    background-color: peachpuff;
+    background-color: rgb(39, 75, 173);
 }
+
+.project{
+    margin: 0;
+    padding: 10px;
+    height: 300px;
+
+    width: min(600px, 90%);
+    min-width: 300px;
+    
+    border: 1px solid rgb(17, 21, 83);
+    border-radius: 3px;
+    background-color: var(--postityellow)
+}
+
+.project-content{
+    outline: 1px dotted red;
+    height: 100%;
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+
+    grid-template-areas: 
+    
+    "title tasks"
+    "summary tasks"
+    "summary tasks"
+    "summary tasks"
+    "objective deadline";
+
+
+}
+
+.project-item{
+
+    outline: 1px dotted blue;
+
+}
+
+.project-title{
+
+    grid-area: title;
+
+}
+
+.project-desc{
+
+    grid-area: summary;
+
+}
+
+.project-goal{
+    outline: 1px solid purple;
+    grid-area: objective;
+}
+
+.deadline-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-area: deadline;
+}
+
+.deadline-container > .deadline-header{
+
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.deadline-contaioner > .deadline-content{
+
+    grid-area: 2 / 2 / -1 / -1;
+}
+
+.priority-button{
+
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+.tasks-container{
+    display: flex;
+    flex-direction: column;
+
+
+    grid-area: tasks;
+}
+
+
+
+
+
+
+.task-card{
+
+}
+
+.project-card{
+    
+}
+
+
+#modal-container{
+    margin-top: 20vh;
+    align-self: center;
+    display: none;
+    justify-content: center;
+   
+    position: fixed;
+    z-index: 1;
+    width: min(100vw, 380px);
+    height: min(100vh, 500px);
+     background-color: rgba(184, 135, 11, 0.082);
+     
+ }
+ 
+ #add-modal{
+     display: flex;
+     
+     align-self: center;
+     justify-content: center;
+     align-items: center;
+     
+     width: min(100vw, 340px);
+     height: min(100vh, 480px);
+ 
+  
+ 
+     overflow: auto;
+     border: 2px dashed var(--alt-card-border-color);
+     border-radius: 5px;
+     box-shadow: 2px 2px 5px;
+     background-color: var(--card-border-color, #647431);
+ 
+ }
+ 
+ .add-content{
+ 
+     width: min(100vh, 300px);
+     height:  min(100vh, 450px);
+ 
+     display: flex;
+     flex-direction: column;
+     background-color: var(--card-bg-color)
+ }
+
+ #project-button{
+    margin-top: 5%;
+    padding: 5px;
+    font-size: clamp(1rem, 24px, 2rem);
+    border-radius: 5px;
+}
+ 
