@@ -45,10 +45,27 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .task{
-    height: 150px;
-    width: 500px;
+    border: 5px solid black;
+    height: 400px;
+    width: min(250px, 70%);
 
-    background-color: rgb(39, 75, 173);
+    background-color: rgb(114, 135, 192);
+
+    display: grid;
+
+    grid-template-rows: 1fr 2fr 1fr;
+    grid-template-areas: 
+    "title title"
+    "content content"
+    "objective deadline";
+}
+
+#content{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
 }
 
 .project{

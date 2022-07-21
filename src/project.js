@@ -1,5 +1,6 @@
 import { Task, getUrgency } from "./todo";
 import defaultProject from "./default-project.json"
+import { parseISO, toDate } from "date-fns";
 
 // Create an object containing todo objects
 
@@ -12,6 +13,8 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
     // Define own info with Task object
     //const info = Task(defaultProject.title, defaultProject.deadline, defaultProject.priority, defaultProject.description)
     
+    deadline = new Date(deadline);
+   
     const startDate = new Date(Date.now())
     const timeRemaining = deadline - Date.now();
 
@@ -59,7 +62,6 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
 
     const setDeadline = (newDeadline) => deadline = newDeadline;
     const getDeadline = () => deadline;
-
 
     const setDescription = (newDescription) => {
         description = newDescription

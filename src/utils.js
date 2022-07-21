@@ -62,7 +62,7 @@ const makeContainer = (name) => {
     // Title and Button
     const titleContainer = createElement('div', {'class': "title-container", 'id': `${name.toLowerCase()}-title-container`});
     const title = createElement('h4', {'class': `${name.toLowerCase()}-header`});
-    const titleButton = createElement('button', {'class': 'container-button expand-content-btn'}, );
+    const titleButton = createElement('input', {'type': 'button', 'id': `${name.toLowerCase()}-button`, 'class': 'container-button expand-content-btn', 'value': '+'}, );
     titleContainer.appendChild(title);
     titleContainer.appendChild(titleButton);
 
