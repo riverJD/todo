@@ -110,7 +110,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .project{
     height: 300px;
-    width: min(600px, 90%);
+    width: min(600px, 98%);
     min-width: 300px;
     
 
@@ -132,11 +132,11 @@ h1,h2,h3,h4,h5,p, ul, li{
 .project-content{
     outline: 1px dotted red;
     height: 80%;
-    width: 90%;
+    width: 98%;
 
     display: grid;
 
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 3fr 2fr;
     grid-template-rows: repeat(5, 1fr);
 
     grid-template-areas: 
@@ -208,9 +208,23 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-area: tasks;
 }
 
+.mini-task{
 
+    display: flex;
+    outline: 1px solid magenta;
 
+}
 
+.mini-button{
+    flex: 1;
+
+}
+
+.mini-finish, .mini-delete{
+    flex: 0;
+    width: 2rem;
+    text-align: center;
+}
 
 
 .task-card{

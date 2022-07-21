@@ -1,6 +1,6 @@
 {"title": "My Task", 
-"description": "Describe task here.",
-"priority": 2, 
-"goal": "Create three projects.",
+"description": "Useful information about your task goes here.  What specifically are you looking to accomplish?  ",
+"priority": 1, 
+"goal": "Your goal, how you decide whether a task is complete.",
 "deadline": "8/12/2022"
 }

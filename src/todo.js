@@ -3,8 +3,8 @@
 // Helper functions located in utils file
 import { isThisSecond, isEqual, formatDistance, formatISO, format } from 'date-fns';
 import { setAttributes, createElement as element } from './utils.js';
-//import task from "./default-task.json";
-import task from "./example-task.json";
+import task from "./default-task.json";
+//import task from "./example-task.json";
 // Constants
 
 // Factory to create a ToDo object

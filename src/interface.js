@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { element, makeContainer, setAttributes } from "./utils";
 import defaultProject from "./default-project.json"
 import defaultTask from "./default-task.json";
+import { Task } from "./todo";
 
 
 // Interface for adding tasks and projects.
@@ -70,11 +71,15 @@ const renderProject = (projectObject) => {
     const tasks = () => {
         const tasks = makeContainer("Tasks");
         const addTask = element('input', {'type':'button', 'id': 'add-task-button', 'value': '++'})
-        addTask.addEventListener('click', (e) => createTask(e));
+       
         const sample = element('div');
         sample.textContent = 'sample'
         tasks.appendChild(addTask)
+        
+        // Attaches a new task to both the DOM element and Project Objects
+        addTask.addEventListener('click', (e, ) => createTask(e.target.parentNode, projectObject));
         tasks.insertBefore(sample, addTask);
+       
         return tasks;
     }
     content.appendChild(tasks());
@@ -109,7 +114,9 @@ const renderProject = (projectObject) => {
 
     
     parent.appendChild(project);
-    createListeners();
+    createListeners(projectObject);
+    renderTaskList(projectObject);
+  
     
 
 }
@@ -173,6 +180,97 @@ const renderTask = (task) => {
     content.appendChild(taskPopup());
 }
 
+//Project object
+const renderTaskList = (project) => {
+
+    const list = document.querySelector('.tasks-container')
+   
+    const miniList = document.querySelectorAll('.mini-task');
+    miniList.forEach(mini => mini.remove())
+    console.log(project.tasks.getTaskList());
+
+    for (let task of project.tasks.getTaskList()){
+        console.log(task.getTitle());
+
+        const minitask = createMiniTask(project, task);
+        list.insertBefore(minitask, list.lastElementChild);
+
+    }
+    
+
+
+}
+
+
+const createTask = (container, project) => {
+
+    const task = Task();
+    renderTask(task);
+    const taskList = (container)
+    taskList.insertBefore(createMiniTask(project, task), taskList.lastElementChild);
+   
+    // Add to object
+    project.tasks.addTask(task);
+
+}
+
+// Creates a mini-task DOM element out of task object
+const createMiniTask = (project, task) => {
+    
+    const minitask = element('div', {'class':'mini-task'})
+   
+    console.log(task);
+    // Delete mini
+    const removeMini = element('input', {'type': 'button', 'class': 'mini-button mini-delete', 'value': '-'})
+    removeMini.addEventListener('click', () => deleteMini(project, task));
+    // Mark mini as complete
+    const finishMini = element('input', {'type': 'button', 'class': 'mini-button mini-finish', 'value': 'F'});
+    //Open Task in full view
+    const miniButton = element('input', {'type': 'button', 'class': 'mini-button', 'value': `${task.getTitle()}`});
+        
+    
+    
+    miniButton.addEventListener('click', () => renderTask(task))
+    minitask.appendChild(removeMini);
+    minitask.appendChild(miniButton);
+    minitask.appendChild(finishMini)
+    let bgcolor = minitask.style.backgroundColor;
+    const title = element('h4', {'class': 'mini-task-title'})
+    
+    
+    switch (task.getPriority()){
+
+        case 1: 
+             bgcolor = "red";
+            break;
+        case 2:
+            bgcolor = "yellow";
+            break;
+        case 3:
+            bgcolor = "green";
+            break;
+            
+            
+
+    }
+
+    minitask.appendChild(title);
+
+
+    return minitask;
+}
+
+const deleteMini = (project, task) => {
+
+    // Remove from tasklist
+    project.tasks.deleteTask(task);
+
+    // Refresh task list
+    renderTaskList(project);
+
+
+}
+
 const getProjectFromUser = () => {
 
 
@@ -180,20 +278,32 @@ const getProjectFromUser = () => {
 
 
 // Buttons and Listeners
-const createListeners = () => {
+const createListeners = (project) => {
 
     // Create listeners for buttons
     const edit = document.querySelector('#edit-project');
-    console.log(edit)
+    console.log(project.content.getPriority())
     const close = document.querySelector('#close-project');
- 
+    close.addEventListener('click', () => closeProject());
     // Content button (expand content)
     const tasks = document.querySelector('#tasks-button');
     
     const deadline = document.querySelector('#deadline-button');
-    const priority = document.querySelector('.priority-button');
+    const priority = document.querySelector('.priority-button.project-item');
+    priority.addEventListener('click', (e) => {
 
-    close.addEventListener('click', () => closeProject());
+        const currentPriority = project.content.getPriority();
+        console.log(currentPriority);
+
+        console.log('tf')
+        const updatedPriority = ((currentPriority) % 3) + 1;
+        project.content.setPriority(updatedPriority);
+        e.target.value = updatedPriority;
+        
+
+    })
+
+ 
    
 
 }
@@ -201,7 +311,7 @@ const createListeners = () => {
 const closeProject = () => {
     console.log('click')
     const project = document.querySelector('.project')
-
+   
     project.remove();
 
 

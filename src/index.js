@@ -7,7 +7,7 @@ import { addProjectButton, createListeners, renderProject, renderTask } from './
 const destDate = ("7/25/2022");
 
 const test = Task("New ggTitle", destDate, 3, "Test Description");
-const test2 = Task("Seocnd Task", destDate, 1, "Nothin rly")
+const test2 = Task("Second Task", destDate, 1, "Nothin rly")
 //const restProject = Project("PROJECTO", destDate, 2, "Project Scription")
 const testProject = Project("Project Title", destDate, 2, "PROJECT DESCRIPTION")
 
@@ -31,10 +31,13 @@ renderTask(Task());
 
 
 const NEWPROJ = Project();
+console.log(NEWPROJ.content.getPriority())
+
+NEWPROJ.tasks.addTask(Task());
+NEWPROJ.tasks.addTask(test2);
 
 
-
-renderProject(Project());
+renderProject(NEWPROJ);
 
 
 
