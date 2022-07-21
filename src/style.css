@@ -47,21 +47,61 @@ h1,h2,h3,h4,h5,p, ul, li{
 .task{
     border: 5px solid black;
     height: 400px;
-    width: min(250px, 70%);
+    width: min(300px, 90%);
+
+    padding: 10px;
 
     background-color: rgb(114, 135, 192);
 
     display: grid;
 
     grid-template-rows: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas: 
     "title title"
     "content content"
     "objective deadline";
 }
 
-#content{
+.task-title{
+    grid-area: title;
+}
 
+.task-desc{
+    grid-area: content;
+}
+
+.task-deadline{
+    font-size: 20px;
+}
+
+.task-deadline-container{
+    grid-area: deadline;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+.task-deadline-content{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+
+.task-header{
+    grid-row: 1 / 2;
+}
+
+
+.task-goal{
+    grid-area: objective;
+}
+
+
+#content{
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -151,6 +191,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .deadline-content{
     display: flex;
+    flex-direction: row-reverse;
     justify-content: space-between;
 }
 

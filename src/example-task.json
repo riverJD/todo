@@ -1,0 +1,6 @@
+{"title": "Complete project module", 
+"description": "Create project generation module for ToDo project",
+"priority": 1, 
+"goal": "Project factory returns completed object",
+"deadline": "7/24/2022"
+}

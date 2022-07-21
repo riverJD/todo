@@ -17,65 +17,67 @@ const renderProject = (projectObject) => {
     let proj = projectObject.content;
 
     const render = () => {
-    // Create skeleton
+    
+        // Create skeleton
     const projectTitle = proj.getTitle();
-
     const project = element('div', {'class': "project", "id": `${projectTitle }-id`})
     const content = element('div', {'class': 'project-content', 'id': `${projectTitle}-content`})
    
     // Loading of data into specified containers
     const renderData = () => {
+        
+        const title = () => {
+            const title = element('h2', {'class': "project-title project-item"});
+            title.textContent = projectTitle ;
+            return title;
+        }
+        content.appendChild(title());
+        
+        const description = () => {
+            const description = element('div', {'class': "project-desc project-item", 'id': `${projectTitle }-desc`});
+            description.textContent = proj.getDescription();
+            return description;
+        }
+        content.appendChild(description())
 
-    // Project elements
-    
-    const title = () => {
-    const title = element('h2', {'class': "project-title project-item"});
-    title.textContent = projectTitle ;
-        return title;
-    }
-    content.appendChild(title());
-    
-    const description = () => {
-    const description = element('div', {'class': "project-desc project-item", 'id': `${projectTitle }-desc`});
-    description.textContent = proj.getDescription();
-        return description;
-    }
-    content.appendChild(description())
+        // Deadline/Priority/Urgency Container (These will interact a lot)
+        const deadline = () => {
 
-    // Deadline/Priority/Urgency Container (These will interact a lot)
-    const deadline = () => {
+            const deadlineContainer = makeContainer("Deadline");
+            const deadlineContent = deadlineContainer.querySelector('.deadline-content');     
+            const deadline = element('div', {'class': "project-deadline project-item", "id": `${proj.deadline}-deadline`});
+            const priorityButton = element('input', {'type': 'button', 'class': "priority-button project-item", 'value': proj.getPriority()});
+            deadline.textContent = format(proj.getDeadline(), "MM.dd.yyyy");
+            deadlineContent.appendChild(deadline);
+            deadlineContainer.appendChild(deadlineContent);    
+            deadlineContent.appendChild(priorityButton);
+        
+            return deadlineContainer;
+        }
+        content.appendChild(deadline())
 
-    const deadlineContainer = makeContainer("Deadline");
-    const deadlineContent = deadlineContainer.querySelector('.deadline-content');     
-    const deadline = element('div', {'class': "project-deadline project-item", "id": `${proj.deadline}-deadline`});
-    const priorityButton = element('input', {'type': 'button', 'class': "priority-button project-item", 'value': proj.getPriority()});
-    deadline.textContent = format(proj.getDeadline(), "MM.dd.yyyy");
-    deadlineContent.appendChild(deadline);
-    deadlineContainer.appendChild(deadlineContent);    
-    deadlineContent.appendChild(priorityButton);
-   
-    return deadlineContainer;
-    }
-    content.appendChild(deadline())
-
-    //Objectives 
-    const goal = element('div', {'class': "project-goal project-item", "id": `${projectTitle }-goal`});
-    goal.textContent = proj.getGoal();
-    content.appendChild(goal); 
-    
-    
-
-    
-    
+        // Also known as objective
+        const goal = () => {
+            const goal = element('div', {'class': "project-goal project-item", "id": `${projectTitle }-goal`});
+            goal.textContent = proj.getGoal();
+            return goal;
+        }
+        content.appendChild(goal()); 
     }
     renderData();
 
     // Task Container
-    const tasks = makeContainer("Tasks");
-    const addTask = element('input', {'type':'button', 'id': 'add-task-button', 'value': '++'})
-    tasks.appendChild(addTask)
-
-    content.appendChild(tasks);
+    const tasks = () => {
+        const tasks = makeContainer("Tasks");
+        const addTask = element('input', {'type':'button', 'id': 'add-task-button', 'value': '++'})
+        addTask.addEventListener('click', (e) => createTask(e));
+        const sample = element('div');
+        sample.textContent = 'sample'
+        tasks.appendChild(addTask)
+        tasks.insertBefore(sample, addTask);
+        return tasks;
+    }
+    content.appendChild(tasks());
    
 
     const projectButtons = () => {
@@ -96,7 +98,7 @@ const renderProject = (projectObject) => {
 
     project.appendChild(content)
 
-    console.log(project)
+   
 
     
     return project;
@@ -104,7 +106,7 @@ const renderProject = (projectObject) => {
     }
 
     const project = render();
-    console.log(project);
+
     
     parent.appendChild(project);
     createListeners();
@@ -114,6 +116,9 @@ const renderProject = (projectObject) => {
 
 const renderTask = (task) => {
 
+    const content = document.querySelector("#content");
+
+    const taskPopup = () => {
     const newTask = element('div', {'class': "task", id: `${task.title}-id`})
 
     const title = element('h2', {'class': "task-title"});
@@ -121,25 +126,51 @@ const renderTask = (task) => {
 
     const description = element('div', {'class': "task-desc", 'id': `${task.title}-desc`});
     description.textContent = task.description;
-    const priority = element('div', {'class': "project-priority", "id": `${task.title}-priority`});
-    priority.textContent = task.priority;
+
+    const priority = () => {
+
+    const priority = makeContainer('task-deadline');
+    const priorityHeader = priority.querySelector('.task-deadline-header');
+    priorityHeader.textContent = "Deadline"
+    const deadlineContent = priority.querySelector('.task-deadline-content');     
+    const deadline = element('div', {'class': "task-deadline task-item", "id": `${task.deadline}-deadline`});
+    const priorityButton = element('input', {'type': 'button', 'class': "priority-button task-item", 'value': task.getPriority()});
+    deadline.textContent = format(task.getDeadline(), "MM.dd.yyyy");
+    deadlineContent.appendChild(deadline);
+    priority.appendChild(deadlineContent);    
+    deadlineContent.appendChild(priorityButton);
+
     
-    const goal = element('div', {'class': "project-goal", "id": `${task.title}-goal`});
-    goal.textContent = task.goal;
+    priority.value = task.priority;
     
-    const deadline = element('div', {'class': "project-deadline", "id": `${task.deadline}-deadline`});
-    deadline.textContent = task.deadline;
+        return priority;
+    }
+
+    const goal = () => {
+    const goal = element('div', {'class': "task-goal", "id": `${task.title}-goal`});
+    const goalHeader = element('h3', {'class': 'goal-button'})
+    const goalContent = element('p', {'class': 'goal-content'});
+    goalContent.textContent = task.getGoal();
+    goalHeader.textContent = "Goal"
+
+
+    goal.appendChild(goalHeader)
+    goal.appendChild(goalContent)
+    
+    return goal;
+    }
 
     newTask.appendChild(title);
    newTask.appendChild(description);
-    newTask.appendChild(priority);
-    newTask.appendChild(goal);
-    newTask.appendChild(deadline);
-
+    newTask.appendChild(priority());
+    newTask.appendChild(goal());
 
 
     return newTask;
-
+    
+    }
+    
+    content.appendChild(taskPopup());
 }
 
 const getProjectFromUser = () => {

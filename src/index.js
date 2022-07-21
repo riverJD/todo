@@ -23,10 +23,10 @@ testProject.tasks.addTask(test)
 
 const content = document.querySelector("#content");
 
-const test3 = renderTask(test);
 
 
-content.appendChild(test3)
+
+renderTask(Task());
 //const testProj = renderProject(testProject);
 
 
@@ -34,7 +34,7 @@ const NEWPROJ = Project();
 
 
 
-renderProject(testProject);
+renderProject(Project());
 
 
 
