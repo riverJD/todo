@@ -22,11 +22,13 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
     let _completedTasks = [];
     let _incompleteTasks = [];
 
+   
 
     // task module
     const tasks = (() => {
 
         const addTask = (task) => {
+             
             _taskList.push(task)
         }
     

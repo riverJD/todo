@@ -11,6 +11,9 @@ import task from "./default-task.json";
 const createToDo = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal) => {
 
     deadline = new Date(deadline);
+    
+    // Project object that owns this task
+    let parent = null;
   
     // Time/Date based attributes
     const startDate = new Date(Date.now())
@@ -47,9 +50,11 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
 
     const getGoal = () => goal;
  
+    const setParent = (newParent) => parent = newParent;
+    const getParent = () => parent;
 
 
-    return ({setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
+    return ({setParent, getParent, setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
 
 }
 

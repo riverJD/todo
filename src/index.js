@@ -29,8 +29,10 @@ const content = document.querySelector("#content");
 
 const NEWPROJ = Project();
 
+const newTask = Task();
 
-NEWPROJ.tasks.addTask(Task());
+NEWPROJ.tasks.addTask(newTask);
+newTask.setParent(NEWPROJ);
 NEWPROJ.tasks.addTask(test2);
 
 

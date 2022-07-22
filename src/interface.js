@@ -123,6 +123,7 @@ const renderProject = (projectObject) => {
 
 }
 
+
 const editProjectBox = () => {
 
     console.log('editing');
@@ -236,10 +237,13 @@ const renderTask = (task) => {
         const buttonBar = () => {
 
         
-            const deleteTask = element('input', {'type': 'button', 'class': 'task-button delete-task', 'id': 'delete-task'})
-            deleteTask.addEventListener('click', (e) => deleteTask(e.target.parentNode, task))
+            const deleteButton = element('input', {'type': 'button', 'class': 'task-button delete-task', 'id': 'delete-task'})
+            deleteButton.addEventListener('click', (e) => deleteTask(e.target.parentNode, task));
+                
+                
+        
 
-            return deleteTask;
+            return deleteButton;
 
         }
 
@@ -280,6 +284,7 @@ const renderTaskList = (project) => {
 const createTask = (container, project) => {
 
     const task = Task();
+    task.setParent(project);
     renderTask(task);
     const taskList = (container)
     taskList.insertBefore(createMiniTask(project, task), taskList.lastElementChild);
@@ -295,8 +300,17 @@ const deleteTask = (DOM, task) => {
     console.log(DOM);
     console.log(task);
 
+    DOM.remove();
+    
+    const project = task.getParent();
+    //project.tasks.deleteTask(task);
+    renderTaskList(project);
 
+}
 
+const closeTask = (DOM) => {
+
+    DOM.remove();
 }
 
 // Creates a mini-task DOM element out of task object
