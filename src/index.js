@@ -24,14 +24,11 @@ testProject.tasks.addTask(test)
 const content = document.querySelector("#content");
 
 
-
-
-renderTask(Task());
 //const testProj = renderProject(testProject);
 
 
 const NEWPROJ = Project();
-console.log(NEWPROJ.content.getPriority())
+
 
 NEWPROJ.tasks.addTask(Task());
 NEWPROJ.tasks.addTask(test2);

@@ -55,7 +55,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
     display: grid;
 
-    grid-template-rows: 1fr 2fr 1fr;
+    grid-template-rows: 1fr 2fr 1fr 1fr;
     grid-template-columns: 1fr 1fr;
     grid-template-areas: 
     "title title"
@@ -113,7 +113,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     width: min(600px, 98%);
     min-width: 300px;
     
-
+    font-family: inter;
     display: flex;
     flex-direction: column-reverse;
     justify-content: center;
@@ -130,10 +130,10 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .project-content{
-    outline: 1px dotted red;
+    
     height: 80%;
     width: 98%;
-
+    gap: 5px;
     display: grid;
 
     grid-template-columns: 3fr 2fr;
@@ -154,7 +154,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
     display: flex;
     justify-content: space-between;
-    outline: 1px solid black;
+   
 
 }
 
@@ -165,24 +165,38 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .project-title{
-
+    width: 98%;
+    height: 100%;
     grid-area: title;
+
+    background-color: var(--project-color);
+    font-family: inter;
+    font-size: 32px;
 
 }
 
 .project-desc{
+    height: 100%;
+    width: 98%;
 
+    font-family: inter;
     grid-area: summary;
     background-color: var(--sub-bg-color, rgba(211, 209, 209, 0.493));
 
 }
 
 .project-goal{
-    border-top: 1px solid black;
+    width: 98%;
    background-color: var(--sub-bg-color, rgba(211, 209, 209, 0.493));
 
     grid-area: objective;
 }
+
+.edit-proj-box{
+    resize: none;
+
+}
+
 
 .deadline-container{
     display: grid;

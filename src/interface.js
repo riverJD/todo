@@ -3,6 +3,7 @@ import { element, makeContainer, setAttributes } from "./utils";
 import defaultProject from "./default-project.json"
 import defaultTask from "./default-task.json";
 import { Task } from "./todo";
+import { Project } from "./project";
 
 
 // Interface for adding tasks and projects.
@@ -92,6 +93,7 @@ const renderProject = (projectObject) => {
         // Will replace with image
         const closeProject = element('input', {'type': 'button', 'id': 'close-project', 'value': 'Close'});
         const editProject = element('input', {'type': 'button', 'id': 'edit-project', 'value': 'Edit'})
+        editProject.addEventListener('click', () => editProjectBox())
         
         buttonContainer.appendChild(closeProject)
         buttonContainer.appendChild(editProject)
@@ -121,76 +123,149 @@ const renderProject = (projectObject) => {
 
 }
 
+const editProjectBox = () => {
+
+    console.log('editing');
+
+    const tempProj = Project();
+
+    editTitle();
+    editProjectDescription();
+    editProjectGoal();
+
+}
+
+// Enable editing of title of project. Fills in input with content already stored for UX
+const editTitle = () => {
+
+    const title = document.querySelector(".project-title");
+
+    const editTitleBox = element('textarea',  {'name': 'textarea', 'placeholder': title.innerText, "class": 'edit-proj-box project-title project-item'});
+    editTitleBox.textContent = title.innerText;
+    title.parentNode.insertBefore(editTitleBox, title);
+    title.remove();
+    
+
+}
+
+// Enable editing of description/content of project. Fills in input with content already stored for UX
+const editProjectDescription = () => {
+    
+    const desc = document.querySelector('.project-desc');
+    
+    //const editDescriptionBox = element('input', {'type': 'text', 'placeholder': desc.innerText, 'class': 'project-description project-item edit-box',})
+    const editDescriptionBox = element('textarea', {'name':'textarea', 'placeholder': desc.innerText, 'class': 'edit-proj-box project-item project-desc'});
+    editDescriptionBox.textContent = desc.innerText;
+    desc.parentNode.insertBefore(editDescriptionBox, desc);
+    desc.remove();
+
+}
+
+const editProjectGoal = () => {
+
+    const goal = document.querySelector('.project-goal');
+    const goalText = goal.innerText;
+    console.log(goalText);
+    const editGoalBox = element('textarea', {'placeholder': goalText, 'class': 'edit-proj-box project-goal project-item'})
+    editGoalBox.textContent = goalText;
+    goal.parentNode.insertBefore(editGoalBox, goal);
+    goal.remove();
+
+}
+
+// Show a full task on screen
 const renderTask = (task) => {
 
+    // DOM element to attach self to
     const content = document.querySelector("#content");
 
+    // The actual render object 
     const taskPopup = () => {
-    const newTask = element('div', {'class': "task", id: `${task.title}-id`})
-
-    const title = element('h2', {'class': "task-title"});
-    title.textContent = task.title;
-
-    const description = element('div', {'class': "task-desc", 'id': `${task.title}-desc`});
-    description.textContent = task.description;
-
-    const priority = () => {
-
-    const priority = makeContainer('task-deadline');
-    const priorityHeader = priority.querySelector('.task-deadline-header');
-    priorityHeader.textContent = "Deadline"
-    const deadlineContent = priority.querySelector('.task-deadline-content');     
-    const deadline = element('div', {'class': "task-deadline task-item", "id": `${task.deadline}-deadline`});
-    const priorityButton = element('input', {'type': 'button', 'class': "priority-button task-item", 'value': task.getPriority()});
-    deadline.textContent = format(task.getDeadline(), "MM.dd.yyyy");
-    deadlineContent.appendChild(deadline);
-    priority.appendChild(deadlineContent);    
-    deadlineContent.appendChild(priorityButton);
-
-    
-    priority.value = task.priority;
-    
-        return priority;
-    }
-
-    const goal = () => {
-    const goal = element('div', {'class': "task-goal", "id": `${task.title}-goal`});
-    const goalHeader = element('h3', {'class': 'goal-button'})
-    const goalContent = element('p', {'class': 'goal-content'});
-    goalContent.textContent = task.getGoal();
-    goalHeader.textContent = "Goal"
+        const newTask = element('div', {'class': "task", id: `${task.title}-id`})
 
 
-    goal.appendChild(goalHeader)
-    goal.appendChild(goalContent)
-    
-    return goal;
-    }
+        const title = () => {
 
-    newTask.appendChild(title);
-   newTask.appendChild(description);
-    newTask.appendChild(priority());
-    newTask.appendChild(goal());
+            const title = element('h2', {'class': "task-title"});
+            title.textContent = task.title;
+            return title;
+        }
+
+        const description = () => {
 
 
-    return newTask;
-    
+        const description = element('div', {'class': "task-desc", 'id': `${task.title}-desc`});
+        description.textContent = task.description;
+                return description;
+        }
+      
+            // Creating a DOM container to hold priority and deadline display
+        const priority = () => {
+
+            const priority = makeContainer('task-deadline');
+            const priorityHeader = priority.querySelector('.task-deadline-header');
+            priorityHeader.textContent = "Deadline"
+            const priorityButton = element('input', {'type': 'button', 'class': "priority-button task-item", 'value': task.getPriority()});
+
+            const deadlineContent = priority.querySelector('.task-deadline-content');     
+            const deadline = element('div', {'class': "task-deadline task-item", "id": `${task.deadline}-deadline`});
+            deadline.textContent = format(task.getDeadline(), "MM.dd.yyyy");
+            deadlineContent.appendChild(deadline);
+
+
+            priority.appendChild(deadlineContent);    
+            deadlineContent.appendChild(priorityButton);
+            priority.value = task.priority;
+        
+            return priority;
+        }
+
+        // Creation of goal element
+        const goal = () => {
+            const goal = element('div', {'class': "task-goal", "id": `${task.title}-goal`});
+            const goalHeader = element('h3', {'class': 'goal-button'})
+            const goalContent = element('p', {'class': 'goal-content'});
+            goalContent.textContent = task.getGoal();
+            goalHeader.textContent = "Goal"
+            goal.appendChild(goalHeader)
+            goal.appendChild(goalContent)
+        
+            return goal;
+        }
+
+        const buttonBar = () => {
+
+        
+            const deleteTask = element('input', {'type': 'button', 'class': 'task-button delete-task', 'id': 'delete-task'})
+            deleteTask.addEventListener('click', (e) => deleteTask(e.target.parentNode, task))
+
+            return deleteTask;
+
+        }
+
+
+        newTask.appendChild(title());
+        newTask.appendChild(description());
+        newTask.appendChild(priority());
+        newTask.appendChild(goal());
+        newTask.appendChild(buttonBar());
+
+
+        return newTask;
+        
     }
     
     content.appendChild(taskPopup());
 }
 
-//Project object
+//Handles display of 'Tasks list'
 const renderTaskList = (project) => {
 
     const list = document.querySelector('.tasks-container')
    
     const miniList = document.querySelectorAll('.mini-task');
     miniList.forEach(mini => mini.remove())
-    console.log(project.tasks.getTaskList());
-
     for (let task of project.tasks.getTaskList()){
-        console.log(task.getTitle());
 
         const minitask = createMiniTask(project, task);
         list.insertBefore(minitask, list.lastElementChild);
@@ -214,12 +289,22 @@ const createTask = (container, project) => {
 
 }
 
+// Deletes parent dom, and respective task from project
+const deleteTask = (DOM, task) => {
+
+    console.log(DOM);
+    console.log(task);
+
+
+
+}
+
 // Creates a mini-task DOM element out of task object
 const createMiniTask = (project, task) => {
     
     const minitask = element('div', {'class':'mini-task'})
    
-    console.log(task);
+    //console.log(task);
     // Delete mini
     const removeMini = element('input', {'type': 'button', 'class': 'mini-button mini-delete', 'value': '-'})
     removeMini.addEventListener('click', () => deleteMini(project, task));
@@ -282,7 +367,7 @@ const createListeners = (project) => {
 
     // Create listeners for buttons
     const edit = document.querySelector('#edit-project');
-    console.log(project.content.getPriority())
+    //console.log(project.content.getPriority())
     const close = document.querySelector('#close-project');
     close.addEventListener('click', () => closeProject());
     // Content button (expand content)
@@ -293,28 +378,26 @@ const createListeners = (project) => {
     priority.addEventListener('click', (e) => {
 
         const currentPriority = project.content.getPriority();
-        console.log(currentPriority);
+      //  console.log(currentPriority);
 
-        console.log('tf')
+       
         const updatedPriority = ((currentPriority) % 3) + 1;
         project.content.setPriority(updatedPriority);
         e.target.value = updatedPriority;
         
 
-    })
-
- 
-   
+    })   
 
 }
+
+
+
 
 const closeProject = () => {
     console.log('click')
     const project = document.querySelector('.project')
    
     project.remove();
-
-
 
 }
 
@@ -325,8 +408,6 @@ const addProjectPopUp = () => {
     
     const button = element("button", {"id": "project-button", "value": "Pressit","textContent": "Press"})
     button.addEventListener("click", () => {
-
-       
         
     })
 

@@ -26,7 +26,6 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
     // task module
     const tasks = (() => {
 
-        console.log(priority)
         const addTask = (task) => {
             _taskList.push(task)
         }
