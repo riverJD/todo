@@ -177,6 +177,9 @@ const editProjectGoal = () => {
 // Show a full task on screen
 const renderTask = (task) => {
 
+    const oldTaskDOM = document.querySelector(".task");
+    if (oldTaskDOM != undefined) oldTaskDOM.remove();
+    
     // DOM element to attach self to
     const content = document.querySelector("#content");
 
@@ -303,7 +306,7 @@ const deleteTask = (DOM, task) => {
     DOM.remove();
     
     const project = task.getParent();
-    //project.tasks.deleteTask(task);
+    project.tasks.deleteTask(task);
     renderTaskList(project);
 
 }
@@ -321,7 +324,7 @@ const createMiniTask = (project, task) => {
     //console.log(task);
     // Delete mini
     const removeMini = element('input', {'type': 'button', 'class': 'mini-button mini-delete', 'value': '-'})
-    removeMini.addEventListener('click', () => deleteMini(project, task));
+    removeMini.addEventListener('click', () => deleteMini(task));
     // Mark mini as complete
     const finishMini = element('input', {'type': 'button', 'class': 'mini-button mini-finish', 'value': 'F'});
     //Open Task in full view
@@ -359,16 +362,22 @@ const createMiniTask = (project, task) => {
     return minitask;
 }
 
-const deleteMini = (project, task) => {
+const deleteMini = (task) => {
 
-    // Remove from tasklist
+    const project = task.getParent();
     project.tasks.deleteTask(task);
+    
+    const taskCard = document.querySelector('.task');
+    closeTask(taskCard);
 
     // Refresh task list
     renderTaskList(project);
 
 
 }
+
+
+
 
 const getProjectFromUser = () => {
 
