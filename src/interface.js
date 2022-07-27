@@ -185,7 +185,7 @@ const renderTask = (task) => {
 
     // The actual render object 
     const taskPopup = () => {
-        const newTask = element('div', {'class': "task", id: `${task.title}-id`})
+        const newTask = element('div', {class: "task", id: `${task.title}-${task.getID()}`, 'data-id': task.getID()})
 
 
         const title = () => {
@@ -241,7 +241,10 @@ const renderTask = (task) => {
 
         
             const deleteButton = element('input', {'type': 'button', 'class': 'task-button delete-task', 'id': 'delete-task'})
-            deleteButton.addEventListener('click', (e) => deleteTask(e.target.parentNode, task));
+            deleteButton.addEventListener('click', (e) => {
+                deleteTask(task);
+                closeTask(e.target.parentNode);
+            });
                 
                 
         
@@ -273,8 +276,14 @@ const renderTaskList = (project) => {
     const miniList = document.querySelectorAll('.mini-task');
     miniList.forEach(mini => mini.remove())
     for (let task of project.tasks.getTaskList()){
-
+        console.log(task);
         const minitask = createMiniTask(project, task);
+
+        if (task.getStatus() === true){
+            minitask.classList.add('completed');        
+        }
+        else minitask.classList.remove('completed');
+
         list.insertBefore(minitask, list.lastElementChild);
 
     }
@@ -288,32 +297,42 @@ const createTask = (container, project) => {
 
     const task = Task();
     task.setParent(project);
-    renderTask(task);
+    
+   
     const taskList = (container)
     taskList.insertBefore(createMiniTask(project, task), taskList.lastElementChild);
    
     // Add to object
     project.tasks.addTask(task);
+    task.getID();
+    renderTask(task);
 
 }
 
-// Deletes parent dom, and respective task from project
-const deleteTask = (DOM, task) => {
+// Deletes task from parent project
+const deleteTask = (task) => {
 
-    console.log(DOM);
     console.log(task);
 
-    DOM.remove();
-    
-    const project = task.getParent();
-    project.tasks.deleteTask(task);
+     const project = task.getParent();
+    project.tasks.removeTask(task);
     renderTaskList(project);
-
 }
 
+// Delete the DOM element associated with task
 const closeTask = (DOM) => {
 
-    DOM.remove();
+    if (DOM != null) DOM.remove();
+}
+
+const toggleTaskStatus = (task) => {
+
+    if (task == null) return;
+
+    task.getStatus() === false ? task.setStatus(true) : task.setStatus(false);
+
+    renderTaskList(task.getParent());
+
 }
 
 // Creates a mini-task DOM element out of task object
@@ -321,12 +340,19 @@ const createMiniTask = (project, task) => {
     
     const minitask = element('div', {'class':'mini-task'})
    
+    if (task.getStatus() === true){
+        minitask.classList.add('completed');
+        
+    }
+
     //console.log(task);
     // Delete mini
     const removeMini = element('input', {'type': 'button', 'class': 'mini-button mini-delete', 'value': '-'})
-    removeMini.addEventListener('click', () => deleteMini(task));
+    // Pass on DOM of Minilist and Task to delete
+    removeMini.addEventListener('click', (e) => deleteMini(task));
     // Mark mini as complete
     const finishMini = element('input', {'type': 'button', 'class': 'mini-button mini-finish', 'value': 'F'});
+    finishMini.addEventListener('click', (e) => toggleTaskStatus(task));
     //Open Task in full view
     const miniButton = element('input', {'type': 'button', 'class': 'mini-button', 'value': `${task.getTitle()}`});
         
@@ -356,6 +382,7 @@ const createMiniTask = (project, task) => {
 
     }
 
+    
     minitask.appendChild(title);
 
 
@@ -364,11 +391,16 @@ const createMiniTask = (project, task) => {
 
 const deleteMini = (task) => {
 
+    
     const project = task.getParent();
-    project.tasks.deleteTask(task);
+
+    console.log(project.tasks.getTaskList());
+    project.tasks.removeTask(task);
     
     const taskCard = document.querySelector('.task');
-    closeTask(taskCard);
+    if (taskCard != null){
+        if (taskCard.getAttribute('data-id') == task.getID()) closeTask(taskCard);
+    }
 
     // Refresh task list
     renderTaskList(project);

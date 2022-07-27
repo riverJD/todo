@@ -17,6 +17,9 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
    
     const startDate = new Date(Date.now())
     const timeRemaining = deadline - Date.now();
+    
+    // Will assign task ID sequentially
+    let taskID = 0;
 
     let _taskList = [];
     let _completedTasks = [];
@@ -28,11 +31,11 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
     const tasks = (() => {
 
         const addTask = (task) => {
-             
+             setTaskID(task);
             _taskList.push(task)
         }
     
-        const deleteTask = (task) => {
+        const removeTask = (task) => {
             
             const taskElement = _taskList.indexOf(task);
             _taskList.splice(taskElement, 1); 
@@ -40,16 +43,21 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
     
         const completeTask = (task => {
             _completedTasks.push(_taskList.slice(task));
-             deleteTask(task)
+             removeTask(task)
     
         })
+
+        const setTaskID = (task) => {
+            task.setID(taskID);
+            taskID++;
+        }
 
         const getTaskList = () => _taskList;
         const getCompletedTasks = () => _completedTasks;
         const getInCompleteTasks = () => _incompleteTasks;
         const taskCount = _taskList.length;
 
-        return {taskCount, addTask, deleteTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks, _taskList}
+        return {taskCount, addTask, removeTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks, _taskList}
 
     })();
   

@@ -2,5 +2,7 @@
 "description": "Useful information about your task goes here.  What specifically are you looking to accomplish?  ",
 "priority": 1, 
 "goal": "Your goal, how you decide whether a task is complete.",
-"deadline": "8/12/2022"
+"deadline": "8/12/2022",
+"taskID": "0",
+"completed": false
 }

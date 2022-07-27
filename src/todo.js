@@ -8,7 +8,7 @@ import task from "./default-task.json";
 // Constants
 
 // Factory to create a ToDo object
-const createToDo = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal) => {
+const createToDo = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal, taskID = task.taskID, completed = task.completed) => {
 
     deadline = new Date(deadline);
     
@@ -29,32 +29,38 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
     const setDescription = (newDescription) => {
         description = newDescription
     }
+    const getDescription = () => description;
 
     const setDeadline = (newDeadline) => deadline = newDeadline;
     const getDeadline = () => deadline;
 
-    const getDescription = () => description;
+    
 
-    const getContent = () => {
-
-        return {title, deadline, priority, description};
-    }
     const setPriority = (newPriority) => {
-
         priority = newPriority;
     }
-
     const getPriority = () => priority;
  
     const setGoal = (newGoal) => goal = newGoal;
-
     const getGoal = () => goal;
  
     const setParent = (newParent) => parent = newParent;
     const getParent = () => parent;
 
+    const setID = (newID) => taskID = newID;
+    const getID = () => taskID;
 
-    return ({setParent, getParent, setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
+
+    const setStatus = (newStatus) => completed = newStatus;
+    const getStatus = () => completed;
+
+    const getContent = () => {
+
+        return {title, deadline, priority, description};
+    }
+
+
+    return ({setStatus, getStatus, getID, setID, setParent, getParent, setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
 
 }
 

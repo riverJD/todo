@@ -223,9 +223,9 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .mini-task{
-
+    
     display: flex;
-    outline: 1px solid magenta;
+
 
 }
 
@@ -299,5 +299,16 @@ h1,h2,h3,h4,h5,p, ul, li{
     padding: 5px;
     font-size: clamp(1rem, 24px, 2rem);
     border-radius: 5px;
+}
+
+.completed{
+    
+   
+    
+}
+
+.completed > *{
+    background-color: rgba(104, 245, 104, 0.521);
+    font-style: italic;
 }
  
