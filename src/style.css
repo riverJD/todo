@@ -60,10 +60,15 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-template-areas: 
     "title title"
     "content content"
-    "objective deadline";
+    "objective deadline"
+    "buttons buttons";
 }
 
-.task-title{
+
+
+.task-title-bar{
+    display: flex;
+    justify-content: space-between;
     grid-area: title;
 }
 
@@ -163,11 +168,16 @@ h1,h2,h3,h4,h5,p, ul, li{
 
     
 }
+.project-title-bar{
+
+    grid-area: title;
+}
+
 
 .project-title{
     width: 98%;
     height: 100%;
-    grid-area: title;
+ 
 
     background-color: var(--project-color);
     font-family: inter;
@@ -301,14 +311,44 @@ h1,h2,h3,h4,h5,p, ul, li{
     border-radius: 5px;
 }
 
+.button-bar{
+    display: flex;
+    justify-content: space-between;
+
+    grid-area: buttons;
+}
+
+#project-button-bar{
+    flex-direction: row-reverse;
+}
+
+
+.edit-button{
+
+    
+}
+
+
 .completed{
     
    
     
 }
 
+.delete-task{
+    outline: 2px solid red;
+    
+    width: min-content;
+   
+
+}
+
 .completed > *{
     background-color: rgba(104, 245, 104, 0.521);
     font-style: italic;
+}
+
+.hidden{
+    display: none;
 }
  

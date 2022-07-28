@@ -13,14 +13,14 @@ const content = document.querySelector("#content")
 // Render a full project
 const renderProject = (projectObject) => {
    
+    // Container to attach project to
     const parent = document.querySelector("#content");
-    console.log(parent);
 
     let proj = projectObject.content;
 
     const render = () => {
     
-        // Create skeleton
+    // Create dom skeleton 
     const projectTitle = proj.getTitle();
     const project = element('div', {'class': "project", "id": `${projectTitle }-id`})
     const content = element('div', {'class': 'project-content', 'id': `${projectTitle}-content`})
@@ -28,9 +28,15 @@ const renderProject = (projectObject) => {
     // Loading of data into specified containers
     const renderData = () => {
         
+        // create titgle bar
         const title = () => {
+
+
             const title = element('h2', {'class': "project-title project-item"});
-            title.textContent = projectTitle ;
+            title.textContent = projectTitle;
+           
+
+           
             return title;
         }
         content.appendChild(title());
@@ -73,13 +79,12 @@ const renderProject = (projectObject) => {
         const tasks = makeContainer("Tasks");
         const addTask = element('input', {'type':'button', 'id': 'add-task-button', 'value': '++'})
        
-        const sample = element('div');
-        sample.textContent = 'sample'
+   
         tasks.appendChild(addTask)
         
         // Attaches a new task to both the DOM element and Project Objects
         addTask.addEventListener('click', (e, ) => createTask(e.target.parentNode, projectObject));
-        tasks.insertBefore(sample, addTask);
+  
        
         return tasks;
     }
@@ -88,12 +93,19 @@ const renderProject = (projectObject) => {
 
     const projectButtons = () => {
 
-        const buttonContainer = element('div', {'class': 'button-bar'});
+        const buttonContainer = element('div', {'class': 'button-bar', 'id': 'project-button-bar'});
 
         // Will replace with image
         const closeProject = element('input', {'type': 'button', 'id': 'close-project', 'value': 'Close'});
         const editProject = element('input', {'type': 'button', 'id': 'edit-project', 'value': 'Edit'})
-        editProject.addEventListener('click', () => editProjectBox())
+        editProject.addEventListener('click', () => {
+            
+
+        editProjectBox(projectObject);
+            
+            
+            
+        })
         
         buttonContainer.appendChild(closeProject)
         buttonContainer.appendChild(editProject)
@@ -123,45 +135,86 @@ const renderProject = (projectObject) => {
 
 }
 
+// Proj is original project being edited;
+const editProjectBox = (proj) => {
 
-const editProjectBox = () => {
-
-    console.log('editing');
-
+    // Create temporary project to save to, allow for future refactoring
     const tempProj = Project();
+    
+    const content = tempProj.content;
 
-    editTitle();
-    editProjectDescription();
-    editProjectGoal();
+    // Create save button and hide edit button
+    const buttonBar = document.querySelector('.button-bar');
+    const editButton = document.querySelector('#edit-project');
+    editButton.classList.add('hidden');
+    const saveButton = element('input', {'type': 'button', 'class': 'edit-button', 'id': 'save-project-button', 'value': 'Save'});
+    
+    // Copy content to temporary project object
+    saveButton.addEventListener('click', () => {
 
+        content.setTitle(newTitle.value);
+        content.setDescription(newDescription.value);
+        content.setGoal(newGoal.value);
+        saveButton.remove();
+        editButton.classList.remove('hidden');
+
+        saveToProject();  
+
+    })
+
+    // Save temporary project content to original project and refresh
+    // The extra step of creating a temporary project is for future editability/refactoring
+    const saveToProject = () => {
+
+        proj.content.setTitle(content.getTitle());
+        proj.content.setDescription(content.getDescription());
+        proj.content.setGoal(content.getGoal());
+        
+        closeProject(proj);
+        renderProject(proj);
+    }
+
+
+    buttonBar.appendChild(saveButton);
+
+
+    // Functions return DOM object, not its content explicitely
+    const newTitle = editTitle('project');
+    const newDescription = editProjectDescription('project');
+    const  newGoal = editProjectGoal('project');
+       
 }
 
-// Enable editing of title of project. Fills in input with content already stored for UX
-const editTitle = () => {
+// Enable editing of title of project. Returns DOM Object. Target is string either 'project' or 'task'
+const editTitle = (target) => {
 
-    const title = document.querySelector(".project-title");
+    const title = document.querySelector(`.${target}-title`);
+    console.log(title);
 
-    const editTitleBox = element('textarea',  {'name': 'textarea', 'placeholder': title.innerText, "class": 'edit-proj-box project-title project-item'});
+    const editTitleBox = element('textarea',  {'name': 'textarea', 'placeholder': title.innerText, "class": `edit-${target}-box ${target}-title ${target}-item`});
     editTitleBox.textContent = title.innerText;
     title.parentNode.insertBefore(editTitleBox, title);
+    console.log(editTitleBox.textContent)
     title.remove();
-    
+    return editTitleBox;
 
 }
 
-// Enable editing of description/content of project. Fills in input with content already stored for UX
+// Enable editing of description/content of project. Returns DOM object.
 const editProjectDescription = () => {
     
     const desc = document.querySelector('.project-desc');
     
     //const editDescriptionBox = element('input', {'type': 'text', 'placeholder': desc.innerText, 'class': 'project-description project-item edit-box',})
-    const editDescriptionBox = element('textarea', {'name':'textarea', 'placeholder': desc.innerText, 'class': 'edit-proj-box project-item project-desc'});
+    const editDescriptionBox = element('textarea', {'name':'textarea', 'placeholder': desc.innerText, 'class': `edit-${target}-box ${target}-item ${target}-desc`});
     editDescriptionBox.textContent = desc.innerText;
     desc.parentNode.insertBefore(editDescriptionBox, desc);
     desc.remove();
+    return editDescriptionBox;
 
 }
 
+// Enable editing of goal content.  Returns DOM object.
 const editProjectGoal = () => {
 
     const goal = document.querySelector('.project-goal');
@@ -171,6 +224,7 @@ const editProjectGoal = () => {
     editGoalBox.textContent = goalText;
     goal.parentNode.insertBefore(editGoalBox, goal);
     goal.remove();
+    return editGoalBox;
 
 }
 
@@ -187,12 +241,27 @@ const renderTask = (task) => {
     const taskPopup = () => {
         const newTask = element('div', {class: "task", id: `${task.title}-${task.getID()}`, 'data-id': task.getID()})
 
-
         const title = () => {
+
+            const titleBar = element('div', {'class': "task-title-bar"});
+            
+            const editButton = element('input', {'type': 'button', 'class': 'task-button', 'id': 'task-edit-button', 'value': 'Edit'});
+            editButton.addEventListener('click', () => editTask());
+            titleBar.appendChild(editButton);
+
 
             const title = element('h2', {'class': "task-title"});
             title.textContent = task.title;
-            return title;
+            titleBar.appendChild(title);            
+
+
+            const completeButton = element('input', {'type': 'button', 'class': 'task-button', 'id': 'task-complete-button', 'value': 'CHK'});
+            completeButton.addEventListener('click', () => {
+                // set task as complete
+            })
+            titleBar.appendChild(completeButton)
+
+            return titleBar;
         }
 
         const description = () => {
@@ -239,17 +308,20 @@ const renderTask = (task) => {
 
         const buttonBar = () => {
 
-        
-            const deleteButton = element('input', {'type': 'button', 'class': 'task-button delete-task', 'id': 'delete-task'})
+            const buttons = element("div", {'class': 'button-bar', 'id': 'task-buttons'});
+            const deleteButton = element('input', {'type': 'button', 'class': 'task-button delete-task', 'id': 'delete-task', 'value': 'Delete'})
             deleteButton.addEventListener('click', (e) => {
                 deleteTask(task);
-                closeTask(e.target.parentNode);
+                closeTask(e.target.parentNode.parentNode);
             });
-                
-                
+            buttons.appendChild(deleteButton);
+          
+            const closeButton = element('input', {'type': 'button', 'value': 'Close', 'class': 'taks-button close-task'});
+            closeButton.addEventListener('click', (e) => closeTask(e.target.parentNode.parentNode));
+            buttons.appendChild(closeButton);                
         
 
-            return deleteButton;
+            return buttons;
 
         }
 
@@ -279,6 +351,7 @@ const renderTaskList = (project) => {
         console.log(task);
         const minitask = createMiniTask(project, task);
 
+
         if (task.getStatus() === true){
             minitask.classList.add('completed');        
         }
@@ -288,8 +361,6 @@ const renderTaskList = (project) => {
 
     }
     
-
-
 }
 
 
@@ -306,6 +377,47 @@ const createTask = (container, project) => {
     project.tasks.addTask(task);
     task.getID();
     renderTask(task);
+
+}
+
+// Would like to refactor this to share with edit project functions if possible
+const editTask = (task) => {
+    
+    //const project = task.getParent();
+    const tempTask = Task();
+
+    const content = tempTask;
+
+    const buttonBar = document.querySelector('#task-buttons');
+    const editButton = document.querySelector('#task-edit-button');
+    editButton.classList.add('hidden');
+    const saveButton = element('input', {'type': 'button', 'class': 'task-edit-button task-button', 'id': 'task-edit-button', 'value': 'Save'})
+
+    saveButton.addEventListener('click', () => {
+
+        content.setTitle(newTitle.value);
+        content.setDescription(newDescription.value);
+        content.setGoal(newGoal.value);
+        saveButton.remove();
+        editButton.classList.remove('hidden');
+
+        saveToTask();
+    })
+
+    const saveToTask = () => {
+
+        // Save Task
+    }
+
+
+    buttonBar.appendChild(saveButton);
+
+    const newTitle = editTaskTitle();
+    const newDescription = editTaskDescription();
+    const newGoal = editTaskGoal();
+
+
+    
 
 }
 

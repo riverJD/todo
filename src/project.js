@@ -27,7 +27,7 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
 
    
 
-    // task module
+    // All task related functions
     const tasks = (() => {
 
         const addTask = (task) => {
@@ -61,49 +61,40 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
 
     })();
   
+    // Content related functions
     const content = (() => {
+        
+        const setTitle = (newTitle) => {
+            title = newTitle;
+        }
+        const getTitle = () => title;
 
-    // Modify Content
-    
-    const setTitle = (newTitle) => {
-        title = newTitle;
-    }
-    const getTitle = () => title;
+        const setDeadline = (newDeadline) => deadline = newDeadline;
+        const getDeadline = () => deadline;
 
-    const setDeadline = (newDeadline) => deadline = newDeadline;
-    const getDeadline = () => deadline;
+        const setDescription = (newDescription) => {
+            description = newDescription
+        }
+        const getDescription = () => description;
 
-    const setDescription = (newDescription) => {
-        description = newDescription
-    }
-    const getDescription = () => description;
+        const setPriority = (newPriority) => {
 
-    const setPriority = (newPriority) => {
+            priority = newPriority;
+        }
+        const getPriority = () => priority;
 
-        priority = newPriority;
-    }
+        const setGoal = (newGoal) => goal = newGoal;
+        const getGoal = () => goal;
 
-    const getPriority = () => priority;
+        const getContent = () => {
+            return {title, deadline, priority, description};
+        }
 
-    const setGoal = (newGoal) => goal = newGoal;
-
-    const getGoal = () => goal;
-
-    const getContent = () => {
-
-        return {title, deadline, priority, description};
-    }
-
-    return {setTitle, getTitle, getDeadline, setDeadline, setDescription, getDescription, getContent, setPriority, getPriority, setGoal, getGoal, }
-
-
-    
+        return {setTitle, getTitle, getDeadline, setDeadline, setDescription, getDescription, getContent, setPriority, getPriority, setGoal, getGoal, }
 })();
 
   return { tasks, _taskList, content}
 }
-
-
 
 
 export { Project}
