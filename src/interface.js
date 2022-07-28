@@ -83,9 +83,12 @@ const renderProject = (projectObject) => {
         tasks.appendChild(addTask)
         
         // Attaches a new task to both the DOM element and Project Objects
-        addTask.addEventListener('click', (e, ) => createTask(e.target.parentNode, projectObject));
+        addTask.addEventListener('click', (e, ) => {
+            
+            createTask(e.target.parentNode, projectObject);
+            
   
-       
+        })
         return tasks;
     }
     content.appendChild(tasks());
@@ -180,8 +183,8 @@ const editProjectBox = (proj) => {
 
     // Functions return DOM object, not its content explicitely
     const newTitle = editTitle('project');
-    const newDescription = editProjectDescription('project');
-    const  newGoal = editProjectGoal('project');
+    const newDescription = editDescription('project');
+    const  newGoal = editGoal('project');
        
 }
 
@@ -189,8 +192,7 @@ const editProjectBox = (proj) => {
 const editTitle = (target) => {
 
     const title = document.querySelector(`.${target}-title`);
-    console.log(title);
-
+   
     const editTitleBox = element('textarea',  {'name': 'textarea', 'placeholder': title.innerText, "class": `edit-${target}-box ${target}-title ${target}-item`});
     editTitleBox.textContent = title.innerText;
     title.parentNode.insertBefore(editTitleBox, title);
@@ -201,9 +203,10 @@ const editTitle = (target) => {
 }
 
 // Enable editing of description/content of project. Returns DOM object.
-const editProjectDescription = () => {
+const editDescription = (target) => {
     
-    const desc = document.querySelector('.project-desc');
+    const desc = document.querySelector(`.${target}-desc`);
+    
     
     //const editDescriptionBox = element('input', {'type': 'text', 'placeholder': desc.innerText, 'class': 'project-description project-item edit-box',})
     const editDescriptionBox = element('textarea', {'name':'textarea', 'placeholder': desc.innerText, 'class': `edit-${target}-box ${target}-item ${target}-desc`});
@@ -215,12 +218,12 @@ const editProjectDescription = () => {
 }
 
 // Enable editing of goal content.  Returns DOM object.
-const editProjectGoal = () => {
+const editGoal = (target) => {
 
-    const goal = document.querySelector('.project-goal');
+    const goal = document.querySelector(`.${target}-goal`);
     const goalText = goal.innerText;
     console.log(goalText);
-    const editGoalBox = element('textarea', {'placeholder': goalText, 'class': 'edit-proj-box project-goal project-item'})
+    const editGoalBox = element('textarea', {'placeholder': goalText, 'class': `edit-${target}-box ${target}-goal ${target}-item`})
     editGoalBox.textContent = goalText;
     goal.parentNode.insertBefore(editGoalBox, goal);
     goal.remove();
@@ -231,6 +234,7 @@ const editProjectGoal = () => {
 // Show a full task on screen
 const renderTask = (task) => {
 
+    console.log(task.getContent())
     const oldTaskDOM = document.querySelector(".task");
     if (oldTaskDOM != undefined) oldTaskDOM.remove();
     
@@ -246,12 +250,12 @@ const renderTask = (task) => {
             const titleBar = element('div', {'class': "task-title-bar"});
             
             const editButton = element('input', {'type': 'button', 'class': 'task-button', 'id': 'task-edit-button', 'value': 'Edit'});
-            editButton.addEventListener('click', () => editTask());
+            editButton.addEventListener('click', () => editTask(task));
             titleBar.appendChild(editButton);
 
 
             const title = element('h2', {'class': "task-title"});
-            title.textContent = task.title;
+            title.textContent = task.getTitle();;
             titleBar.appendChild(title);            
 
 
@@ -268,7 +272,7 @@ const renderTask = (task) => {
 
 
         const description = element('div', {'class': "task-desc", 'id': `${task.title}-desc`});
-        description.textContent = task.description;
+        description.textContent = task.getDescription();
                 return description;
         }
       
@@ -295,9 +299,9 @@ const renderTask = (task) => {
 
         // Creation of goal element
         const goal = () => {
-            const goal = element('div', {'class': "task-goal", "id": `${task.title}-goal`});
-            const goalHeader = element('h3', {'class': 'goal-button'})
-            const goalContent = element('p', {'class': 'goal-content'});
+            const goal = element('div', {'class': "task-goal-header", "id": `${task.title}-goal`});
+            const goalHeader = element('h3', {'class': 'goal-title'})
+            const goalContent = element('p', {'class': 'task-goal'});
             goalContent.textContent = task.getGoal();
             goalHeader.textContent = "Goal"
             goal.appendChild(goalHeader)
@@ -377,6 +381,7 @@ const createTask = (container, project) => {
     project.tasks.addTask(task);
     task.getID();
     renderTask(task);
+    editTask(task);
 
 }
 
@@ -388,7 +393,8 @@ const editTask = (task) => {
 
     const content = tempTask;
 
-    const buttonBar = document.querySelector('#task-buttons');
+    const buttonBar = document.querySelector('.task-title-bar');
+    const title = document.querySelector('.task-title');
     const editButton = document.querySelector('#task-edit-button');
     editButton.classList.add('hidden');
     const saveButton = element('input', {'type': 'button', 'class': 'task-edit-button task-button', 'id': 'task-edit-button', 'value': 'Save'})
@@ -405,19 +411,25 @@ const editTask = (task) => {
     })
 
     const saveToTask = () => {
+        console.log(task)
+        task.setTitle(content.getTitle());
+        task.setDescription(content.getDescription());
+        task.setGoal(content.getGoal());
+   
+        closeTask(buttonBar.parentNode);
+        closeProject();
+        renderProject(task.getParent());
+        renderTask(task);
 
-        // Save Task
     }
 
 
-    buttonBar.appendChild(saveButton);
+    buttonBar.insertBefore(saveButton, title);
 
-    const newTitle = editTaskTitle();
-    const newDescription = editTaskDescription();
-    const newGoal = editTaskGoal();
+    const newTitle = editTitle('task');
+    const newDescription = editDescription('task');
+    const newGoal = editGoal('task');
 
-
-    
 
 }
 
@@ -561,7 +573,7 @@ const createListeners = (project) => {
 
 
 const closeProject = () => {
-    console.log('click')
+
     const project = document.querySelector('.project')
    
     project.remove();

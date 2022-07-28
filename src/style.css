@@ -8,6 +8,8 @@
     --project-color: var(--postityellow, white);
 
 
+    --editing-task-color: var(--happyBlue);
+
     --low-priority: rgb(162, 178, 233);
     --med-priority: rgb(162, 178, 233);
 }
@@ -70,6 +72,11 @@ h1,h2,h3,h4,h5,p, ul, li{
     display: flex;
     justify-content: space-between;
     grid-area: title;
+}
+
+.task-title{
+    font-size: clamp(1rem, 32px, 2rem);
+    text-align: center;
 }
 
 .task-desc{
@@ -202,11 +209,18 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-area: objective;
 }
 
-.edit-proj-box{
+.edit-project-box, .edit-task-box{
     resize: none;
+    
 
 }
 
+
+.edit-task-box{
+
+    background-color: var(--editing-task-color, grey);
+
+}
 
 .deadline-container{
     display: grid;
