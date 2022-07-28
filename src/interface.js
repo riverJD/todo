@@ -10,12 +10,15 @@ import closeTaskIcon from "./img/close-task.svg";
 import editTaskIcon from "./img/pencil.svg";
 import saveTaskIcon from "./img/save-task.svg";
 import finishTaskIcon from "./img/finish-task.svg"
+import deleteTaskIcon from "./img/delete-task.svg"
 
 import closeProjectIcon from "./img/close-project.svg";
 import editProjectIcon from "./img/edit.svg";
 import saveProjectIcon from "./img/save-content.svg";
 
-
+import miniCheckbox from './img/minicheckbox.svg';
+import miniCheckboxComplete from './img/minicheckmarked.svg';
+import miniDeleteIcon from './img/delete-alert.svg';
 
 
 
@@ -113,8 +116,8 @@ const renderProject = (projectObject) => {
         const buttonContainer = element('div', {'class': 'button-bar', 'id': 'project-button-bar'});
 
         // Will replace with image
-        const closeProject = element('input', {'type': 'button', 'id': 'close-project', 'value': 'Close'});
-        const editProject = element('input', {'type': 'button', 'id': 'edit-project', 'value': 'Edit'})
+        const closeProject = element('input', {'type': 'image', 'src': closeProjectIcon,'class': 'project-button', 'id': 'close-project', 'value': 'Close'});
+        const editProject = element('input', {'type': 'image', 'src': editProjectIcon, 'class': 'project-button', 'id': 'edit-project', 'value': 'Edit'})
         editProject.addEventListener('click', () => {
             
 
@@ -164,7 +167,7 @@ const editProjectBox = (proj) => {
     const buttonBar = document.querySelector('.button-bar');
     const editButton = document.querySelector('#edit-project');
     editButton.classList.add('hidden');
-    const saveButton = element('input', {'type': 'button', 'class': 'edit-button', 'id': 'save-project-button', 'value': 'Save'});
+    const saveButton = element('input', {'type': 'image', 'src': saveProjectIcon, 'class': 'project-button edit-button', 'id': 'save-project-button', 'value': 'Save'});
     
     // Copy content to temporary project object
     saveButton.addEventListener('click', () => {
@@ -222,7 +225,6 @@ const editDescription = (target) => {
     const desc = document.querySelector(`.${target}-desc`);
     
     
-    //const editDescriptionBox = element('input', {'type': 'text', 'placeholder': desc.innerText, 'class': 'project-description project-item edit-box',})
     const editDescriptionBox = element('textarea', {'name':'textarea', 'placeholder': desc.innerText, 'class': `edit-${target}-box ${target}-item ${target}-desc`});
     editDescriptionBox.textContent = desc.innerText;
     desc.parentNode.insertBefore(editDescriptionBox, desc);
@@ -263,7 +265,7 @@ const renderTask = (task) => {
 
             const titleBar = element('div', {'class': "task-title-bar"});
             
-            const editButton = element('input', {'type': 'button', 'class': 'task-button', 'id': 'task-edit-button', 'value': 'Edit'});
+            const editButton = element('input', {'type': 'image', 'src': editTaskIcon, 'class': 'task-button', 'id': 'task-edit-button', 'value': 'Edit'});
             editButton.addEventListener('click', () => editTask(task));
             titleBar.appendChild(editButton);
 
@@ -273,7 +275,7 @@ const renderTask = (task) => {
             titleBar.appendChild(title);            
 
 
-            const completeButton = element('input', {'type': 'button', 'class': 'task-button', 'id': 'task-complete-button', 'value': 'CHK'});
+            const completeButton = element('input', {'type': 'image', 'src': finishTaskIcon, 'class': 'task-button', 'id': 'task-complete-button', 'value': 'CHK'});
             completeButton.addEventListener('click', () => {
                 // set task as complete
             })
@@ -327,14 +329,14 @@ const renderTask = (task) => {
         const buttonBar = () => {
 
             const buttons = element("div", {'class': 'button-bar', 'id': 'task-buttons'});
-            const deleteButton = element('input', {'type': 'button', 'class': 'task-button delete-task', 'id': 'delete-task', 'value': 'Delete'})
+            const deleteButton = element('input', {'type': 'image', 'src': deleteTaskIcon, 'class': 'task-button delete-task', 'id': 'delete-task', 'value': 'Delete'})
             deleteButton.addEventListener('click', (e) => {
                 deleteTask(task);
                 closeTask(e.target.parentNode.parentNode);
             });
             buttons.appendChild(deleteButton);
           
-            const closeButton = element('input', {'type': 'button', 'value': 'Close', 'class': 'taks-button close-task'});
+            const closeButton = element('input', {'type': 'image', 'src': closeProjectIcon,'alt': 'close', 'class': 'task-button close-task'});
             closeButton.addEventListener('click', (e) => closeTask(e.target.parentNode.parentNode));
             buttons.appendChild(closeButton);                
         
@@ -411,7 +413,7 @@ const editTask = (task) => {
     const title = document.querySelector('.task-title');
     const editButton = document.querySelector('#task-edit-button');
     editButton.classList.add('hidden');
-    const saveButton = element('input', {'type': 'button', 'class': 'task-edit-button task-button', 'id': 'task-edit-button', 'value': 'Save'})
+    const saveButton = element('input', {'type': 'image', 'src': saveTaskIcon, 'class': 'task-edit-button task-button', 'id': 'task-edit-button', 'value': 'Save'})
 
     saveButton.addEventListener('click', () => {
 
@@ -480,16 +482,17 @@ const createMiniTask = (project, task) => {
    
     if (task.getStatus() === true){
         minitask.classList.add('completed');
+       
         
     }
 
     //console.log(task);
     // Delete mini
-    const removeMini = element('input', {'type': 'button', 'class': 'mini-button mini-delete', 'value': '-'})
+    const removeMini = element('input', {'type': 'image', 'src': miniDeleteIcon, 'class': 'mini-button mini-delete', 'value': '-'})
     // Pass on DOM of Minilist and Task to delete
     removeMini.addEventListener('click', (e) => deleteMini(task));
     // Mark mini as complete
-    const finishMini = element('input', {'type': 'button', 'class': 'mini-button mini-finish', 'value': 'F'});
+    const finishMini = element('input', {'type': 'image', 'src': miniCheckbox, 'class': 'mini-button mini-finish', 'value': 'F'});
     finishMini.addEventListener('click', (e) => toggleTaskStatus(task));
     //Open Task in full view
     const miniButton = element('input', {'type': 'button', 'class': 'mini-button', 'value': `${task.getTitle()}`});

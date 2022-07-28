@@ -318,11 +318,14 @@ h1,h2,h3,h4,h5,p, ul, li{
      background-color: var(--card-bg-color)
  }
 
- #project-button{
-    margin-top: 5%;
+ .project-button, .task-button{
     padding: 5px;
     font-size: clamp(1rem, 24px, 2rem);
     border-radius: 5px;
+    height: 2rem;
+    width: 2rem;
+ 
+   
 }
 
 .button-bar{
@@ -350,16 +353,22 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .delete-task{
-    outline: 2px solid red;
     
-    width: min-content;
-   
+    
+ 
 
 }
 
 .completed > *{
     background-color: rgba(104, 245, 104, 0.521);
+    
     font-style: italic;
+}
+
+.completed > .mini-finish{
+    background-image:  url(./img/minicheckmarked.svg);
+    outline: 2px solid pink;
+
 }
 
 .hidden{
