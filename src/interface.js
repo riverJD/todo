@@ -5,6 +5,20 @@ import defaultTask from "./default-task.json";
 import { Task } from "./todo";
 import { Project } from "./project";
 
+// images
+import closeTaskIcon from "./img/close-task.svg";
+import editTaskIcon from "./img/pencil.svg";
+import saveTaskIcon from "./img/save-task.svg";
+import finishTaskIcon from "./img/finish-task.svg"
+
+import closeProjectIcon from "./img/close-project.svg";
+import editProjectIcon from "./img/edit.svg";
+import saveProjectIcon from "./img/save-content.svg";
+
+
+
+
+
 
 // Interface for adding tasks and projects.
 const content = document.querySelector("#content")
