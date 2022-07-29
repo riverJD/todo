@@ -4,6 +4,7 @@ import defaultProject from "./default-project.json"
 import defaultTask from "./default-task.json";
 import { Task } from "./todo";
 import { Project } from "./project";
+import { renderProjectList } from "./content";
 
 // images
 import closeTaskIcon from "./img/close-task.svg";
@@ -19,6 +20,7 @@ import saveProjectIcon from "./img/save-content.svg";
 import miniCheckbox from './img/minicheckbox.svg';
 import miniCheckboxComplete from './img/minicheckmarked.svg';
 import miniDeleteIcon from './img/delete-alert.svg';
+
 
 
 
@@ -329,14 +331,14 @@ const renderTask = (task) => {
         const buttonBar = () => {
 
             const buttons = element("div", {'class': 'button-bar', 'id': 'task-buttons'});
-            const deleteButton = element('input', {'type': 'image', 'src': deleteTaskIcon, 'class': 'task-button delete-task', 'id': 'delete-task', 'value': 'Delete'})
+            const deleteButton = element('input', {'type': 'image', 'src': deleteTaskIcon, 'alt': 'Delete task', 'class': 'task-button delete-task', 'id': 'delete-task', 'value': 'Delete'})
             deleteButton.addEventListener('click', (e) => {
                 deleteTask(task);
                 closeTask(e.target.parentNode.parentNode);
             });
             buttons.appendChild(deleteButton);
           
-            const closeButton = element('input', {'type': 'image', 'src': closeProjectIcon,'alt': 'close', 'class': 'task-button close-task'});
+            const closeButton = element('input', {'type': 'image', 'src': closeProjectIcon,'alt': 'Close Task', 'class': 'task-button close-task'});
             closeButton.addEventListener('click', (e) => closeTask(e.target.parentNode.parentNode));
             buttons.appendChild(closeButton);                
         
@@ -594,6 +596,10 @@ const closeProject = () => {
     const project = document.querySelector('.project')
    
     project.remove();
+
+    renderProjectList();
+
+
 
 }
 

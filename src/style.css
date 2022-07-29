@@ -1,30 +1,40 @@
 :root{
     --greyBlue: rgb(156, 164, 199);
     --happyBlue: rgb(192, 204, 241);
-    --postityellow: rgb(222, 231, 222);
+    --postityellow: rgb(242, 243, 221);
     --bg-color: var(--happyBlue, blue);
 
     --sub-bg-color: rgba(211, 209, 209, 0.493);
-    --project-color: var(--postityellow, white);
+    --project-color: rgb(246, 247, 238);
 
 
     --editing-task-color: var(--happyBlue);
 
     --low-priority: rgb(162, 178, 233);
     --med-priority: rgb(162, 178, 233);
+
+    padding: 0;
+    margin: 0;
 }
 
 body{
-    background-color:var(--bg-color, blue)
+    
+    background-color: var(--greyBlue);
 
-
-
+    height: 100vh;
+    border: 1px solid yellow;
 
 }
 
 h1,h2,h3,h4,h5,p, ul, li{
     margin: 0;
     padding: 0;
+}
+
+#content{
+    background-color:var(--bg-color, rgb(197, 197, 202));
+    height: 100%;
+    width: 100%;
 }
 
 .test{
@@ -122,11 +132,12 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .project{
     height: 300px;
-    width: min(600px, 98%);
+    width: min(600px, 90%);
     min-width: 300px;
     
     font-family: inter;
     display: flex;
+    position: fixed;
     flex-direction: column-reverse;
     justify-content: center;
     margin: 0;
@@ -134,7 +145,7 @@ h1,h2,h3,h4,h5,p, ul, li{
   
     border: 1px solid rgb(17, 21, 83);
     border-radius: 3px;
-    background-color: var(--postityellow);
+    background-color: var(--project-color);
     
     
     
@@ -173,6 +184,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .project-item{
 
+
     
 }
 .project-title-bar{
@@ -198,13 +210,15 @@ h1,h2,h3,h4,h5,p, ul, li{
 
     font-family: inter;
     grid-area: summary;
-    background-color: var(--sub-bg-color, rgba(211, 209, 209, 0.493));
+
+    overflow: auto;
+   
 
 }
 
 .project-goal{
     width: 98%;
-   background-color: var(--sub-bg-color, rgba(211, 209, 209, 0.493));
+   
 
     grid-area: objective;
 }
@@ -374,4 +388,74 @@ h1,h2,h3,h4,h5,p, ul, li{
 .hidden{
     display: none;
 }
+
+.main-container{
+
+    width: 100%;
+    height: 100%;
+    outline: 2px solid green;
+}
+
+ .workspace{
+    width: 100%;
+    height: 100%;
+  
+    display: grid;
+    justify-content: center;
+
+
+    gap: 30px;
+    grid-template-columns: repeat(auto-fill, min(150px, 100vw));
+    grid-auto-rows: 250px;
+ }
+
+ .content-button{
+    height: auto;
+    width: 3rem;
+
+    justify-self: center;
+ }
+
  
+ .card-button{
+    height: auto;
+    width: 1.5rem;
+    color: red;
+    opacity: .5;
+
+ }
+
+ 
+ .card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    height: 200px;
+    width: 130px;
+
+    background-color: rgb(242, 243, 221);
+    border: 2px solid black;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px;
+ }
+
+ .card-button-bar{
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+   
+ }
+
+.card-deadline{
+    display: flex;
+    justify-content: space-between;
+}
+
+.active-settings-button{
+
+ transform: rotate(90deg);
+
+}
