@@ -1,9 +1,11 @@
 import { element } from "./utils"
 import newProjIcon from "./img/note-plus.svg"
-import { addProjectButton, renderProject } from "./interface";
+import { addProjectButton, renderProject } from "./projectUI.js";
 import { createProjectCard as renderProjectCard} from "./cards";
 import { Project } from "./project";
 import { format } from "date-fns";
+
+
 //  Content space that holds projects
 
 // Create workspace

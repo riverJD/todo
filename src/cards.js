@@ -1,6 +1,7 @@
 import { element } from "./utils";
 import { format } from "date-fns";
-import { renderProject } from "./interface";
+import { renderProject } from "./projectUI.js";
+import { renderTask } from "./projectUI.js";
 
 
 import settingsIcon from "./img/cog.svg";
