@@ -35,6 +35,10 @@ const renderProject = (projectObject) => {
     // Container to attach project to
     const parent = document.querySelector("#content");
 
+    // Remove interaction with workspace
+    const main = document.querySelector("#workspace-container");
+    main.classList.add('blockscreen');
+
     let proj = projectObject.content;
 
     const render = () => {
@@ -117,7 +121,6 @@ const renderProject = (projectObject) => {
 
         const buttonContainer = element('div', {'class': 'button-bar', 'id': 'project-button-bar'});
 
-        // Will replace with image
         const closeProject = element('input', {'type': 'image', 'src': closeProjectIcon,'class': 'project-button', 'id': 'close-project', 'value': 'Close'});
         const editProject = element('input', {'type': 'image', 'src': editProjectIcon, 'class': 'project-button', 'id': 'edit-project', 'value': 'Edit'})
         editProject.addEventListener('click', () => {
@@ -252,12 +255,15 @@ const editGoal = (target) => {
 // Show a full task on screen
 const renderTask = (task) => {
 
-    console.log(task.getContent())
+    
     const oldTaskDOM = document.querySelector(".task");
     if (oldTaskDOM != undefined) oldTaskDOM.remove();
     
     // DOM element to attach self to
     const content = document.querySelector("#content");
+
+    const projectDOM = document.querySelector('.project');
+    projectDOM.classList.add('blockproject')
 
     // The actual render object 
     const taskPopup = () => {
@@ -301,6 +307,7 @@ const renderTask = (task) => {
             const priorityHeader = priority.querySelector('.task-deadline-header');
             priorityHeader.textContent = "Deadline"
             const priorityButton = element('input', {'type': 'button', 'class': "priority-button task-item", 'value': task.getPriority()});
+            priorityButton.addEventListener('click', (e) => changePriority(e));
 
             const deadlineContent = priority.querySelector('.task-deadline-content');     
             const deadline = element('div', {'class': "task-deadline task-item", "id": `${task.deadline}-deadline`});
@@ -464,6 +471,9 @@ const deleteTask = (task) => {
 // Delete the DOM element associated with task
 const closeTask = (DOM) => {
 
+    const project = document.querySelector('.project');
+    project.classList.remove('blockproject');
+
     if (DOM != null) DOM.remove();
 }
 
@@ -471,7 +481,15 @@ const toggleTaskStatus = (task) => {
 
     if (task == null) return;
 
-    task.getStatus() === false ? task.setStatus(true) : task.setStatus(false);
+    if (task.getStatus() === false){
+        task.setStatus(true);
+        task.getParent().tasks.completeTask(task);
+    }
+    else{
+        task.setStatus(false)
+        task.getParent().tasks.removeComplete(task);
+    }
+  
 
     renderTaskList(task.getParent());
 
@@ -497,7 +515,7 @@ const createMiniTask = (project, task) => {
     const finishMini = element('input', {'type': 'image', 'src': miniCheckbox, 'class': 'mini-button mini-finish', 'value': 'F'});
     finishMini.addEventListener('click', (e) => toggleTaskStatus(task));
     //Open Task in full view
-    const miniButton = element('input', {'type': 'button', 'class': 'mini-button', 'value': `${task.getTitle()}`});
+    const miniButton = element('input', {'type': 'button', 'class': 'mini-button mini-title', 'value': `${task.getTitle()}`});
         
     
     
@@ -594,7 +612,12 @@ const createListeners = (project) => {
 const closeProject = () => {
 
     const project = document.querySelector('.project')
-   
+    
+    //Reenable interaction 
+    const main = document.querySelector('#workspace-container');
+    main.classList.remove('blockscreen')
+    
+   console.log(main)
     project.remove();
 
     renderProjectList();

@@ -2,7 +2,7 @@
 "description": "Create project generation module for ToDo project.",
 "priority": 1, 
 "goal": "Project factory returns completed object",
-"deadline": "7/24/2022",
+"deadline": "8/24/2022",
 "taskID": "0",
 "completed": false
 }
