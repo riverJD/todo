@@ -1,3 +1,5 @@
+import defaultIcon from './img/close-task.svg';
+
 // Helper functions
 
 // create element of specific type, with attributes attached
@@ -53,7 +55,7 @@ function createImageLink(url, image, alt){
 // Make a generic display element, with a container, title, and content section
 // ID and class will be generated from name (string)
 // [Container]-->  [TitleContainer-->Title+Button] + Content
-const makeContainer = (name) => {
+const makeContainer = (name, inputImage) => {
 
  
 
@@ -61,7 +63,7 @@ const makeContainer = (name) => {
     // Title and Button
     const titleContainer = createElement('div', {'class': "title-container", 'id': `${name.toLowerCase()}-title-container`});
     const title = createElement('h4', {'class': `${name.toLowerCase()}-header`});
-    const titleButton = createElement('input', {'type': 'button', 'id': `${name.toLowerCase()}-button`, 'class': 'container-button expand-content-btn', 'value': '^'}, );
+    const titleButton = createElement('input', {'type': 'image', 'src': inputImage,  'id': `${name.toLowerCase()}-button`, 'class': 'container-button expand-content-btn', }, );
     titleContainer.appendChild(title);
     titleContainer.appendChild(titleButton);
 

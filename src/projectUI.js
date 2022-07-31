@@ -4,8 +4,8 @@ import defaultProject from "./default-project.json"
 import defaultTask from "./default-task.json";
 import { Task } from "./todo";
 import { Project } from "./project";
-import { renderProjectList } from "./content";
-import { renderTask, createTask} from "./taskUI";
+import { projectList, renderProjectList } from "./content";
+import { renderTask, createTask, priorityStyle} from "./taskUI";
 
 // images
 
@@ -16,8 +16,8 @@ import saveProjectIcon from "./img/save-content.svg";
 import miniCheckbox from './img/minicheckbox.svg';
 import miniCheckboxComplete from './img/minicheckmarked.svg';
 import miniDeleteIcon from './img/delete-alert.svg';
-
-
+import finishTasksIcon from './img/finish-task.svg';
+import calendarIcon from './img/calendar-edit.svg';
 
 
 
@@ -70,10 +70,10 @@ const renderProject = (projectObject) => {
         // Deadline/Priority/Urgency Container (These will interact a lot)
         const deadline = () => {
 
-            const deadlineContainer = makeContainer("Deadline");
+            const deadlineContainer = makeContainer("Deadline", calendarIcon);
             const deadlineContent = deadlineContainer.querySelector('.deadline-content');     
             const deadline = element('div', {'class': "project-deadline project-item", "id": `${proj.deadline}-deadline`});
-            const priorityButton = element('input', {'type': 'button', 'class': "priority-button project-item", 'value': proj.getPriority()});
+            const priorityButton = element('input', {'type': 'button', 'class': `priority-button project-item ${priorityStyle(proj).priorityValue}`, 'value': priorityStyle(proj).priorityText});
             deadline.textContent = format(proj.getDeadline(), "MM.dd.yyyy");
             deadlineContent.appendChild(deadline);
             deadlineContainer.appendChild(deadlineContent);    
@@ -95,7 +95,7 @@ const renderProject = (projectObject) => {
 
     // Task Container
     const tasks = () => {
-        const tasks = makeContainer("Tasks");
+        const tasks = makeContainer("Tasks", finishTasksIcon);
         const addTask = element('input', {'type':'button', 'id': 'add-task-button', 'value': '++'})
        
    
@@ -265,6 +265,8 @@ const renderTaskList = (project) => {
         }
         else minitask.classList.remove('completed');
 
+      
+
         list.insertBefore(minitask, list.lastElementChild);
 
     }
@@ -306,11 +308,10 @@ const toggleTaskStatus = (task) => {
 const createMiniTask = (project, task) => {
     
     const minitask = element('div', {'class':'mini-task'})
-   
+    minitask.classList.add(priorityStyle(task).priorityValue);
     if (task.getStatus() === true){
         minitask.classList.add('completed');
        
-        
     }
 
     //console.log(task);
@@ -333,23 +334,6 @@ const createMiniTask = (project, task) => {
     let bgcolor = minitask.style.backgroundColor;
     const title = element('h4', {'class': 'mini-task-title'})
     
-    
-    switch (task.getPriority()){
-
-        case 1: 
-             bgcolor = "red";
-            break;
-        case 2:
-            bgcolor = "yellow";
-            break;
-        case 3:
-            bgcolor = "green";
-            break;
-            
-            
-
-    }
-
     
     minitask.appendChild(title);
 
@@ -395,25 +379,79 @@ const createListeners = (project) => {
     close.addEventListener('click', () => closeProject());
     // Content button (expand content)
     const tasks = document.querySelector('#tasks-button');
+    tasks.addEventListener('click', () => {
+
+        setAllTasks(project);
+
+    })
     
     const deadline = document.querySelector('#deadline-button');
     const priority = document.querySelector('.priority-button.project-item');
     priority.addEventListener('click', (e) => {
 
-        const currentPriority = project.content.getPriority();
-      //  console.log(currentPriority);
-
-       
-        const updatedPriority = ((currentPriority) % 3) + 1;
-        project.content.setPriority(updatedPriority);
-        e.target.value = updatedPriority;
-        
+        cyclePriority(project);
 
     })   
 
 }
 
+const cyclePriority = (project) => {
 
+    const currentPriority = project.content.getPriority();
+    //  console.log(currentPriority);
+
+     
+      const updatedPriority = (((currentPriority) +1 ) % 3) + 1;
+      project.content.setPriority(updatedPriority);
+      closeProject();
+
+    const projectDOM = document.querySelector('.project');
+    if (projectDOM != null) renderProject(project);
+      
+}
+
+
+
+// Toggle completed status for all tasks in a project
+const setAllTasks = (project) => {
+
+    let status = false;
+
+    const taskList = project.tasks.getTaskList();
+    const finishedList = project.tasks.getCompletedTasks();
+
+    if (project.tasks.getTaskList().length != project.tasks.getCompletedTasks().length){
+        status = true;
+    }
+    else if(finishedList.length === 0){
+        status = true;
+    }
+
+    project.tasks.clearFinishedList();
+    
+    for (let task of taskList){
+
+        task.setStatus(status);
+        console.log(taskList.length);
+        console.log(finishedList.length);
+        if (status === true){
+            project.tasks.completeTask(task);
+            
+        }
+        else{
+            
+        }
+
+    }
+
+    const projectDom = document.querySelector('.project');
+    if (projectDom != null){    
+        closeProject(project);
+        renderProject(project);
+    }
+
+
+}
 
 
 const closeProject = () => {
@@ -424,14 +462,33 @@ const closeProject = () => {
     const main = document.querySelector('#workspace-container');
     main.classList.remove('blockscreen')
     
-   console.log(main)
-    project.remove();
+    if (project != null) project.remove();
 
     renderProjectList();
 
 
 
 }
+
+const finishProject = (project) => {
+
+    const projectTasks = project.tasks.getTaskList();
+
+    
+    setAllTasks(project);
+
+    renderProjectList();
+
+}
+
+const deleteProject = (project) => {
+
+    projectList.removeProject(project);
+
+
+}
+
+
 
 
 
@@ -449,4 +506,4 @@ const addProjectPopUp = () => {
 }
 
 
-export {renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}
+export {deleteProject, cyclePriority, editProjectBox, deleteTask, finishProject, closeProject, renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}

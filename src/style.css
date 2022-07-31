@@ -6,6 +6,10 @@
 
     --sub-bg-color: rgba(211, 209, 209, 0.493);
     --project-color: rgb(246, 247, 238);
+    
+    
+    --header-bg-color: rgb(238, 240, 233);
+    --header-border: var(--greyBlue);
 
 
     --editing-task-color: var(--happyBlue);
@@ -19,23 +23,28 @@
 }
 
 body{
-    
-    background-color: var(--greyBlue);
 
+    background-color: var(--happyBlue);
+  
     height: 100vh;
-    border: 1px solid yellow;
-
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h1,h2,h3,h4,h5,p, ul, li{
     margin: 0;
     padding: 0;
+    list-style: none;;
 }
 
 #content{
     background-color:var(--bg-color, rgb(197, 197, 202));
     height: 100%;
-    width: 100%;
+    width: 90%;
 }
 
 .test{
@@ -59,7 +68,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .task{
     border: 5px solid black;
-    height: 400px;
+    height: 500px;
     width: min(300px, 90%);
 
     padding: 10px;
@@ -145,9 +154,10 @@ h1,h2,h3,h4,h5,p, ul, li{
     margin: 0;
     padding: 10px;
   
-    border: 1px solid rgb(17, 21, 83);
+    border: px outset rgb(17, 21, 83);
     border-radius: 3px;
     background-color: var(--project-color);
+    box-shadow: 1px 1px 5px;
     
     
     
@@ -228,6 +238,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 .edit-project-box, .edit-task-box{
     resize: none;
     
+    max-width: 90%;
 
 }
 
@@ -348,8 +359,15 @@ h1,h2,h3,h4,h5,p, ul, li{
     border-radius: 5px;
     height: 2rem;
     width: 2rem;
- 
-   
+    fill: red;   
+    opacity: .85;
+}
+
+.project-button:hover, .task-button:hover{
+
+    opacity: 1;
+    outline: 5px solid rgb(204, 39, 39);
+    border-radius: 50%;
 }
 
 .button-bar{
@@ -370,11 +388,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 
-.completed{
-    
-    background-color: rgba(104, 245, 104, 0.795);
-    
-}
+
 
 .delete-task{
     
@@ -400,17 +414,18 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .main-container{
-
-    width: 100%;
-    height: 100%;
-    outline: 2px solid green;
+    margin-top: 10%;
+    width: 70%;
+    height: 90%;
+    outline: 2px solid black;
 }
 
  .workspace{
     width: 100%;
     height: 100%;
   
-    display: grid;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
 
 
@@ -430,7 +445,6 @@ h1,h2,h3,h4,h5,p, ul, li{
  .card-button{
     height: auto;
     width: 1.5rem;
-    color: red;
     opacity: .5;
  }
 
@@ -448,9 +462,10 @@ h1,h2,h3,h4,h5,p, ul, li{
     width: 130px;
 
     background-color: rgb(242, 243, 221);
-    border: 2px solid black;
+   
     border-radius: 5px;
-    box-shadow: 1px 1px 5px;
+    box-shadow: 2px 2px 5px var(--greyBlue);
+    outline: 1px solid var(--greyBlue);
  }
 
  .card-button-bar{
@@ -507,6 +522,28 @@ h1,h2,h3,h4,h5,p, ul, li{
     
 }
 
+
+
+.priority-button{
+    height: 1.5rem;
+    width: min-content;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+
+.container-button{
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+#tasks-button{
+    flex: 0;
+   
+
+}
+
+
 .lowpriority{
     background-color: var(--low-priority, lightblue);
 }
@@ -520,3 +557,65 @@ h1,h2,h3,h4,h5,p, ul, li{
     background-color:var(--high-priority, lightsalmon);
 }
 
+.completed{
+    
+    background-color: rgba(104, 245, 104, 0.795);
+    
+}
+
+#context-menu-container{
+    position: fixed;
+    z-index: 10;
+    
+    background-color: rgba(219, 219, 219, 0.89);
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+
+    
+}
+
+#context-menu{
+    display:flex;
+    flex-direction: column;
+
+}
+
+.menu-item{
+
+margin-bottom: 10px;
+
+}
+
+.menu-item:hover, .menu-item:focus{
+    font-weight: bold;
+}
+
+#header{
+    width: 100%;
+    height: 100px;
+    background-color: var(--header-bg-color, rgb(196, 181, 181));
+    margin-bottom: 5px;
+    border-bottom: 5px solid var(--header-bg-color, none);
+    box-shadow: 2px 2px 5px var(--greyBlue)
+    
+
+
+}
+
+.tab-container{
+    display: flex;
+    flex-direction: column;
+
+
+
+}
+
+.tab{
+
+    width: 100%;
+    display: flex;
+
+
+}

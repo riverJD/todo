@@ -28,9 +28,9 @@ const createWorkSpace = () => {
     return main;
 }
 
-const addNewProject = () => {
-
-    const project = Project();
+const addNewProject = (proj) => {
+    let project;
+    (proj != null) ? project = proj : project = Project();
     const card = renderProjectCard(project);
     projectList.addProject(project)
  
@@ -49,10 +49,16 @@ const projectList = ((project) => {
 
     }
 
+    const removeProject = (project) => {
+
+        list.splice(project, 1);
+        renderProjectList();
+    }
+
 
     const getProjects = () => list;
 
-    return {addProject, getProjects, list}
+    return {addProject, getProjects, removeProject}
 
 })();
 
@@ -74,8 +80,24 @@ const renderProjectList = () => {
 
     }
 
+}
 
+const switchDisplayStyle = () => {
 
+    const style = document.querySelector('.tab-container');
+   
+    const cards = document.querySelectorAll('.card');
+    if (style != null){
+        style.classList.remove('tab-container');
+
+    
+        cards.forEach(tab => tab.classList.remove('tab'));
+    }
+    else{
+        const display = document.querySelector('.workspace');
+        display.classList.add('tab-container');
+        cards.forEach(card => card.classList.add('tab'));
+    }
 
 }
 
@@ -83,7 +105,7 @@ const renderProjectList = () => {
 
 
 
-export {createWorkSpace as content, projectList, renderProjectList}
+export {createWorkSpace as content, projectList, renderProjectList, addNewProject, switchDisplayStyle}
 
 // Button for adding new project
 

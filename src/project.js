@@ -42,6 +42,9 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
         }
     
         const completeTask = (task => {
+
+            //if (_completedTasks.includes(task)) return;
+
             _completedTasks.push(_taskList.slice(task));
              //removeTask(task)
     
@@ -58,12 +61,18 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
             taskID++;
         }
 
+        const clearFinishedList = () => {
+            _completedTasks = [];
+        }
+
+
+
         const getTaskList = () => _taskList;
         const getCompletedTasks = () => _completedTasks;
         const getInCompleteTasks = () => _incompleteTasks;
         const taskCount = _taskList.length;
 
-        return {removeComplete, taskCount, addTask, removeTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks, _taskList}
+        return {clearFinishedList, removeComplete, taskCount, addTask, removeTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks, _taskList}
 
     })();
   
@@ -98,6 +107,11 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
 
         return {setTitle, getTitle, getDeadline, setDeadline, setDescription, getDescription, getContent, setPriority, getPriority, setGoal, getGoal, }
 })();
+
+
+
+
+
 
   return { tasks, _taskList, content}
 }

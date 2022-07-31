@@ -3,11 +3,10 @@ import editTaskIcon from "./img/pencil.svg";
 import saveTaskIcon from "./img/save-task.svg";
 import finishTaskIcon from "./img/finish-task.svg";
 import deleteTaskIcon from "./img/delete-task.svg";
-import { editDescription, editGoal, editTitle, createMiniTask} from "./projectUI";
+import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask} from "./projectUI";
 import { Task } from "./todo";
 import { element, makeContainer } from "./utils";
 import { format } from "date-fns";
-
 
 
 // Show a full task on screen
@@ -58,14 +57,15 @@ const renderTask = (task) => {
                 return description;
         }
       
-            // Creating a DOM container to hold priority and deadline display
+        // Creating a DOM container to hold priority and deadline display
         const priority = () => {
 
             const priority = makeContainer('task-deadline');
             const priorityHeader = priority.querySelector('.task-deadline-header');
-            priorityHeader.textContent = "Deadline"
-            const priorityButton = element('input', {'type': 'button', 'class': "priority-button task-item", 'value': task.getPriority()});
-            priorityButton.addEventListener('click', (e) => changePriority(e));
+     
+                priorityHeader.textContent = "Deadline"
+            const priorityButton = element('input', {'type': 'button', 'class': `priority-button task-item ${priorityStyle(task).priorityValue}`, 'value': priorityStyle(task).priorityText});
+            priorityButton.addEventListener('click', () => cyclePriority(task));
 
             const deadlineContent = priority.querySelector('.task-deadline-content');     
             const deadline = element('div', {'class': "task-deadline task-item", "id": `${task.deadline}-deadline`});
@@ -93,6 +93,7 @@ const renderTask = (task) => {
             return goal;
         }
 
+        // Creation of button bar
         const buttonBar = () => {
 
             const buttons = element("div", {'class': 'button-bar', 'id': 'task-buttons'});
@@ -127,6 +128,27 @@ const renderTask = (task) => {
     content.appendChild(taskPopup());
 }
 
+const cyclePriority = (task) => {
+
+    const curPriority = task.getPriority();
+
+    // Priority is 1-3, cycle to next priority level
+    const newPriority = changePriority(task, (((curPriority) % 3) + 1));
+
+
+}
+
+// Task Object, Priority Integer
+const changePriority = (task, priority) => {
+
+    task.setPriority(priority);
+    
+    closeProject();
+    renderProject(task.getParent());
+    renderTask(task);
+
+}
+
 
 
 const closeTask = (DOM) => {
@@ -150,8 +172,6 @@ const createTask = (container, project) => {
     // Add to object
     project.tasks.addTask(task);
     task.getID();
-    renderTask(task);
-    editTask(task);
 
 }
 
@@ -203,4 +223,33 @@ const editTask = (task) => {
 
 }
 
-export {editTask, createTask, closeTask, renderTask }
+const priorityStyle = (task) => {
+
+    let priorityValue;
+    let priorityText;
+        
+    switch (task.getPriority()){
+
+        case 3:
+            priorityValue = 'lowpriority';
+            priorityText = 'Low';
+            break;
+        case 2:
+            priorityValue = 'medpriority';
+            priorityText = 'Med';
+            break;
+        case 1:
+            priorityValue = 'highpriority';
+            priorityText = 'High';
+            break;
+        default: 
+            console.warn(`That priority level is not implemented: ${task.getPriority()}`);
+            break;    
+    }
+
+    
+
+
+    return {priorityValue, priorityText}
+};
+export {editTask, createTask, closeTask, renderTask, priorityStyle}
