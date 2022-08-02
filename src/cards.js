@@ -161,7 +161,7 @@ const settingsMenu = (card, project) => {
     const del = element('li', {'class': 'menu-delete menu-item'});
     del.textContent = 'delete project';
         del.addEventListener('click', () => {
-
+            console.log('cli')
             deleteProject(project);
         })
 

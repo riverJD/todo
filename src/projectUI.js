@@ -23,17 +23,20 @@ import calendarIcon from './img/calendar-edit.svg';
 
 // Interface for adding tasks and projects.
 const content = document.querySelector("#content")
-
+const TASKLISTMAX = 7;
 
 // Render a full project
 const renderProject = (projectObject) => {
    
     // Container to attach project to
-    const parent = document.querySelector("#content");
+    const parent = document.querySelector("#workspace");
 
     // Remove interaction with workspace
     const main = document.querySelector("#workspace-container");
-    main.classList.add('blockscreen');
+    
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => card.classList.add('blockscreen'))
+
 
     let proj = projectObject.content;
 
@@ -97,19 +100,25 @@ const renderProject = (projectObject) => {
     const tasks = () => {
         const tasks = makeContainer("Tasks", finishTasksIcon);
         const addTask = element('input', {'type':'button', 'id': 'add-task-button', 'value': '++'})
-       
+       console.log(projectObject.tasks.getTaskList().length)
    
         tasks.appendChild(addTask)
         
         // Attaches a new task to both the DOM element and Project Objects
+
         addTask.addEventListener('click', (e, ) => {
             
             createTask(e.target.parentNode, projectObject);
             
   
         })
+
+        
+
         return tasks;
     }
+
+
     content.appendChild(tasks());
    
 
@@ -327,6 +336,7 @@ const createMiniTask = (project, task) => {
         
     
     
+
     miniButton.addEventListener('click', () => renderTask(task))
     minitask.appendChild(removeMini);
     minitask.appendChild(miniButton);
@@ -483,7 +493,7 @@ const finishProject = (project) => {
 
 const deleteProject = (project) => {
 
-    projectList.removeProject(project);
+    projectList.removeProject();
 
 
 }

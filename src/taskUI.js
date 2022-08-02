@@ -17,7 +17,7 @@ const renderTask = (task) => {
     if (oldTaskDOM != undefined) oldTaskDOM.remove();
     
     // DOM element to attach self to
-    const content = document.querySelector("#content");
+    const content = document.querySelector("#workspace");
 
     const projectDOM = document.querySelector('.project');
     projectDOM.classList.add('blockproject')
