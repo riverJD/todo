@@ -133,7 +133,7 @@ const cyclePriority = (task) => {
     const curPriority = task.getPriority();
 
     // Priority is 1-3, cycle to next priority level
-    const newPriority = changePriority(task, (((curPriority) % 3) + 1));
+    changePriority(task, (((curPriority) % 3) + 1));
 
 
 }
@@ -142,6 +142,7 @@ const cyclePriority = (task) => {
 const changePriority = (task, priority) => {
 
     task.setPriority(priority);
+    console.log(">" + task.getPriority());
     
     closeProject();
     renderProject(task.getParent());
@@ -166,8 +167,8 @@ const createTask = (container, project) => {
     task.setParent(project);
     
    
-    const taskList = (container)
-    taskList.insertBefore(createMiniTask(project, task), taskList.lastElementChild);
+    //const taskList = (container)
+    //taskList.insertBefore(createMiniTask(project, task), taskList.lastElementChild);
    
     // Add to object
     project.tasks.addTask(task);

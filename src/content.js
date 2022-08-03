@@ -28,6 +28,14 @@ const createWorkSpace = () => {
     return main;
 }
 
+const projectContainer = () => {
+
+    const container = element('div', {'id': 'project-container'});
+
+
+    return container;
+}
+
 const addNewProject = (proj) => {
     let project;
     (proj != null) ? project = proj : project = Project();
@@ -105,7 +113,7 @@ const switchDisplayStyle = () => {
 
 
 
-export {createWorkSpace as content, projectList, renderProjectList, addNewProject, switchDisplayStyle}
+export {createWorkSpace as content, projectList, renderProjectList, addNewProject, switchDisplayStyle, projectContainer}
 
 // Button for adding new project
 

@@ -7,6 +7,8 @@ import { renderTask } from "./projectUI.js";
 import settingsIcon from "./img/cog.svg";
 import expandIcon from "./img/expand.svg";
 import finishIcon from "./img/finish-task.svg";
+
+
 import { compare } from "semver";
 import { priorityStyle } from "./taskUI";
 import { addNewProject } from "./content";
@@ -26,9 +28,11 @@ const createProjectCard = (project) => {
         const titleBar = element('div', {'class': 'card-button-bar'});    
             const title = element('h3', {'class': 'card-title'});
                 title.textContent = project.content.getTitle();
-            const settings = element('input', {'type': 'image', 'src': settingsIcon, 'alt': 'settings', 'class': 'card-button'})
+            const settings = element('div', {'class': 'button-container'})    
+            const settingsButton = element('input', {'type': 'image', 'src': settingsIcon, 'alt': 'settings', 'class': 'card-button settings-cog'})
                 settings.addEventListener('click', (e) => openSettings(e.target, project))
             titleBar.appendChild(title);
+            settings.appendChild(settingsButton);
             titleBar.appendChild(settings);
 
         return titleBar;
@@ -118,10 +122,10 @@ const getDaysRemaining = (project) => {
 const openSettings = (parentButton, project) => {
 
     console.log('open settings menu')
-    const parentCard = parentButton.parentNode.parentNode;
+    const parentCard = parentButton.parentNode;
     console.log(parentCard)
     // popup menu
-    parentButton.classList.add('active-settings-button')
+    parentCard.classList.add('active-settings-button')
 
     settingsMenu(parentCard, project)
 
@@ -131,9 +135,10 @@ const openSettings = (parentButton, project) => {
 const settingsMenu = (card, project) => {
     console.log(card);
     console.log('settings menu')
-    const container = element('div', {'id': 'context-menu-container'});
-    const menu = element('div', {'id': 'context-menu'});
-    const menuItems = element('ul', {'id': 'menu-items menu-list'});
+    const container = element('div', {'class': 'menu-container shift-left'});
+    container.style.visibility = 'visible';
+    const menu = element('div', {'class': 'context-menu', 'id': 'cog-menu'});
+    const menuItems = element('ul', {'class': 'menu-items menu-list'});
 
     const open = element('li', {'class': 'menu-open menu-item', });
     open.textContent = 'open';

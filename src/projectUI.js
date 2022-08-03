@@ -1,24 +1,25 @@
 import { format } from "date-fns";
-import { element, makeContainer, setAttributes } from "./utils";
+import { element, makeContainer, makeMenu, setAttributes } from "./utils";
 import defaultProject from "./default-project.json"
 import defaultTask from "./default-task.json";
-import { Task } from "./todo";
+import { getUrgency, Task } from "./todo";
 import { Project } from "./project";
 import { projectList, renderProjectList } from "./content";
-import { renderTask, createTask, priorityStyle} from "./taskUI";
+import { renderTask, priorityStyle} from "./taskUI";
 
 // images
 
 import closeProjectIcon from "./img/close-project.svg";
 import editProjectIcon from "./img/edit.svg";
 import saveProjectIcon from "./img/save-content.svg";
-
+import miniSortIcon from "./img/sort.svg";
 import miniCheckbox from './img/minicheckbox.svg';
 import miniCheckboxComplete from './img/minicheckmarked.svg';
 import miniDeleteIcon from './img/delete-alert.svg';
 import finishTasksIcon from './img/finish-task.svg';
 import calendarIcon from './img/calendar-edit.svg';
-
+import addMiniTaskIcon from './img/plus-box-multiple.svg';
+import { sort } from "semver";
 
 
 // Interface for adding tasks and projects.
@@ -31,11 +32,11 @@ const renderProject = (projectObject) => {
     // Container to attach project to
     const parent = document.querySelector("#workspace");
 
-    // Remove interaction with workspace
-    const main = document.querySelector("#workspace-container");
-    
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => card.classList.add('blockscreen'))
+    // Remove interaction with rest of workspace;
+    const container = document.querySelector("#project-container");
+    container.style.display = 'flex';
+    //const cards = document.querySelectorAll('.card');
+    //cards.forEach(card => card.classList.add('blockscreen'))
 
 
     let proj = projectObject.content;
@@ -98,18 +99,61 @@ const renderProject = (projectObject) => {
 
     // Task Container
     const tasks = () => {
-        const tasks = makeContainer("Tasks", finishTasksIcon);
-        const addTask = element('input', {'type':'button', 'id': 'add-task-button', 'value': '++'})
-       console.log(projectObject.tasks.getTaskList().length)
-   
-        tasks.appendChild(addTask)
+
+        // tooltips and menu
+        const sortMenu = () => {
+            const menu = makeMenu('sort', 'sort tasks');
+            
+            const header = element('h5', {'class': 'menu-item menu-header', 'id': 'sort-test'})
+            header.textContent = 'sort';
+            menu.appendChild(header);
+
+
+            const sort = element('div', {'id': 'sort'})
+
+
         
+            const sortButton = element('input', {'type': 'image', 'src': miniSortIcon, 'class': 'container-button', 'id':'mini-sort', 'alt': 'Sort tasks', 'data-sort': 'priority'});
+          
+            sort.appendChild(sortButton);
+            
+            sort.appendChild(menu);
+          
+
+            sortButton.addEventListener('click', (e) => {
+                
+                sortButton.setAttribute('data-sort', 'title')
+                console.log(sortButton.getAttribute('data-sort'))
+            
+                console.log('..')
+    
+            })
+           
+            return sort;
+        }
+
+
+        const tasks = makeContainer("Tasks", finishTasksIcon);
+
+        
+   
+      
+        const addTask = element('input', {'type':'image', 'src': addMiniTaskIcon, 'id': 'add-task-button', 'alt': 'add mini task'})
+        const titleContainer = tasks.firstElementChild;
+        titleContainer.insertBefore(sortMenu(), titleContainer.firstElementChild); 
+        //const miniTitleContainer = document.querySelector("#tasks-title-container");
+        // miniTitleContainer.appendChild(sort);
+        console.log(projectObject.tasks.getTaskList().length)
+
+        tasks.appendChild(addTask)
+
         // Attaches a new task to both the DOM element and Project Objects
 
         addTask.addEventListener('click', (e, ) => {
             
-            createTask(e.target.parentNode, projectObject);
-            
+            //createTask(e.target.parentNode, projectObject);
+            createTask(projectObject);
+            renderTaskList(projectObject);
   
         })
 
@@ -163,6 +207,13 @@ const renderProject = (projectObject) => {
   
     
 
+}
+
+const createTask = (project) => {
+
+    const task = Task();
+    task.setParent(project);
+    project.tasks.addTask(task);
 }
 
 // Proj is original project being edited;
@@ -257,15 +308,63 @@ const editGoal = (target) => {
 
 }
 
+const sortList = (list, method) => {
+
+    
+    const sortButton = document.querySelector('#mini-sort');
+    
+    if (method == null){
+        method = sortButton.getAttribute('data-sort');
+    }
+
+    console.log("method is " + method)
+
+    switch(method){
+
+        case 'priority':
+            return list.sort((a,b) => { 
+                return a.getPriority() - b.getPriority() });
+            
+        case 'deadline':
+            return list.sort((a,b) => { 
+                return a.getDeadline() - b.getDeadline() });
+  
+        case 'urgency':
+            return list.sort((a,b) => { 
+                return a.getUrgency() - b.getUrgency() });
+           
+        case 'title':
+            return list.sort((a,b) => { 
+                return a.getTitle() - b.getTitle() });
+    }
+
+    return;
+
+
+}
+
 //Handles display of 'Tasks list'
 const renderTaskList = (project) => {
 
-    const list = document.querySelector('.tasks-container')
-   
+    const parent = document.querySelector('.tasks-container')
+    const list = element('div', {'class': 'task-list'});
+    parent.insertBefore(list, parent.lastElementChild)
     const miniList = document.querySelectorAll('.mini-task');
     miniList.forEach(mini => mini.remove())
-    for (let task of project.tasks.getTaskList()){
-        console.log(task);
+
+    // Sort list based on user option
+    let taskList = project.tasks.getTaskList();
+   /* console.log(taskList)
+    taskList.sort((a, b) => {
+        const sort = sortTasks();
+        return a.sort - b.sort
+    });*/
+
+    sortList(taskList);
+
+    console.log(taskList)
+    for (let task of taskList){
+        //console.log(task);
         const minitask = createMiniTask(project, task);
 
 
@@ -275,12 +374,15 @@ const renderTaskList = (project) => {
         else minitask.classList.remove('completed');
 
       
-
-        list.insertBefore(minitask, list.lastElementChild);
-
+      
+       list.appendChild(minitask);
     }
+
+
     
 }
+
+
 
 // Deletes task from parent project
 const deleteTask = (task) => {
@@ -469,8 +571,8 @@ const closeProject = () => {
     const project = document.querySelector('.project')
     
     //Reenable interaction 
-    const main = document.querySelector('#workspace-container');
-    main.classList.remove('blockscreen')
+    const projectContainer = document.querySelector('#project-container');
+    projectContainer.style.display = 'none';
     
     if (project != null) project.remove();
 

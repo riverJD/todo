@@ -77,4 +77,26 @@ const makeContainer = (name, inputImage) => {
     return container;
 }
 
-export {getDate, setAttributes, createElement as element, createImageLink, makeContainer};
+const makeMenu = (menuName, tooltipText) => {
+
+    const container = createElement('div', {'class': 'menu-container'});
+   
+    const tooltipContainer = createElement('div', {'class': 'tooltip'});
+    const tooltip = createElement('p', {'class': 'tooltiptext', 'id': `${menuName}-text`});
+    tooltip.textContent = tooltipText;
+    
+    tooltipContainer.appendChild(tooltip);
+
+    const menu = createElement('div', {'class': 'context-menu', 'id': `${menuName}-menu`})
+    const menuItems = createElement('ul', {'class': 'menu-items menu-list'});
+    menu.appendChild(menuItems);
+    
+    container.appendChild(tooltipContainer);
+    container.appendChild(menu);
+
+
+    return container;
+
+}
+
+export {getDate, setAttributes, createElement as element, createImageLink, makeContainer, makeMenu};
