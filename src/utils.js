@@ -1,3 +1,4 @@
+
 import defaultIcon from './img/close-task.svg';
 
 // Helper functions
@@ -11,6 +12,24 @@ const createElement = (type, attributes) => {
     
     return newElement;
 }
+
+const appendChildren = (parent, children) => {
+
+    
+    console.log(parent);
+    console.log(children)
+
+    const childCount = children.length;
+    for (let i = 1; i < childCount; i++){
+
+        parent.appendChild(children[i]);
+
+    }
+    console.log(parent);
+   // return childCount;
+}
+
+
 
 const getDate = () => {
 
@@ -99,4 +118,7 @@ const makeMenu = (menuName, tooltipText) => {
 
 }
 
-export {getDate, setAttributes, createElement as element, createImageLink, makeContainer, makeMenu};
+
+
+
+export {getDate, setAttributes, createElement as element, createImageLink, makeContainer, makeMenu, appendChildren};

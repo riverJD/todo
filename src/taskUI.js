@@ -5,8 +5,8 @@ import finishTaskIcon from "./img/finish-task.svg";
 import deleteTaskIcon from "./img/delete-task.svg";
 import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask} from "./projectUI";
 import { Task } from "./todo";
-import { element, makeContainer } from "./utils";
-import { format } from "date-fns";
+import { appendChildren, element, makeContainer } from "./utils";
+import { format, getDate } from "date-fns";
 
 
 // Show a full task on screen
@@ -63,6 +63,9 @@ const renderTask = (task) => {
             const priority = makeContainer('task-deadline');
             const priorityHeader = priority.querySelector('.task-deadline-header');
      
+           const deadlineButton = priority.querySelector('#task-deadline-button');
+           deadlineButton.addEventListener('click', () => openDeadlineForm())
+
                 priorityHeader.textContent = "Deadline"
             const priorityButton = element('input', {'type': 'button', 'class': `priority-button task-item ${priorityStyle(task).priorityValue}`, 'value': priorityStyle(task).priorityText});
             priorityButton.addEventListener('click', () => cyclePriority(task));
@@ -176,7 +179,7 @@ const createTask = (container, project) => {
 
 }
 
-// Would like to refactor this to share with edit project functions if possible
+
 const editTask = (task) => {
     
     //const project = task.getParent();
@@ -224,6 +227,7 @@ const editTask = (task) => {
 
 }
 
+
 const priorityStyle = (task) => {
 
     let priorityValue;
@@ -247,10 +251,55 @@ const priorityStyle = (task) => {
             console.warn(`That priority level is not implemented: ${task.getPriority()}`);
             break;    
     }
+    return {priorityValue, priorityText}
+
+}
+const openDeadlineForm = () => {
 
     
+    const container = element('div', {'class': 'form-container', 'id': 'deadline-form-container'});
+    
+    container.appendChild(deadlineForm());
+    const parent = document.querySelector('body');
+    parent.appendChild(container);
+
+}
 
 
-    return {priorityValue, priorityText}
+
+
+
+const deadlineForm = () => {
+
+    const FORM_HEADER = "Select Deadline Date."
+    const DATE_TOOLTIP = "Select any future date"
+
+    const formContainer = element('div', {"id": "form-container"});
+    const form = element('form', {"id": "deadline-form"});
+
+    const dateLabel = element('label', {"for": "date", "class": "form-label", "id": "date-label"});
+    dateLabel.textContent = "Date";
+    const today = new Date(); 
+    const date = element("input", {"type": "date", "class": "form-input", "name": "name", "id": "form_date", "min": today, "required": ""});
+    dateLabel.appendChild(date);
+
+    const timeLabel = element('label', {"for": "time", "class": "form-label", "id": "time-label"});
+    timeLabel.textContent = "Time";
+    const time = element('input', {"type": "time", "class": "form-input", "name": "time", "id": "form_time", "value": "16:00", });
+    timeLabel.appendChild(time);
+
+
+    const formHeader = element("h2", {'class':'form-header deadline-form'});
+    formHeader.textContent = FORM_HEADER;
+
+   
+appendChildren(form, {dateLabel, timeLabel, formHeader});
+formContainer.appendChild(form);
+return formContainer;
+
 };
+
+
+
+
 export {editTask, createTask, closeTask, renderTask, priorityStyle}

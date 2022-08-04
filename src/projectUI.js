@@ -6,6 +6,8 @@ import { getUrgency, Task } from "./todo";
 import { Project } from "./project";
 import { projectList, renderProjectList } from "./content";
 import { renderTask, priorityStyle} from "./taskUI";
+import { UI } from "./settings";
+
 
 // images
 
@@ -19,7 +21,6 @@ import miniDeleteIcon from './img/delete-alert.svg';
 import finishTasksIcon from './img/finish-task.svg';
 import calendarIcon from './img/calendar-edit.svg';
 import addMiniTaskIcon from './img/plus-box-multiple.svg';
-import { sort } from "semver";
 
 
 // Interface for adding tasks and projects.
@@ -113,7 +114,7 @@ const renderProject = (projectObject) => {
 
 
         
-            const sortButton = element('input', {'type': 'image', 'src': miniSortIcon, 'class': 'container-button', 'id':'mini-sort', 'alt': 'Sort tasks', 'data-sort': 'priority'});
+            const sortButton = element('input', {'type': 'image', 'src': miniSortIcon, 'class': 'container-button', 'id':'mini-sort', 'alt': 'Sort tasks', 'data-sort': ''});
           
             sort.appendChild(sortButton);
             
@@ -122,8 +123,9 @@ const renderProject = (projectObject) => {
 
             sortButton.addEventListener('click', (e) => {
                 
-                sortButton.setAttribute('data-sort', 'title')
-                console.log(sortButton.getAttribute('data-sort'))
+                // testing
+                UI.setSort('deadline');
+                
             
                 console.log('..')
     
@@ -308,17 +310,17 @@ const editGoal = (target) => {
 
 }
 
+
+// For sorting the list of tasks in a project.  method is an optional override
 const sortList = (list, method) => {
 
-    
-    const sortButton = document.querySelector('#mini-sort');
-    
+    console.log("method is " + method)
     if (method == null){
-        method = sortButton.getAttribute('data-sort');
+        method = UI.getSort();
     }
 
     console.log("method is " + method)
-
+    console.log(list);
     switch(method){
 
         case 'priority':
@@ -334,9 +336,9 @@ const sortList = (list, method) => {
                 return a.getUrgency() - b.getUrgency() });
            
         case 'title':
-            return list.sort((a,b) => { 
-                return a.getTitle() - b.getTitle() });
+            return list.sort((a, b) => a.getTitle().localeCompare(b.getTitle()));
     }
+
 
     return;
 
@@ -600,6 +602,18 @@ const deleteProject = (project) => {
 
 }
 
+const settings = () => {
+
+    let sort = 'priority';
+
+
+    const setSort = (newSort) => sort = newSort;
+    const getSort = () => sort;
+
+
+    return {sort, getSort, setSort}
+
+}
 
 
 
@@ -618,4 +632,4 @@ const addProjectPopUp = () => {
 }
 
 
-export {deleteProject, cyclePriority, editProjectBox, deleteTask, finishProject, closeProject, renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}
+export {settings, deleteProject, cyclePriority, editProjectBox, deleteTask, finishProject, closeProject, renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}
