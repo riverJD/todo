@@ -13,18 +13,20 @@ const createElement = (type, attributes) => {
     return newElement;
 }
 
-const appendChildren = (parent, children) => {
+// for appending multiple children in one call
+const appendChildren = (parent, ...children) => {
 
     
     console.log(parent);
     console.log(children)
 
     const childCount = children.length;
-    for (let i = 1; i < childCount; i++){
 
-        parent.appendChild(children[i]);
+    for (let child of children){
+        parent.appendChild(child);
 
     }
+
     console.log(parent);
    // return childCount;
 }
@@ -117,6 +119,8 @@ const makeMenu = (menuName, tooltipText) => {
     return container;
 
 }
+
+
 
 
 

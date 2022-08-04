@@ -288,12 +288,34 @@ const deadlineForm = () => {
     const time = element('input', {"type": "time", "class": "form-input", "name": "time", "id": "form_time", "value": "16:00", });
     timeLabel.appendChild(time);
 
+    const buttonBar = element('div', {'class': 'button-bar form-buttons', 'id': 'form-buttons'})
+    const repeatOptions = () => {
+
+        
+        const legend = element('legend',{"value": 'repeat?'})
+        const label = element('label', {'for': "repeat", "class": "form-label", "id": "repeat-label"})
+        label.textContent = "repeat options"
+        const none = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-no" })
+        const daily = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-daily" })
+        const weekly = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-weekly" })
+        const monthly = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-monthly" })
+
+        appendChildren(label, none, daily, weekly, monthly);
+
+
+        return legend.appendChild(label);
+
+
+
+
+    }
+    form.appendChild(buttonBar());
 
     const formHeader = element("h2", {'class':'form-header deadline-form'});
     formHeader.textContent = FORM_HEADER;
 
    
-appendChildren(form, {dateLabel, timeLabel, formHeader});
+appendChildren(form, dateLabel, timeLabel, formHeader);
 formContainer.appendChild(form);
 return formContainer;
 
