@@ -125,7 +125,8 @@ const renderProject = (projectObject) => {
                 
                 // testing
                 UI.setSort('deadline');
-                
+
+                renderTaskList(projectObject);
             
                 console.log('..')
     

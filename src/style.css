@@ -64,24 +64,23 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .task{
-    border: 5px solid black;
-    height: 500px;
-    width: min(300px, 90%);
-
-    padding: 10px;
-
     background-color: rgb(114, 135, 192);
-
+    height: 300px;
+    width: min(300px, 90%);
+    
+    border-radius: 10px;
+    
     display: grid;
     position: fixed;
     z-index: 10;
-    grid-template-rows: 1fr 2fr 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
+    
+    padding: 10px;
+
     grid-template-areas: 
     "title title"
     "content content"
-    "objective deadline"
-    "buttons buttons";
+    "buttons deadline"
+    "buttons deadline";
 }
 
 
@@ -268,7 +267,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     
 }
 
-.title-container{
+#tasks-title-container{
 
     
     display: flex;
@@ -341,6 +340,10 @@ h1,h2,h3,h4,h5,p, ul, li{
     background-color: var(--editing-task-color, grey);
 
 
+}
+
+#task-buttons{
+    
 }
 
 #add-task-button{
@@ -516,9 +519,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 
 .delete-task{
-    
-    
- 
+  
 
 }
 
@@ -673,6 +674,11 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 }
 
+#task-buttons{
+
+    flex-direction: column;
+
+}
 
 .lowpriority{
     background-color: var(--low-priority, lightblue);

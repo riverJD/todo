@@ -7,8 +7,8 @@ import editDeadlineIcon from "./img/calendar-edit.svg"
 
 import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask} from "./projectUI";
 import { Task } from "./todo";
-import { appendChildren, element, makeContainer, makeRadio } from "./utils";
-import { format, getDate, parseISO, toDate } from "date-fns";
+import { appendChildren, element, makeContainer, makeRadio, getDate} from "./utils";
+import { format, parseISO, toDate } from "date-fns";
 
 let focusedTask;
 // Show a full task on screen
@@ -123,7 +123,7 @@ const renderTask = (task) => {
         newTask.appendChild(title());
         newTask.appendChild(description());
         newTask.appendChild(priority());
-        newTask.appendChild(goal());
+        //newTask.appendChild(goal());
         newTask.appendChild(buttonBar());
 
 
@@ -261,28 +261,32 @@ const openDeadlineForm = (task) => {
 
     
     const container = element('div', {'class': 'form-container', 'id': 'deadline-form-container'});
-    
+  
+
+
     container.appendChild(deadlineForm(task));
     const parent = document.querySelector('body');
     parent.appendChild(container);
+  
 
 }
 
 
 const updateDeadline = (task, form) => {
 
-    const DEFAULTTIME = "00:00:00"
+    const DEFAULTTIME = "00:00:01"
 
     const deadlineData = new FormData(form);
     console.log (deadlineData)
-    const newDay = deadlineData.get('date');
-    const newTime = deadlineData.get('time');
+    let newDay = deadlineData.get('date');
+    let newTime = deadlineData.get('time');
    
    
-    if (newTime == null){
+    if (newTime == ""){
         console.log('no time set, setting to midnight')
         newTime = DEFAULTTIME;
     }
+
     console.log(newTime)
     const newRepeat = deadlineData.get('repeat');
    
@@ -291,14 +295,11 @@ const updateDeadline = (task, form) => {
     const newDeadline = new Date(newDay + 'T' + newTime)
     console.log(newDeadline);
     task.setDeadline(newDeadline);
-    //renderTask(task);
-   
-
-
+    console.log(format(task.getDeadline(), "yyyy-MM-dd"));
+    renderTask(task);
 
 
 }
-
 
 const deadlineForm = (task) => {
 
@@ -310,36 +311,29 @@ const deadlineForm = (task) => {
 
     const dateLabel = element('label', {"for": "date", "class": "form-label", "id": "date-label"});
     dateLabel.textContent = "Date";
-    const today = new Date(); 
-    const date = element("input", {"type": "date", "class": "form-input", "name": "date", "id": "form_date", "min": today, "required": ""});
+    const today = getDate();
+    
+    const date = element("input", {"type": "date", "class": "form-input", "name": "date", "id": "form_date", "min": today, 'value': format(task.getDeadline(), "yyyy-MM-dd"), "required": ""});
     dateLabel.appendChild(date);
 
     const timeLabel = element('label', {"for": "time", "class": "form-label", "id": "time-label"});
     timeLabel.textContent = "Time";
-    const time = element('input', {"type": "time", "class": "form-input", "name": "time", "id": "form_time", });
+    const time = element('input', {"type": "time", "class": "form-input", "name": "time", "id": "form_time", 'value': format(task.getDeadline(), "HH:mm:SS") });
     timeLabel.appendChild(time);
 
     const buttonBar = element('div', {'class': 'button-bar form-buttons', 'id': 'form-buttons'})
-        const submit = element('input', {'type': 'image', 'src': saveTaskIcon, 'alt': 'confirm deadline', 'class': 'form-button task-button', 'id': 'submit-deadline-button'})
-            submit.addEventListener('click', (e) => {
-                
-             
-                e.preventDefault();
-                updateDeadline(task, form)
-                formContainer.remove();
-                }
-           
-            });
+        const submitDeadline = element('input', {'type': 'image', 'src': saveTaskIcon, 'alt': 'confirm deadline', 'class': 'form-button task-button', 'id': 'submit-deadline-button'})
+  
         const close = element('input', {'type': 'image', 'src': closeTaskIcon, 'alt': 'close without changes', 'class': 'form-button task-button', 'id': 'close-deadline-button'})
             close.addEventListener('click', (e) => {
-             
+                const form = document.querySelector("#deadline-form-container")
                 e.preventDefault();
                 formContainer.remove();
             })
-    appendChildren(buttonBar, submit, close)
+    appendChildren(buttonBar, submitDeadline, close)
     
     const repeatOptions = () => {
-
+       
         const chooseRepeat = element('fieldset', {'class': 'fieldset', 'id': 'task-deadline-fieldset'})
         const legend = element('legend',{"value": 'repeat?'})
         legend.textContent = "Repeat every..."
@@ -354,9 +348,15 @@ const deadlineForm = (task) => {
 
         return chooseRepeat
     }
+
     form.appendChild(repeatOptions());
     form.appendChild(buttonBar);
-
+   
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        updateDeadline(task, form)
+        formContainer.remove();
+    });
     const formHeader = element("h2", {'class':'form-header deadline-form'});
     formHeader.textContent = FORM_HEADER;
 
