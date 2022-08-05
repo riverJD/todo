@@ -289,27 +289,57 @@ const deadlineForm = () => {
     timeLabel.appendChild(time);
 
     const buttonBar = element('div', {'class': 'button-bar form-buttons', 'id': 'form-buttons'})
+        const submit = element('input', {'type': 'image', 'src': saveTaskIcon, 'alt': 'confirm deadline', 'class': 'form-button task-button', 'id': 'submit-button'})
+        buttonBar.appendChild(submit);
     const repeatOptions = () => {
 
-        
+        const chooseRepeat = element('fieldset', {'class': 'fieldset', 'id': 'task-deadline-fieldset'})
         const legend = element('legend',{"value": 'repeat?'})
-        const label = element('label', {'for': "repeat", "class": "form-label", "id": "repeat-label"})
-        label.textContent = "repeat options"
-        const none = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-no" })
-        const daily = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-daily" })
-        const weekly = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-weekly" })
-        const monthly = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-monthly" })
+  
+      
+        const none = element('label', {'for': 'repeat', 'class': 'form-label', 'id': 'none-label', });
+        noneLabel.textContent = 'no'
+        const noneRadio = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-no", 'checked': ""})
+        none.appendChild(noneRadio);
+        const dailyLabel = element('label', {'for': "repeat", "class": "form-label", "id": "repeat-label repeat-daily"});
+        dailyLabel.textContent = "every day";
+        const daily = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-daily-radio" })
+        dailyLabel.appendChild(daily);
 
-        appendChildren(label, none, daily, weekly, monthly);
+        const weeklyLabel = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-weekly"});
+        weeklyLabel.textContent = "once per week";
+        const weeklyRadio = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-weeklyd-radio" })
+        weeklyLabel.appendChild(weekly);
+        
+
+        // return a radio object to be attached to a fieldset
+        makeRadio = (name, selection, labelText) => {
+
+            const container = element('div', {'class': 'radio-container form-element', 'id': `${name}-label-container`});         
+            const label = element('label', {'for': `${name}`, "class": "form-label radio-label", "id": `${name}-label ${name}-${selection}`})    
+            label.textContent = labelText;
+            const radio = element('input', {'type': 'radio', 'name': `${name}`, 'class': `form-input radio-${name}`, 'id': `${name}-${selection}-radio` })
+            label.appendChild(radio);
+            return container.appendChild(label);
+
+        }
 
 
-        return legend.appendChild(label);
+        const monthlyLabel = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-weekly"});
+        const monthlyRadio = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-monthly" })
+
+        monthlyLabel.textContent = "once per week";
+        
 
 
 
+        appendChildren(chooseRepeat, legend, none, daily, weekly, monthly);
 
+
+        return chooseRepeat.appendChild(label);
     }
-    form.appendChild(buttonBar());
+    form.appendChild(repeatOptions());
+    form.appendChild(buttonBar);
 
     const formHeader = element("h2", {'class':'form-header deadline-form'});
     formHeader.textContent = FORM_HEADER;

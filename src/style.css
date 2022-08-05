@@ -140,11 +140,12 @@ h1,h2,h3,h4,h5,p, ul, li{
     height: 300px;
     width: min(400px, 100%);
     display: grid;
-
+    padding: 10px;
     grid-template-areas: 
     "label ."
-    "date ."
-    ". time"
+    "date repeat"
+    "time buttons";
+    
     
 ;
 
@@ -171,8 +172,14 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-area: input;
 }
 
+#repeat-label{
+    grid-area: repeat
+}
 
-.form-
+.form-buttons{
+
+    grid-area: buttons
+}
 
 
 
