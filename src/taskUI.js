@@ -3,15 +3,18 @@ import editTaskIcon from "./img/pencil.svg";
 import saveTaskIcon from "./img/save-task.svg";
 import finishTaskIcon from "./img/finish-task.svg";
 import deleteTaskIcon from "./img/delete-task.svg";
+import editDeadlineIcon from "./img/calendar-edit.svg"
+
 import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask} from "./projectUI";
 import { Task } from "./todo";
-import { appendChildren, element, makeContainer } from "./utils";
-import { format, getDate } from "date-fns";
+import { appendChildren, element, makeContainer, makeRadio } from "./utils";
+import { format, getDate, parseISO, toDate } from "date-fns";
 
-
+let focusedTask;
 // Show a full task on screen
 const renderTask = (task) => {
 
+    focusedTask = task;
     
     const oldTaskDOM = document.querySelector(".task");
     if (oldTaskDOM != undefined) oldTaskDOM.remove();
@@ -60,11 +63,11 @@ const renderTask = (task) => {
         // Creating a DOM container to hold priority and deadline display
         const priority = () => {
 
-            const priority = makeContainer('task-deadline');
+            const priority = makeContainer('task-deadline', editDeadlineIcon);
             const priorityHeader = priority.querySelector('.task-deadline-header');
      
            const deadlineButton = priority.querySelector('#task-deadline-button');
-           deadlineButton.addEventListener('click', () => openDeadlineForm())
+           deadlineButton.addEventListener('click', () => openDeadlineForm(task))
 
                 priorityHeader.textContent = "Deadline"
             const priorityButton = element('input', {'type': 'button', 'class': `priority-button task-item ${priorityStyle(task).priorityValue}`, 'value': priorityStyle(task).priorityText});
@@ -254,24 +257,52 @@ const priorityStyle = (task) => {
     return {priorityValue, priorityText}
 
 }
-const openDeadlineForm = () => {
+const openDeadlineForm = (task) => {
 
     
     const container = element('div', {'class': 'form-container', 'id': 'deadline-form-container'});
     
-    container.appendChild(deadlineForm());
+    container.appendChild(deadlineForm(task));
     const parent = document.querySelector('body');
     parent.appendChild(container);
 
 }
 
 
+const updateDeadline = (task, form) => {
+
+    const DEFAULTTIME = "00:00:00"
+
+    const deadlineData = new FormData(form);
+    console.log (deadlineData)
+    const newDay = deadlineData.get('date');
+    const newTime = deadlineData.get('time');
+   
+   
+    if (newTime == null){
+        console.log('no time set, setting to midnight')
+        newTime = DEFAULTTIME;
+    }
+    console.log(newTime)
+    const newRepeat = deadlineData.get('repeat');
+   
+
+    // format ISO and create new deadline
+    const newDeadline = new Date(newDay + 'T' + newTime)
+    console.log(newDeadline);
+    task.setDeadline(newDeadline);
+    //renderTask(task);
+   
 
 
 
-const deadlineForm = () => {
 
-    const FORM_HEADER = "Select Deadline Date."
+}
+
+
+const deadlineForm = (task) => {
+
+    const FORM_HEADER = "Select Deadline"
     const DATE_TOOLTIP = "Select any future date"
 
     const formContainer = element('div', {"id": "form-container"});
@@ -280,63 +311,48 @@ const deadlineForm = () => {
     const dateLabel = element('label', {"for": "date", "class": "form-label", "id": "date-label"});
     dateLabel.textContent = "Date";
     const today = new Date(); 
-    const date = element("input", {"type": "date", "class": "form-input", "name": "name", "id": "form_date", "min": today, "required": ""});
+    const date = element("input", {"type": "date", "class": "form-input", "name": "date", "id": "form_date", "min": today, "required": ""});
     dateLabel.appendChild(date);
 
     const timeLabel = element('label', {"for": "time", "class": "form-label", "id": "time-label"});
     timeLabel.textContent = "Time";
-    const time = element('input', {"type": "time", "class": "form-input", "name": "time", "id": "form_time", "value": "16:00", });
+    const time = element('input', {"type": "time", "class": "form-input", "name": "time", "id": "form_time", });
     timeLabel.appendChild(time);
 
     const buttonBar = element('div', {'class': 'button-bar form-buttons', 'id': 'form-buttons'})
-        const submit = element('input', {'type': 'image', 'src': saveTaskIcon, 'alt': 'confirm deadline', 'class': 'form-button task-button', 'id': 'submit-button'})
-        buttonBar.appendChild(submit);
+        const submit = element('input', {'type': 'image', 'src': saveTaskIcon, 'alt': 'confirm deadline', 'class': 'form-button task-button', 'id': 'submit-deadline-button'})
+            submit.addEventListener('click', (e) => {
+                
+             
+                e.preventDefault();
+                updateDeadline(task, form)
+                formContainer.remove();
+                }
+           
+            });
+        const close = element('input', {'type': 'image', 'src': closeTaskIcon, 'alt': 'close without changes', 'class': 'form-button task-button', 'id': 'close-deadline-button'})
+            close.addEventListener('click', (e) => {
+             
+                e.preventDefault();
+                formContainer.remove();
+            })
+    appendChildren(buttonBar, submit, close)
+    
     const repeatOptions = () => {
 
         const chooseRepeat = element('fieldset', {'class': 'fieldset', 'id': 'task-deadline-fieldset'})
         const legend = element('legend',{"value": 'repeat?'})
-  
-      
-        const none = element('label', {'for': 'repeat', 'class': 'form-label', 'id': 'none-label', });
-        noneLabel.textContent = 'no'
-        const noneRadio = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-no", 'checked': ""})
-        none.appendChild(noneRadio);
-        const dailyLabel = element('label', {'for': "repeat", "class": "form-label", "id": "repeat-label repeat-daily"});
-        dailyLabel.textContent = "every day";
-        const daily = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-daily-radio" })
-        dailyLabel.appendChild(daily);
-
-        const weeklyLabel = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-weekly"});
-        weeklyLabel.textContent = "once per week";
-        const weeklyRadio = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-weeklyd-radio" })
-        weeklyLabel.appendChild(weekly);
-        
-
-        // return a radio object to be attached to a fieldset
-        makeRadio = (name, selection, labelText) => {
-
-            const container = element('div', {'class': 'radio-container form-element', 'id': `${name}-label-container`});         
-            const label = element('label', {'for': `${name}`, "class": "form-label radio-label", "id": `${name}-label ${name}-${selection}`})    
-            label.textContent = labelText;
-            const radio = element('input', {'type': 'radio', 'name': `${name}`, 'class': `form-input radio-${name}`, 'id': `${name}-${selection}-radio` })
-            label.appendChild(radio);
-            return container.appendChild(label);
-
-        }
-
-
-        const monthlyLabel = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-weekly"});
-        const monthlyRadio = element('input', {'type': 'radio', 'name': 'repeat', 'class': 'form-input radio-repeat', 'id': "repeat-monthly" })
-
-        monthlyLabel.textContent = "once per week";
-        
-
-
+        legend.textContent = "Repeat every..."
+          
+        const none = makeRadio('repeat', 'weekly', `Don't repeat`, true);
+        const daily = makeRadio ('repeat', 'weekly', 'Once per day');
+        const weekly =  makeRadio('repeat', 'weekly', 'Every week');
+        const monthly = makeRadio('repeat', 'monthly', 'Once a month');
 
         appendChildren(chooseRepeat, legend, none, daily, weekly, monthly);
 
 
-        return chooseRepeat.appendChild(label);
+        return chooseRepeat
     }
     form.appendChild(repeatOptions());
     form.appendChild(buttonBar);

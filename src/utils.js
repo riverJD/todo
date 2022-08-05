@@ -120,9 +120,28 @@ const makeMenu = (menuName, tooltipText) => {
 
 }
 
+// return a radio object to be attached to a fieldset
+const  makeRadio = (name, selection, labelText, checked) => {
+
+   
+
+    const container = createElement('div', {'class': 'radio-container form-element', 'id': `${name}-label-container`});         
+    const label = createElement('label', {'for': `${name}`, "class": "form-label radio-label", "id": `${name}-label ${name}-${selection}`})    
+    label.textContent = labelText;
+    const radio = createElement('input', {'type': 'radio', 'name': `${name}`, 'class': `form-input radio-${name}`, 'id': `${name}-${selection}-radio` })
+    if (checked) radio.setAttribute('checked', '');
+    
+    label.appendChild(radio);
+
+
+   
+
+    return container.appendChild(label);
+
+}
 
 
 
 
 
-export {getDate, setAttributes, createElement as element, createImageLink, makeContainer, makeMenu, appendChildren};
+export {makeRadio, getDate, setAttributes, createElement as element, createImageLink, makeContainer, makeMenu, appendChildren};

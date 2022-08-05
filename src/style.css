@@ -132,28 +132,32 @@ h1,h2,h3,h4,h5,p, ul, li{
 
     align-self: center;
     justify-self: center;
-    border: 2px solid rgb(0, 0, 0);
     border-radius: 5px;
+    box-shadow: 3px 3px 5px grey;
+
     background-color: rgb(255, 255, 255);
     position: relative;
     z-index: 10;
     height: 300px;
     width: min(400px, 100%);
     display: grid;
-    padding: 10px;
+    padding: 10% 10% 0% 10%;
     grid-template-areas: 
-    "label ."
-    "date repeat"
-    "time buttons";
+    "label"
+    "date"
+    "time"
+    "repeat"
+    "buttons";
     
-    
-;
 
 }
+.form-input{
+    margin-left: 10px;
+}
 
-.form-label{
+.form-header{
 
-    outline: 1px dotted blue;
+    grid-area: label;
 
    
 }
@@ -172,13 +176,18 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-area: input;
 }
 
-#repeat-label{
-    grid-area: repeat
-}
+#task-deadline-fieldset{
+    grid-area: repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}  
 
 .form-buttons{
 
-    grid-area: buttons
+    grid-area: buttons;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 
