@@ -265,7 +265,7 @@ const editProjectBox = (proj) => {
     // Functions return DOM object, not its content explicitely
     const newTitle = editTitle('project');
     const newDescription = editDescription('project');
-    const  newGoal = editGoal('project');
+    const newGoal = editGoal('project');
        
 }
 

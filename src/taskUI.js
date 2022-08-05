@@ -49,6 +49,11 @@ const renderTask = (task) => {
             })
             titleBar.appendChild(completeButton)
 
+            const priorityIndicator = element('div', {'class': 'display-purpose task-design', 'id': 'task-corner' })
+
+            titleBar.appendChild(priorityIndicator)
+
+
             return titleBar;
         }
 
@@ -200,7 +205,7 @@ const editTask = (task) => {
 
         content.setTitle(newTitle.value);
         content.setDescription(newDescription.value);
-        content.setGoal(newGoal.value);
+        //content.setGoal(newGoal.value);
         saveButton.remove();
         editButton.classList.remove('hidden');
 
@@ -225,7 +230,7 @@ const editTask = (task) => {
 
     const newTitle = editTitle('task');
     const newDescription = editDescription('task');
-    const newGoal = editGoal('task');
+    //const newGoal = editGoal('task');
 
 
 }

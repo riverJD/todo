@@ -21,6 +21,8 @@ const createWorkSpace = () => {
             
             workspace.insertBefore(addNewProject(), addProjectButton);            
             
+
+
         });
     workspace.appendChild(addProjectButton);
     main.appendChild(workspace);
@@ -42,7 +44,7 @@ const addNewProject = (proj) => {
     const card = renderProjectCard(project);
     projectList.addProject(project)
  
-    
+    renderProject(project);
     return card;
 
 }
