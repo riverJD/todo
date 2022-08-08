@@ -1,11 +1,12 @@
-import closeTaskIcon from "./img/close-project.svg";
+import closeTaskIcon from "./img/arrow-bottom-left-thick.svg";
 import editTaskIcon from "./img/pencil.svg";
 import saveTaskIcon from "./img/save-task.svg";
 import finishTaskIcon from "./img/finish-task.svg";
 import deleteTaskIcon from "./img/delete-task.svg";
 import editDeadlineIcon from "./img/calendar-edit.svg"
+import confirmIcon from "./img/check-bold.svg";
 
-import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask} from "./projectUI";
+import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask, toggleTaskStatus} from "./projectUI";
 import { Task } from "./todo";
 import { appendChildren, element, makeContainer, makeRadio, getDate} from "./utils";
 import { format, parseISO, toDate } from "date-fns";
@@ -15,6 +16,12 @@ let focusedTask;
 const renderTask = (task) => {
 
     focusedTask = task;
+
+    // Values
+   
+
+
+
     
     const oldTaskDOM = document.querySelector(".task");
     if (oldTaskDOM != undefined) oldTaskDOM.remove();
@@ -29,6 +36,8 @@ const renderTask = (task) => {
     const taskPopup = () => {
         const newTask = element('div', {class: "task", id: `${task.title}-${task.getID()}`, 'data-id': task.getID()})
 
+        if (task.getStatus()) newTask.classList.add('completed');
+        
         const title = () => {
 
             const titleBar = element('div', {'class': "task-title-bar"});
@@ -44,16 +53,17 @@ const renderTask = (task) => {
 
 
             const completeButton = element('input', {'type': 'image', 'src': finishTaskIcon, 'class': 'task-button', 'id': 'task-complete-button', 'value': 'CHK'});
-            completeButton.addEventListener('click', () => {
-                // set task as complete
+            completeButton.addEventListener('click', (e) => {
+                   
+                
+                toggleTaskStatus(task);
+                closeTask(newTask);
+
+                
             })
             titleBar.appendChild(completeButton)
 
-            const priorityIndicator = element('div', {'class': 'display-purpose task-design', 'id': 'task-corner' })
-
-            titleBar.appendChild(priorityIndicator)
-
-
+  
             return titleBar;
         }
 
@@ -104,14 +114,15 @@ const renderTask = (task) => {
             return goal;
         }
 
+     
+
         // Creation of button bar
         const buttonBar = () => {
 
             const buttons = element("div", {'class': 'button-bar', 'id': 'task-buttons'});
             const deleteButton = element('input', {'type': 'image', 'src': deleteTaskIcon, 'alt': 'Delete task', 'class': 'task-button delete-task', 'id': 'delete-task', 'value': 'Delete'})
             deleteButton.addEventListener('click', (e) => {
-                deleteTask(task);
-                closeTask(e.target.parentNode.parentNode);
+                deletePopup();
             });
             buttons.appendChild(deleteButton);
           
@@ -122,6 +133,36 @@ const renderTask = (task) => {
 
             return buttons;
 
+        }
+
+        const deletePopup = () => {
+
+            const parent = document.querySelector('body');
+            const content = document.querySelector("#workspace");    
+            content.classList.add('blockscreen');
+
+            const popup = element('div', {'class': 'task-UI popup', 'id': 'delete-task-screen'});
+            const title = element('h3', {'class': 'popup-item popup-title delete-popup', 'id': 'delete-task-title'});
+            title.textContent = `Confirm remove '${task.getTitle()}' from project?`;
+            const confirm = element('input', {'type': 'image', 'src': confirmIcon, 'alt': 'confirm delete', 'class': 'task-button popup-item popup-confirm', 'id': 'delete-task-confirm'})
+                confirm.addEventListener('click', (e) => {
+                    deleteTask(task);
+                    closeTask(newTask);
+                    closePopup();
+                })
+            const cancel = element('input', {'type': 'image','src': closeTaskIcon, 'alt': 'cancel delete', 'class': 'task-button popup-item popup-cancel', 'id': 'delete-task-cancel' });
+                cancel.addEventListener('click', () => {
+                    closePopup();
+                });
+
+            const closePopup = () => {
+                popup.remove();
+                content.classList.remove('blockscreen');
+            }
+           appendChildren(popup, title, confirm, cancel);
+           parent.appendChild(popup);
+
+        
         }
 
 
@@ -168,7 +209,15 @@ const closeTask = (DOM) => {
     const project = document.querySelector('.project');
     project.classList.remove('blockproject');
 
-    if (DOM != null) DOM.remove();
+    if (DOM != null){
+        DOM.remove();
+        return
+    }
+    const task = document.querySelector('.task');
+    task.remove();
+
+
+
 }
 
 

@@ -11,7 +11,9 @@
     --header-bg-color: rgb(238, 240, 233);
     --header-border: var(--greyBlue);
 
-
+    --task-bg-color: rgb(206, 214, 238);
+    --task-complete-color:  rgba(231, 241, 231, 0.877);
+    --task-complete-border: rgba(20, 75, 20, 0.781);
     --editing-task-color: var(--happyBlue);
 
     --low-priority: rgba(162, 179, 233, 0.596);
@@ -63,6 +65,10 @@ h1,h2,h3,h4,h5,p, ul, li{
     border-radius: 50%;
 }
 
+
+
+
+
 .task{
    
     border-radius: 10px;
@@ -71,7 +77,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     box-shadow: 2px 2px 6px;
     padding: 10px;
 
-    background-color: rgb(206, 214, 238);
+    background-color: var(--task-bg-color, rgb(206, 214, 238));
 
     display: grid;
     position: fixed;
@@ -539,17 +545,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 }
 
-.completed > *{
-  
-   
-    font-style: italic;
-}
 
-.completed > .mini-finish{
-    background-image:  url(./img/minicheckmarked.svg);
-  
-
-}
 
 .hidden{
     display: none;
@@ -704,11 +700,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     background-color:var(--high-priority, lightsalmon);
 }
 
-.completed{
-    
-    background-color: rgba(104, 245, 104, 0.795);
-    
-}
+
 
 .menu-container{
     position: fixed;
@@ -814,6 +806,71 @@ margin-bottom: 10px;
 .settings-cog:hover{
     transform: rotate(90%)
 }
+
+.completed.mini-task{
+    
+    background-color: rgba(104, 245, 104, 0.795);
+    
+}
+
+
+.completed > *{
+  
+   
+    font-style: italic;
+}
+
+.completed > .mini-finish{
+    background-image:  url(./img/minicheckmarked.svg);
+  
+
+}
+
+.task.completed {
+
+   background-color: var(--task-complete-color,  rgb(206, 214, 238));
+   outline: 5px solid var(--task-complete-border, green)
+
+  
+}
+
+#delete-task-screen{
+    
+    position: fixed;
+    top: 20vh;
+    display: grid;
+    z-index: 10;
+
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px;
+    grid-template-rows: repeat(3, 1fr);
+
+    grid-template-areas: 
+    "title title"
+    ". ."
+    "cancel confirm";
+
+
+}
+
+#delete-task-title{
+    grid-area: title;
+}
+
+#delete-task-confirm{
+    grid-area: confirm;
+    justify-self: end;
+}
+
+#delete-task-cancel{
+    grid-area: cancel;
+}
+
+
+
+
 
 .shift-right{
     transform:translateX(var(--translate-amount, 25px));

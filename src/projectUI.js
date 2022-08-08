@@ -547,11 +547,8 @@ const setAllTasks = (project) => {
     for (let task of taskList){
 
         task.setStatus(status);
-        console.log(taskList.length);
-        console.log(finishedList.length);
         if (status === true){
-            project.tasks.completeTask(task);
-            
+            project.tasks.completeTask(task);  
         }
         else{
             
@@ -633,4 +630,4 @@ const addProjectPopUp = () => {
 }
 
 
-export {settings, deleteProject, cyclePriority, editProjectBox, deleteTask, finishProject, closeProject, renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}
+export {toggleTaskStatus, settings, deleteProject, cyclePriority, editProjectBox, deleteTask, finishProject, closeProject, renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}
