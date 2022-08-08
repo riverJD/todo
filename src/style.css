@@ -91,6 +91,11 @@ h1,h2,h3,h4,h5,p, ul, li{
   
 }
 
+.task-deadline-complete{
+    grid-area: deadline;
+}
+
+
 #task-corner{
 
     border-bottom: 50px solid rgba(231, 41, 41, 0.37);
@@ -143,11 +148,15 @@ h1,h2,h3,h4,h5,p, ul, li{
     align-items: end;
     justify-items: end;
 
+    grid-template-columns: 2fr 1fr;
+
     grid-template-areas: 
     "header priority"
     "deadline editDeadline"
 
 }
+
+
 
 .task-deadline-header{
     grid-area: header;

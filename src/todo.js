@@ -8,7 +8,7 @@ import task from "./default-task.json";
 // Constants
 
 // Factory to create a ToDo object
-const createToDo = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal, taskID = task.taskID, completed = task.completed) => {
+const createToDo = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal, taskID = task.taskID, completed = task.completed, completionDate = task.completionDate) => {
 
     deadline = new Date(deadline);
     
@@ -18,7 +18,7 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
     // Time/Date based attributes
     const startDate = new Date(Date.now())
     const timeRemaining = deadline - Date.now();
-    let completionDate = null;
+
 
     const setTitle = (newTitle) => {
         title = newTitle;
@@ -34,7 +34,7 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
     const setDeadline = (newDeadline) => deadline = newDeadline;
     const getDeadline = () => deadline;
 
-    const setCompletionDate = (newCompletionDate) => completionDate;
+    const setCompletionDate = (newCompletionDate) => completionDate = newCompletionDate;
     const getCompletionDate = () => completionDate;
     
     const setPriority = (newPriority) => {
@@ -61,7 +61,7 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
     }
 
 
-    return ({setStatus, getStatus, getID, setID, setParent, getParent, setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
+    return ({getCompletionDate, setCompletionDate, setStatus, getStatus, getID, setID, setParent, getParent, setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
 
 }
 

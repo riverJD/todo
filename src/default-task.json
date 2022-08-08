@@ -4,5 +4,6 @@
 "goal": "Your goal, how you decide whether a task is complete.",
 "deadline": "8/12/2022",
 "taskID": "0",
-"completed": false
+"completed": false,
+"completionDate": null
 }

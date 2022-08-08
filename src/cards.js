@@ -1,4 +1,4 @@
-import { element } from "./utils";
+import { appendChildren, element } from "./utils";
 import { add, format } from "date-fns";
 import { cyclePriority, deleteProject, editProjectBox as editProject, finishProject, renderProject } from "./projectUI.js";
 import { renderTask } from "./projectUI.js";
@@ -121,9 +121,8 @@ const getDaysRemaining = (project) => {
 
 const openSettings = (parentButton, project) => {
 
-    console.log('open settings menu')
     const parentCard = parentButton.parentNode;
-    console.log(parentCard)
+
     // popup menu
     parentCard.classList.add('active-settings-button')
 
@@ -172,12 +171,8 @@ const settingsMenu = (card, project) => {
 
    
 
+    appendChildren(menuItems, open, edit, toggle, finish, del)
 
-    menuItems.appendChild(open);
-    menuItems.appendChild(edit);
-    menuItems.appendChild(toggle);
-    menuItems.appendChild(finish);
-    menuItems.appendChild(del);
 
     menu.appendChild(menuItems);
     container.appendChild(menu);

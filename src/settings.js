@@ -1,12 +1,9 @@
 
-
-
-
-
+// The idea is to store this seperately from the project, to allow for loading UI settings detached from data
 
 const UI = (() => {
 
-
+   
 
         let sortType = 'priority'
         let ascending = true
@@ -18,7 +15,7 @@ const UI = (() => {
       //  setAscending: (newAscending) => ascending = newAscending
 
 
-        return {getSort, setSort}
+        return {getSort, setSort,}
 
 })();
 

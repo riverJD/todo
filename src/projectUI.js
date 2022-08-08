@@ -5,7 +5,7 @@ import defaultTask from "./default-task.json";
 import { getUrgency, Task } from "./todo";
 import { Project } from "./project";
 import { projectList, renderProjectList } from "./content";
-import { renderTask, priorityStyle} from "./taskUI";
+import { renderTask, priorityStyle, toggleTaskStatus} from "./taskUI";
 import { UI } from "./settings";
 
 
@@ -124,7 +124,9 @@ const renderProject = (projectObject) => {
             sortButton.addEventListener('click', (e) => {
                 
                 // testing
-                UI.setSort('deadline');
+                //UI.setSort('deadline');
+
+
 
                 renderTaskList(projectObject);
             
@@ -400,23 +402,6 @@ const deleteTask = (task) => {
 // Delete the DOM element associated with task
 
 
-const toggleTaskStatus = (task) => {
-
-    if (task == null) return;
-
-    if (task.getStatus() === false){
-        task.setStatus(true);
-        task.getParent().tasks.completeTask(task);
-    }
-    else{
-        task.setStatus(false)
-        task.getParent().tasks.removeComplete(task);
-    }
-  
-
-    renderTaskList(task.getParent());
-
-}
 
 // Creates a mini-task DOM element out of task object
 const createMiniTask = (project, task) => {
@@ -440,7 +425,7 @@ const createMiniTask = (project, task) => {
     const miniButton = element('input', {'type': 'button', 'class': 'mini-button mini-title', 'value': `${task.getTitle()}`});
         
     
-    
+
 
     miniButton.addEventListener('click', () => renderTask(task))
     minitask.appendChild(removeMini);
@@ -455,6 +440,14 @@ const createMiniTask = (project, task) => {
 
     return minitask;
 }
+
+const sortMenu = () => {
+
+    
+
+
+}
+
 
 const deleteMini = (task) => {
 
@@ -630,4 +623,4 @@ const addProjectPopUp = () => {
 }
 
 
-export {toggleTaskStatus, settings, deleteProject, cyclePriority, editProjectBox, deleteTask, finishProject, closeProject, renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}
+export {renderTaskList, toggleTaskStatus, settings, deleteProject, cyclePriority, editProjectBox, deleteTask, finishProject, closeProject, renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}

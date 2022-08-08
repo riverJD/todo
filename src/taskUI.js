@@ -6,11 +6,12 @@ import deleteTaskIcon from "./img/delete-task.svg";
 import editDeadlineIcon from "./img/calendar-edit.svg"
 import confirmIcon from "./img/check-bold.svg";
 
-import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask, toggleTaskStatus} from "./projectUI";
+import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask, renderTaskList} from "./projectUI";
 import { Task } from "./todo";
 import { appendChildren, element, makeContainer, makeRadio, getDate} from "./utils";
 import { format, parseISO, toDate } from "date-fns";
 
+const today = getDate();
 let focusedTask;
 // Show a full task on screen
 const renderTask = (task) => {
@@ -19,10 +20,6 @@ const renderTask = (task) => {
 
     // Values
    
-
-
-
-    
     const oldTaskDOM = document.querySelector(".task");
     if (oldTaskDOM != undefined) oldTaskDOM.remove();
     
@@ -84,7 +81,7 @@ const renderTask = (task) => {
            const priority = element('div', {'class': `task-deadline-container`});
            
            const priorityHeader = element ('h3', {'class': `task-deadline-header`});  
-           priorityHeader.textContent = "Priority"   
+           priorityHeader.textContent = "Priority: "   
            
            const editDeadlineButton = element('input', {'type': 'image', 'src': editDeadlineIcon,  'id': `task-deadline-button`, 'class': 'container-button expand-content-btn', }, );
            editDeadlineButton.addEventListener('click', () => openDeadlineForm(task))
@@ -92,7 +89,7 @@ const renderTask = (task) => {
             const switchPriorityButton = element('input', {'type': 'button', 'class': `priority-button task-item ${priorityStyle(task).priorityValue}`, 'value': priorityStyle(task).priorityText});
             switchPriorityButton.addEventListener('click', () => cyclePriority(task));
 
-            const deadline = element('div', {'class': "task-deadline task-item", "id": `${task.deadline}-deadline`});
+            const deadline = element('h4', {'class': "task-deadline task-item", "id": `${task.deadline}-deadline`});
             deadline.textContent = format(task.getDeadline(), "MM.dd.yyyy");
             
             appendChildren(priority, priorityHeader, editDeadlineButton, switchPriorityButton, deadline);
@@ -114,7 +111,17 @@ const renderTask = (task) => {
         
             return goal;
         }
+        // Show date of completed task when checked
+        const complete = () => {
 
+            const container = element('div', {'class': 'task-deadline-complete', 'id': 'task-deadline-complete'});
+            const header = element('h4', {'class': 'task-complete-header'});
+            console.log(task.getCompletionDate());
+            header.textContent = `Task completed ${format(task.getCompletionDate(), 'MM.dd.yyyy')}`
+            container.appendChild(header);
+
+            return container; 
+        }
      
 
         // Creation of button bar
@@ -174,13 +181,36 @@ const renderTask = (task) => {
         newTask.appendChild(priority());
         //newTask.appendChild(goal());
         newTask.appendChild(buttonBar());
-
+        if (task.getStatus()){
+            console.log(task.getCompletionDate())
+            newTask.appendChild(complete()); 
+        } 
 
         return newTask;
         
     }
     
     content.appendChild(taskPopup());
+}
+const toggleTaskStatus = (task) => {
+
+    if (task == null) return;
+
+    if (task.getStatus() === false){
+        task.setStatus(true);
+        task.setCompletionDate(new Date());
+        console.log(today)
+        task.getParent().tasks.completeTask(task);
+    }
+    else{
+        task.setStatus(false)
+        task.setCompletionDate(null);
+        task.getParent().tasks.removeComplete(task);
+    }
+  
+
+    renderTaskList(task.getParent());
+
 }
 
 const cyclePriority = (task) => {
@@ -379,7 +409,7 @@ const deadlineForm = (task) => {
 
     const dateLabel = element('label', {"for": "date", "class": "form-label", "id": "date-label"});
     dateLabel.textContent = "Date";
-    const today = getDate();
+
     
     const date = element("input", {"type": "date", "class": "form-input", "name": "date", "id": "form_date", "min": today, 'value': format(task.getDeadline(), "yyyy-MM-dd"), "required": ""});
     dateLabel.appendChild(date);
@@ -438,4 +468,4 @@ return formContainer;
 
 
 
-export {editTask, createTask, closeTask, renderTask, priorityStyle}
+export {editTask, createTask, closeTask, renderTask, priorityStyle, toggleTaskStatus}
