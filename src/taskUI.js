@@ -57,9 +57,11 @@ const renderTask = (task) => {
                    
                 
                 toggleTaskStatus(task);
-                closeTask(newTask);
-
                 
+                // Refresh task or close task depending on whether task is being marked compelte
+                task.getStatus() ?  closeTask(newTask) : renderTask(task);
+   
+
             })
             titleBar.appendChild(completeButton)
 
@@ -120,7 +122,9 @@ const renderTask = (task) => {
         const buttonBar = () => {
 
             const buttons = element("div", {'class': 'button-bar', 'id': 'task-buttons'});
-            const deleteButton = element('input', {'type': 'image', 'src': deleteTaskIcon, 'alt': 'Delete task', 'class': 'task-button delete-task', 'id': 'delete-task', 'value': 'Delete'})
+
+            // Delete button currently hidden until task in edit mode
+            const deleteButton = element('input', {'type': 'image', 'src': deleteTaskIcon, 'alt': 'Delete task', 'class': 'task-button delete-task hidden', 'id': 'delete-task', 'value': 'Delete'})
             deleteButton.addEventListener('click', (e) => {
                 deletePopup();
             });
@@ -144,7 +148,7 @@ const renderTask = (task) => {
             const popup = element('div', {'class': 'task-UI popup', 'id': 'delete-task-screen'});
             const title = element('h3', {'class': 'popup-item popup-title delete-popup', 'id': 'delete-task-title'});
             title.textContent = `Confirm remove '${task.getTitle()}' from project?`;
-            const confirm = element('input', {'type': 'image', 'src': confirmIcon, 'alt': 'confirm delete', 'class': 'task-button popup-item popup-confirm', 'id': 'delete-task-confirm'})
+            const confirm = element('input', {'type': 'image', 'src': confirmIcon, 'alt': 'confirm delete', 'class': 'task-button popup-item popup-confirm', 'id': 'delete-task-confirm', 'display': 'none'})
                 confirm.addEventListener('click', (e) => {
                     deleteTask(task);
                     closeTask(newTask);
@@ -244,10 +248,20 @@ const editTask = (task) => {
 
     const content = tempTask;
 
-    const buttonBar = document.querySelector('.task-title-bar');
-    const title = document.querySelector('.task-title');
+    // Alter UI elements
+    const completionButton = document.querySelector('#task-complete-button');
+    completionButton.classList.add("disabled");
+
+    const deleteButton = document.querySelector('#delete-task');
+    deleteButton.classList.remove('hidden');
+
     const editButton = document.querySelector('#task-edit-button');
     editButton.classList.add('hidden');
+
+    // Prepare to replace with edit boxes and create save button
+    const buttonBar = document.querySelector('.task-title-bar');
+    const title = document.querySelector('.task-title');
+   
     const saveButton = element('input', {'type': 'image', 'src': saveTaskIcon, 'class': 'task-edit-button task-button', 'id': 'task-edit-button', 'value': 'Save'})
 
     saveButton.addEventListener('click', () => {
@@ -261,8 +275,9 @@ const editTask = (task) => {
         saveToTask();
     })
 
+    // Finalize saving data to task from temporary container
     const saveToTask = () => {
-        console.log(task)
+
         task.setTitle(content.getTitle());
         task.setDescription(content.getDescription());
         task.setGoal(content.getGoal());
@@ -274,9 +289,10 @@ const editTask = (task) => {
 
     }
 
-
+    
     buttonBar.insertBefore(saveButton, title);
 
+    // Refresh UI with new data
     const newTitle = editTitle('task');
     const newDescription = editDescription('task');
     //const newGoal = editGoal('task');

@@ -106,9 +106,12 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 
 .task-title-bar{
-    display: flex;
+    display: grid;
     justify-content: space-between;
     grid-area: title;
+    justify-items: center;
+
+    grid-template-columns: 1fr 2fr 1fr;
 }
 
 .task-title{
@@ -134,11 +137,15 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .task-deadline-container{
     grid-area: deadline;
-   
+    padding-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 
+}
+
+.task-deadline-container > * {
+    flex: 0;
 }
 
 .task-deadline-content{
@@ -361,10 +368,12 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 
 }
-#task-buttons{
-    flex-direction: column;
-}
 
+#task-buttons{
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
 
 #add-task-button{
 
@@ -540,7 +549,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .delete-task{
     
-    
+
  
 
 }
@@ -823,7 +832,12 @@ margin-bottom: 10px;
 .completed > .mini-finish{
     background-image:  url(./img/minicheckmarked.svg);
   
+}
 
+/* disable editing task after completion */
+.completed > * > #task-edit-button {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .task.completed {
@@ -856,6 +870,7 @@ margin-bottom: 10px;
 }
 
 #delete-task-title{
+    
     grid-area: title;
 }
 
@@ -878,4 +893,11 @@ margin-bottom: 10px;
 
 .shift-left{
     transform:translateX(-10rem);
+}
+
+/* disable content and lower opacity */
+
+.disabled{
+    opacity: .5;
+    pointer-events: none;
 }
