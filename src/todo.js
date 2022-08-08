@@ -18,7 +18,7 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
     // Time/Date based attributes
     const startDate = new Date(Date.now())
     const timeRemaining = deadline - Date.now();
-
+    let completionDate = null;
 
     const setTitle = (newTitle) => {
         title = newTitle;
@@ -34,8 +34,9 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
     const setDeadline = (newDeadline) => deadline = newDeadline;
     const getDeadline = () => deadline;
 
+    const setCompletionDate = (newCompletionDate) => completionDate;
+    const getCompletionDate = () => completionDate;
     
-
     const setPriority = (newPriority) => {
         priority = newPriority;
     }

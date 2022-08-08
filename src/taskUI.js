@@ -80,24 +80,23 @@ const renderTask = (task) => {
         // Creating a DOM container to hold priority and deadline display
         const priority = () => {
 
-            const priority = makeContainer('task-deadline', editDeadlineIcon);
-            const priorityHeader = priority.querySelector('.task-deadline-header');
-     
-           const deadlineButton = priority.querySelector('#task-deadline-button');
-           deadlineButton.addEventListener('click', () => openDeadlineForm(task))
+           // const priority = makeContainer('task-deadline', editDeadlineIcon);
+           const priority = element('div', {'class': `task-deadline-container`});
+           
+           const priorityHeader = element ('h3', {'class': `task-deadline-header`});  
+           priorityHeader.textContent = "Priority"   
+           
+           const editDeadlineButton = element('input', {'type': 'image', 'src': editDeadlineIcon,  'id': `task-deadline-button`, 'class': 'container-button expand-content-btn', }, );
+           editDeadlineButton.addEventListener('click', () => openDeadlineForm(task))
+        
+            const switchPriorityButton = element('input', {'type': 'button', 'class': `priority-button task-item ${priorityStyle(task).priorityValue}`, 'value': priorityStyle(task).priorityText});
+            switchPriorityButton.addEventListener('click', () => cyclePriority(task));
 
-                priorityHeader.textContent = "Deadline"
-            const priorityButton = element('input', {'type': 'button', 'class': `priority-button task-item ${priorityStyle(task).priorityValue}`, 'value': priorityStyle(task).priorityText});
-            priorityButton.addEventListener('click', () => cyclePriority(task));
-
-            const deadlineContent = priority.querySelector('.task-deadline-content');     
             const deadline = element('div', {'class': "task-deadline task-item", "id": `${task.deadline}-deadline`});
             deadline.textContent = format(task.getDeadline(), "MM.dd.yyyy");
-            deadlineContent.appendChild(deadline);
+            
+            appendChildren(priority, priorityHeader, editDeadlineButton, switchPriorityButton, deadline);
 
-
-            priority.appendChild(deadlineContent);    
-            deadlineContent.appendChild(priorityButton);
             priority.value = task.priority;
         
             return priority;
@@ -295,7 +294,6 @@ const editTask = (task) => {
     // Refresh UI with new data
     const newTitle = editTitle('task');
     const newDescription = editDescription('task');
-    //const newGoal = editGoal('task');
 
 
 }
