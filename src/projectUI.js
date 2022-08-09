@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { element, makeContainer, makeMenu, setAttributes } from "./utils";
+import { appendChildren, element, makeContainer, makeMenu, setAttributes } from "./utils";
 import defaultProject from "./default-project.json"
 import defaultTask from "./default-task.json";
 import { getUrgency, Task } from "./todo";
@@ -124,11 +124,9 @@ const renderProject = (projectObject) => {
             sortButton.addEventListener('click', (e) => {
                 
                 // testing
-                //UI.setSort('deadline');
+                settingsMenu(sortButton.parentElement, projectObject)
 
-
-
-                renderTaskList(projectObject);
+                //renderTaskList(projectObject);
             
                 console.log('..')
     
@@ -593,16 +591,38 @@ const deleteProject = (project) => {
 
 }
 
-const settings = () => {
+const settingsMenu = (parent, project) => {
 
-    let sort = 'priority';
+    const container = element('div', {'class': 'menu-container shift-right'});
+    container.style.visibility = 'visible';
+    const menu = element('div', {'class': 'context-menu', 'id': 'sort-menu'});
+    const menuItems = element('ul', {'class': 'menu-items menu-list', 'id': 'sort-menu-items'});
+ 
+    const sortOption = (sortType) => {
+        
+        const sort = element('li', {'class': 'menu-edit menu-item'});
+        sort.textContent = sortType;
+            sort.addEventListener('click', () => {
+                console.log(sortType);
+                UI.setSort(sortType);
+                renderTaskList(project);
+                close();
+            })
+        return sort
+    }
+
+    appendChildren(menuItems, sortOption('deadline'), sortOption('priority'), sortOption('urgency'), sortOption('title'));
 
 
-    const setSort = (newSort) => sort = newSort;
-    const getSort = () => sort;
+    menu.appendChild(menuItems);
+    container.appendChild(menu);
+    parent.appendChild(container);
+    const close = () => {
 
+        container.remove();
 
-    return {sort, getSort, setSort}
+    }
+
 
 }
 
@@ -623,4 +643,4 @@ const addProjectPopUp = () => {
 }
 
 
-export {renderTaskList, toggleTaskStatus, settings, deleteProject, cyclePriority, editProjectBox, deleteTask, finishProject, closeProject, renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}
+export {renderTaskList, toggleTaskStatus, settingsMenu, deleteProject, cyclePriority, editProjectBox, deleteTask, finishProject, closeProject, renderProject, renderTask, addProjectPopUp as addProjectButton, createListeners, editTitle, editDescription, editGoal, createMiniTask}

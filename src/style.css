@@ -11,7 +11,7 @@
     --header-bg-color: rgb(238, 240, 233);
     --header-border: var(--greyBlue);
 
-    --task-bg-color: rgb(206, 214, 238);
+    --task-bg-color: rgb(217, 221, 238);
     --task-complete-color:  rgba(231, 241, 231, 0.877);
     --task-complete-border: rgba(20, 75, 20, 0.781);
     --editing-task-color: var(--happyBlue);

@@ -132,8 +132,7 @@ const openSettings = (parentButton, project) => {
 
 // Gear menu for quick access to various options
 const settingsMenu = (card, project) => {
-    console.log(card);
-    console.log('settings menu')
+
     const container = element('div', {'class': 'menu-container shift-left'});
     container.style.visibility = 'visible';
     const menu = element('div', {'class': 'context-menu', 'id': 'cog-menu'});
@@ -178,12 +177,7 @@ const settingsMenu = (card, project) => {
     container.appendChild(menu);
     card.appendChild(container);
 
-    const close = () => {
-
-        container.remove();
-
-    }
-
+   
 
 }
 
