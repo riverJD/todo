@@ -9,6 +9,7 @@ import { renderTask, priorityStyle, toggleTaskStatus, editTask} from "./taskUI";
 import { UI } from "./settings";
 
 
+
 // images
 
 import closeProjectIcon from "./img/arrow-bottom-left-thick.svg";
@@ -189,7 +190,7 @@ const renderProject = (projectObject) => {
         titleContainer.insertBefore(sortMenu(), titleContainer.firstElementChild); 
         //const miniTitleContainer = document.querySelector("#tasks-title-container");
         // miniTitleContainer.appendChild(sort);
-        console.log(projectObject.tasks.getTaskList().length)
+   
 
         tasksContainer.appendChild(addTask)
 
@@ -342,7 +343,7 @@ const editTitle = (target) => {
     const editTitleBox = element('textarea',  {'name': 'textarea', 'placeholder': title.innerText, "class": `edit-${target}-box ${target}-title ${target}-item`});
     editTitleBox.textContent = title.innerText;
     title.parentNode.insertBefore(editTitleBox, title);
-    console.log(editTitleBox.textContent)
+
     title.remove();
     return editTitleBox;
 
@@ -367,7 +368,7 @@ const editGoal = (target) => {
 
     const goal = document.querySelector(`.${target}-goal`);
     const goalText = goal.innerText;
-    console.log(goalText);
+
     const editGoalBox = element('textarea', {'placeholder': goalText, 'class': `edit-${target}-box ${target}-goal ${target}-item`})
     editGoalBox.textContent = goalText;
     goal.parentNode.insertBefore(editGoalBox, goal);
@@ -380,13 +381,10 @@ const editGoal = (target) => {
 // For sorting the list of tasks in a project.  method is an optional override
 const sortList = (list, method) => {
 
-    console.log("method is " + method)
     if (method == null){
         method = UI.getSort();
     }
 
-    console.log("method is " + method)
-    console.log(list);
     switch(method){
 
         case 'priority':
@@ -430,7 +428,7 @@ const renderTaskList = (project) => {
 
     sortList(taskList);
 
-    console.log(taskList)
+
     for (let task of taskList){
         //console.log(task);
         const minitask = createMiniTask(project, task);
@@ -455,7 +453,6 @@ const renderTaskList = (project) => {
 // Deletes task from parent project
 const deleteTask = (task) => {
 
-    console.log(task);
 
     const project = task.getParent();
     project.tasks.removeTask(task);
@@ -517,7 +514,7 @@ const deleteMini = (task) => {
     
     const project = task.getParent();
 
-    console.log(project.tasks.getTaskList());
+
     project.tasks.removeTask(task);
     
     const taskCard = document.querySelector('.task');
@@ -604,7 +601,6 @@ const updateDeadline = (project, form) => {
     const newDeadline = new Date(newDay + 'T' + newTime)
 
     project.content.setDeadline(newDeadline);
-    console.log(format(project.content.getDeadline(), "yyyy-MM-dd"));
 
 
 }
@@ -687,7 +683,7 @@ const setAllTasks = (project) => {
 
 
 const closeProject = () => {
-    console.log("wtf?");
+
     const project = document.querySelector('.project')
     
     //Reenable interaction 
@@ -738,7 +734,7 @@ const settingsMenu = (parent, project) => {
         const sort = element('li', {'class': 'menu-edit menu-item'});
         sort.textContent = sortType;
             sort.addEventListener('click', () => {
-                console.log(sortType);
+
                 UI.setSort(sortType);
                 renderTaskList(project);
                 const sortHeader = document.querySelector(".task-sort-header");

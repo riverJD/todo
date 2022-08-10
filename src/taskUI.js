@@ -9,7 +9,9 @@ import confirmIcon from "./img/check-bold.svg";
 import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask, renderTaskList} from "./projectUI";
 import { Task } from "./todo";
 import { appendChildren, element, makeContainer, makeRadio, getDate as getToday} from "./utils";
-import { format, parseISO, toDate } from "date-fns";
+import { addDays, addMonths, addWeeks, format, parseISO, toDate } from "date-fns";
+import {clone } from 'just-clone';
+import { cloneDeep } from "lodash";
 
 const today = getToday();
 let focusedTask;
@@ -116,7 +118,7 @@ const renderTask = (task) => {
 
             const container = element('div', {'class': 'task-deadline-complete', 'id': 'task-deadline-complete'});
             const header = element('h4', {'class': 'task-complete-header'});
-            console.log(task.getCompletionDate());
+           
             header.textContent = `Task completed ${format(task.getCompletionDate(), 'MM.dd.yyyy')}`
             container.appendChild(header);
 
@@ -182,7 +184,7 @@ const renderTask = (task) => {
         //newTask.appendChild(goal());
         newTask.appendChild(buttonBar());
         if (task.getStatus()){
-            console.log(task.getCompletionDate())
+          
             newTask.appendChild(complete()); 
         } 
 
@@ -199,8 +201,9 @@ const toggleTaskStatus = (task) => {
     if (task.getStatus() === false){
         task.setStatus(true);
         task.setCompletionDate(new Date());
-        console.log(today)
+
         task.getParent().tasks.completeTask(task);
+        repeatTask(task);
     }
     else{
         task.setStatus(false)
@@ -211,7 +214,47 @@ const toggleTaskStatus = (task) => {
 
     renderTaskList(task.getParent());
 
+}    //const repeatedTask = Task(task.getTitle(), task.getDeadline(), task.getPriority(), task.getDescription(), task.getGoal(), task.getID(), false, task.getCompletionDate(), task.getRepeat());
+
+
+const repeatTask = (task) => {
+
+    const repeat = task.getRepeat();
+    const project = task.getParent();
+
+    console.log(task.getParent().tasks.getTaskList())
+
+    // why doesnt this work??
+    //const repeatedTask = cloneDeep(task);
+    const repeatedTask = Task(task.getTitle(), task.getDeadline(), task.getPriority(), task.getDescription(), task.getGoal(), task.getID(), false, task.getCompletionDate(), task.getRepeat());
+
+    console.log(task === repeatedTask);
+    console.log(repeatedTask);
+
+    if (repeat === 'none') return;
+
+    switch(repeat){
+
+        case 'daily': 
+            repeatedTask.setDeadline(addDays(task.getCompletionDate(), 1));
+            break;
+             
+        case 'weekly':
+            repeatedTask.setDeadline(addWeeks(task.getCompletionDate(), 1));
+            break;
+        case 'monthly': 
+            repeatedTask.setDeadline(addMonths(task.getCompletionDate(), 1));
+            break;
+    }
+    
+
+    project.tasks.addTask(repeatedTask);
+    console.log(project.tasks.getTaskList().length)
+    console.log(project.tasks.getTaskList());
+    repeatedTask.setParent(project);
+
 }
+
 
 const cyclePriority = (task) => {
 
@@ -227,7 +270,7 @@ const cyclePriority = (task) => {
 const changePriority = (task, priority) => {
 
     task.setPriority(priority);
-    console.log(">" + task.getPriority());
+
     
     closeProject();
     renderProject(task.getParent());
@@ -388,25 +431,26 @@ const updateDeadline = (task, form) => {
     const DEFAULTTIME = "00:00:01"
 
     const deadlineData = new FormData(form);
-    console.log (deadlineData)
+
     let newDay = deadlineData.get('date');
     let newTime = deadlineData.get('time');
-   
+
+    const repeat = deadlineData.get('repeat');
+    task.setRepeat(repeat)
+    console.log(task.getRepeat());
    
     if (newTime == ""){
         console.log('no time set, setting to midnight')
         newTime = DEFAULTTIME;
     }
 
-    console.log(newTime)
-    const newRepeat = deadlineData.get('repeat');
    
 
     // format ISO and create new deadline
     const newDeadline = new Date(newDay + 'T' + newTime)
-    console.log(newDeadline);
+
     task.setDeadline(newDeadline);
-    console.log(format(task.getDeadline(), "yyyy-MM-dd"));
+  
     renderTask(task);
 
 
@@ -451,7 +495,7 @@ const deadlineForm = (task) => {
         legend.textContent = "Repeat every..."
           
         const none = makeRadio('repeat', 'weekly', `Don't repeat`, true);
-        const daily = makeRadio ('repeat', 'weekly', 'Once per day');
+        const daily = makeRadio ('repeat', 'daily', 'Once per day');
         const weekly =  makeRadio('repeat', 'weekly', 'Every week');
         const monthly = makeRadio('repeat', 'monthly', 'Once a month');
 

@@ -9,13 +9,12 @@ import { eachHourOfIntervalWithOptions } from 'date-fns/fp';
 // Constants
 
 // Factory to create a ToDo object
-const createTask = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal, taskID = task.taskID, completed = task.completed, completionDate = task.completionDate) => {
+const createTask = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal, taskID = task.taskID, completed = task.completed, completionDate = task.completionDate, repeat = task.repeat) => {
 
     deadline = new Date(deadline);
     
     // Project object that owns this task
     let parent = null;
-  
     // Time/Date based attributes
     const startDate = new Date(Date.now())
     const timeRemaining = deadline - (new Date(Date.now()));
@@ -71,8 +70,11 @@ const createTask = (title = task.title, deadline = task.deadline, priority = tas
         return(urgency);
     }
 
+    const setRepeat = (repeatType) => { repeat = repeatType }
+    const getRepeat = () => repeat;
 
-    return ({getUrgency, getCompletionDate, setCompletionDate, setStatus, getStatus, getID, setID, setParent, getParent, setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
+
+    return ({setRepeat, getRepeat, getUrgency, getCompletionDate, setCompletionDate, setStatus, getStatus, getID, setID, setParent, getParent, setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
 
 }
 
