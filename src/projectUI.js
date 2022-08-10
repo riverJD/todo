@@ -103,52 +103,60 @@ const renderProject = (projectObject) => {
 
         // tooltips and menu
         const sortMenu = () => {
-            const menu = makeMenu('sort', 'sort tasks');
+           // const menu = makeMenu('sort', 'sort tasks');
             
-            const header = element('h5', {'class': 'menu-item menu-header', 'id': 'sort-test'})
-            header.textContent = 'sort';
-            menu.appendChild(header);
-
-
+          //  const header = element('h5', {'class': 'menu-item menu-header', 'id': 'sort-test'})
+          //  header.textContent = 'sort';
+          //  menu.appendChild(header);
+          
             const sort = element('div', {'id': 'sort'})
-
-
+            const sortHeader = element('h5', {'class': 'task-sort-header task-sort-type'});
+            sortHeader.textContent = UI.getSort();
+            sort.appendChild(sortHeader)
         
             const sortButton = element('input', {'type': 'image', 'src': miniSortIcon, 'class': 'container-button', 'id':'mini-sort', 'alt': 'Sort tasks', 'data-sort': ''});
           
             sort.appendChild(sortButton);
             
-            sort.appendChild(menu);
+            //sort.appendChild(menu);
           
 
             sortButton.addEventListener('click', (e) => {
                 
-                // testing
                 settingsMenu(sortButton.parentElement, projectObject)
-
-                //renderTaskList(projectObject);
             
-                console.log('..')
-    
             })
            
             return sort;
         }
 
-
-        const tasks = makeContainer("Tasks", finishTasksIcon);
-
+        // Tasks / Titlebar
+        //const tasks = makeContainer("Tasks", finishTasksIcon);
+        const tasksContainer = element('div', {'class': 'tasks-container'});
+        const titleContainer = element('div', {'class': "title-container", 'id': `tasks-title-container`});
         
-   
-      
+       
+       
+        
+        const title = element('h4', {'class': `tasks-header`});
+            title.textContent = 'Tasks';
+
+        const finishTasksButton = element('input', {'type': 'image', 'src': finishTasksIcon,  'id': `tasks-button`, 'class': 'container-button expand-content-btn', }, );
+        appendChildren(titleContainer, title, finishTasksButton);
+
+        const content = element('div', {'class': "tasks-content"});
+
+        appendChildren(tasksContainer, titleContainer, content);
+        
+
         const addTask = element('input', {'type':'image', 'src': addMiniTaskIcon, 'id': 'add-task-button', 'alt': 'add mini task'})
-        const titleContainer = tasks.firstElementChild;
+
         titleContainer.insertBefore(sortMenu(), titleContainer.firstElementChild); 
         //const miniTitleContainer = document.querySelector("#tasks-title-container");
         // miniTitleContainer.appendChild(sort);
         console.log(projectObject.tasks.getTaskList().length)
 
-        tasks.appendChild(addTask)
+        tasksContainer.appendChild(addTask)
 
         // Attaches a new task to both the DOM element and Project Objects
 
@@ -162,7 +170,7 @@ const renderProject = (projectObject) => {
 
         
 
-        return tasks;
+        return tasksContainer;
     }
 
 
@@ -593,7 +601,10 @@ const deleteProject = (project) => {
 
 const settingsMenu = (parent, project) => {
 
-    const container = element('div', {'class': 'menu-container shift-right'});
+    const oldContainer = document.querySelector('.menu-container');
+    if (oldContainer != null) oldContainer.remove();
+
+    const container = element('div', {'class': 'menu-container'});
     container.style.visibility = 'visible';
     const menu = element('div', {'class': 'context-menu', 'id': 'sort-menu'});
     const menuItems = element('ul', {'class': 'menu-items menu-list', 'id': 'sort-menu-items'});
@@ -606,6 +617,8 @@ const settingsMenu = (parent, project) => {
                 console.log(sortType);
                 UI.setSort(sortType);
                 renderTaskList(project);
+                const sortHeader = document.querySelector(".task-sort-header");
+                sortHeader.textContent = UI.getSort();
                 close();
             })
         return sort
@@ -617,6 +630,9 @@ const settingsMenu = (parent, project) => {
     menu.appendChild(menuItems);
     container.appendChild(menu);
     parent.appendChild(container);
+
+
+
     const close = () => {
 
         container.remove();

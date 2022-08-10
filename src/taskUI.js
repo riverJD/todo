@@ -454,6 +454,7 @@ const deadlineForm = (task) => {
         e.preventDefault();
         updateDeadline(task, form)
         formContainer.remove();
+        renderTaskList(task.getParent());
     });
     const formHeader = element("h2", {'class':'form-header deadline-form'});
     formHeader.textContent = FORM_HEADER;

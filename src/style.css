@@ -318,10 +318,11 @@ h1,h2,h3,h4,h5,p, ul, li{
 .title-container{
 
     
-    display: flex;
-    justify-content: space-between;
-    width: 90%;
+    display: grid;
    
+    width: 90%;
+    
+    grid-template-columns: repeat(3, 1fr);
 
 }
 
@@ -431,6 +432,18 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-row: 1 / 2;
 }
 
+#sort{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+.task-sort-type{
+    grid-column: 2 / -1;
+}
+
+.tasks-header{
+    justify-self: center;
+}
+
 .tasks-container{
     display: flex;
     flex-direction: column;
@@ -456,6 +469,8 @@ h1,h2,h3,h4,h5,p, ul, li{
 
     height: auto;
     width: 1.5rem;
+
+    grid-row: 1 / 2;
 }
 
 .mini-title{
@@ -712,7 +727,8 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 #tasks-button{
-    flex: 0;
+    
+    justify-self: end;
    
 
 }

@@ -1,14 +1,15 @@
 //  To do object, creation and modification
 
 // Helper functions located in utils file
-import { isThisSecond, isEqual, formatDistance, formatISO, format } from 'date-fns';
+import { isThisSecond, isEqual, formatDistance, formatISO, format, getHours, differenceInHours } from 'date-fns';
 import { setAttributes, createElement as element } from './utils.js';
 import task from "./default-task.json";
+import { eachHourOfIntervalWithOptions } from 'date-fns/fp';
 //import task from "./example-task.json";
 // Constants
 
 // Factory to create a ToDo object
-const createToDo = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal, taskID = task.taskID, completed = task.completed, completionDate = task.completionDate) => {
+const createTask = (title = task.title, deadline = task.deadline, priority = task.priority, description = task.description, goal = task.goal, taskID = task.taskID, completed = task.completed, completionDate = task.completionDate) => {
 
     deadline = new Date(deadline);
     
@@ -17,7 +18,7 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
   
     // Time/Date based attributes
     const startDate = new Date(Date.now())
-    const timeRemaining = deadline - Date.now();
+    const timeRemaining = deadline - (new Date(Date.now()));
 
 
     const setTitle = (newTitle) => {
@@ -60,30 +61,27 @@ const createToDo = (title = task.title, deadline = task.deadline, priority = tas
         return {title, deadline, priority, description};
     }
 
+    const getUrgency = () => {
 
-    return ({getCompletionDate, setCompletionDate, setStatus, getStatus, getID, setID, setParent, getParent, setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
+        const today = new Date();
+        const hoursRemain = differenceInHours(getDeadline(), today)
+        console.log(hoursRemain);
+        const urgency = hoursRemain * getPriority();
+        console.log(`debug: urgency: ${urgency}`);
+        return(urgency);
+    }
+
+
+    return ({getUrgency, getCompletionDate, setCompletionDate, setStatus, getStatus, getID, setID, setParent, getParent, setGoal, getGoal, setDeadline, getDeadline, getPriority, setPriority, title, deadline, priority, description, priority,  content, startDate, timeRemaining,setDescription, getDescription, setTitle, getTitle, getContent,});
 
 }
 
 
-// Lower urgency is considered more urgent. Closest to zero is most urgent.
-const getTaskUrgency = (toDoObject) => {
-        
-    // Get days onl
-    const urgency = format(toDoObject.timeRemaining, "dd");
-    console.log(urgency * toDoObject.priority);
-
-    return urgency;
-}
 
 
 
 
-
-
-
-
-export {createToDo as Task, getTaskUrgency as getUrgency};
+export {createTask as Task}
 
 
 
