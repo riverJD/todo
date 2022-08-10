@@ -1,17 +1,17 @@
-import { format } from "date-fns";
-import { appendChildren, element, makeContainer, makeMenu, setAttributes } from "./utils";
+import { format, } from "date-fns";
+import { appendChildren, element, makeContainer, makeMenu, setAttributes, getDate as getToday} from "./utils";
 import defaultProject from "./default-project.json"
 import defaultTask from "./default-task.json";
 import { getUrgency, Task } from "./todo";
 import { Project } from "./project";
 import { projectList, renderProjectList } from "./content";
-import { renderTask, priorityStyle, toggleTaskStatus} from "./taskUI";
+import { renderTask, priorityStyle, toggleTaskStatus, editTask} from "./taskUI";
 import { UI } from "./settings";
 
 
 // images
 
-import closeProjectIcon from "./img/close-project.svg";
+import closeProjectIcon from "./img/arrow-bottom-left-thick.svg";
 import editProjectIcon from "./img/edit.svg";
 import saveProjectIcon from "./img/save-content.svg";
 import miniSortIcon from "./img/sort.svg";
@@ -21,11 +21,14 @@ import miniDeleteIcon from './img/delete-alert.svg';
 import finishTasksIcon from './img/finish-task.svg';
 import calendarIcon from './img/calendar-edit.svg';
 import addMiniTaskIcon from './img/plus-box-multiple.svg';
+import saveDeadlineIcon from './img/save-task.svg';
 
 
 // Interface for adding tasks and projects.
 const content = document.querySelector("#content")
 const TASKLISTMAX = 7;
+const today = getToday();
+
 
 // Render a full project
 const renderProject = (projectObject) => {
@@ -99,7 +102,7 @@ const renderProject = (projectObject) => {
            const editDeadlineButton = element('input', {'type': 'image', 'src': calendarIcon,  'id': `project-deadline-button`, 'class': 'container-button project-button expand-content-btn', }, );
            editDeadlineButton.addEventListener('click', () => {
            
-           //openDeadlineForm(task))
+           openDeadlineForm(projectObject);
         
         });
             const switchPriorityButton = element('input', {'type': 'button', 'class': `priority-button task-item ${priorityStyle(proj).priorityValue}`, 'value': priorityStyle(proj).priorityText});
@@ -194,6 +197,7 @@ const renderProject = (projectObject) => {
             
             //createTask(e.target.parentNode, projectObject);
             createTask(projectObject);
+            
             renderTaskList(projectObject);
   
         })
@@ -215,6 +219,7 @@ const renderProject = (projectObject) => {
         const editProject = element('input', {'type': 'image', 'src': editProjectIcon, 'class': 'project-button', 'id': 'edit-project', 'value': 'Edit'})
         editProject.addEventListener('click', () => {
             
+        
 
         editProjectBox(projectObject);
             
@@ -228,7 +233,7 @@ const renderProject = (projectObject) => {
         return buttonContainer;
     }
     
-    project.appendChild(projectButtons());
+    content.appendChild(projectButtons());
 
     project.appendChild(content)
 
@@ -254,11 +259,17 @@ const createTask = (project) => {
 
     const task = Task();
     task.setParent(project);
+    renderTask(task);
+    editTask(task);
+
     project.tasks.addTask(task);
 }
 
 // Proj is original project being edited;
 const editProjectBox = (proj) => {
+
+    // Alter UI elements
+    disableProjUI();
 
     // Create temporary project to save to, allow for future refactoring
     const tempProj = Project();
@@ -305,6 +316,19 @@ const editProjectBox = (proj) => {
     const newDescription = editDescription('project');
     const newGoal = editGoal('project');
        
+
+
+
+
+}
+
+// Disable unrelated buttons while in edit mode
+const disableProjUI = () => {
+    const deadlineContainer = document.querySelector(".project-deadline-container");
+    deadlineContainer.classList.add('disabled');
+    const tasksContainer = document.querySelector(".tasks-container");
+    tasksContainer.classList.add('disabled');
+
 }
 
 // Enable editing of title of project. Returns DOM Object. Target is string either 'project' or 'task'
@@ -504,15 +528,78 @@ const deleteMini = (task) => {
 
 }
 
+const openDeadlineForm = (project) => {
 
-
-
-const getProjectFromUser = () => {
-
+    
+    const container = element('div', {'class': 'form-container', 'id': 'deadline-form-container'});
+  
+    container.appendChild(deadlineForm(project));
+    const parent = document.querySelector('body');
+    parent.appendChild(container);
+  
 
 }
 
+const deadlineForm = (project) => {
 
+    const FORM_HEADER = "Select Deadline"
+    
+    const formContainer = element('div', {"id": "project-form-container"});
+    const form = element('form', {'class': 'project-deadline-form', "id": "deadline-form"});
+
+    const dateLabel = element('label', {"for": "date", "class": "form-label", "id": "date-label"});
+    dateLabel.textContent = "Date";
+
+    const date = element("input", {"type": "date", "class": "form-input", "name": "date", "id": "form_date", "min": today, 'value': format(project.content.getDeadline(), "yyyy-MM-dd"), "required": ""});
+    dateLabel.appendChild(date);
+
+
+    const buttonBar = element('div', {'class': 'button-bar form-buttons', 'id': 'form-buttons'})
+        const submitDeadline = element('input', {'type': 'image', 'src': saveDeadlineIcon, 'alt': 'confirm deadline', 'class': 'form-button task-button', 'id': 'submit-deadline-button'})
+  
+        const close = element('input', {'type': 'image', 'src': closeProjectIcon, 'alt': 'close without changes', 'class': 'form-button task-button', 'id': 'close-deadline-button'})
+            close.addEventListener('click', (e) => {
+                const form = document.querySelector("#deadline-form-container")
+                e.preventDefault();
+                formContainer.remove();
+            })
+    appendChildren(buttonBar, submitDeadline, close)
+    
+
+    form.appendChild(buttonBar);
+   
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        updateDeadline(project, form)
+        formContainer.remove();
+    });
+    const formHeader = element("h2", {'class':'form-header deadline-form'});
+    formHeader.textContent = FORM_HEADER;
+
+   
+appendChildren(form, dateLabel, formHeader);
+formContainer.appendChild(form);
+return formContainer;
+
+};
+
+const updateDeadline = (project, form) => {
+
+    const DEFAULTTIME = "12:00:01"
+
+    const deadlineData = new FormData(form);
+
+    let newDay = deadlineData.get('date');
+
+    const newTime = DEFAULTTIME;
+    const newDeadline = new Date(newDay + 'T' + newTime)
+
+    project.content.setDeadline(newDeadline);
+    console.log(format(project.content.getDeadline(), "yyyy-MM-dd"));
+    renderProject(project);
+
+
+}
 // Buttons and Listeners
 const createListeners = (project) => {
 

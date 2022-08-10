@@ -8,10 +8,10 @@ import confirmIcon from "./img/check-bold.svg";
 
 import { editDescription, editGoal, editTitle, createMiniTask, closeProject, renderProject, deleteTask, renderTaskList} from "./projectUI";
 import { Task } from "./todo";
-import { appendChildren, element, makeContainer, makeRadio, getDate} from "./utils";
+import { appendChildren, element, makeContainer, makeRadio, getDate as getToday} from "./utils";
 import { format, parseISO, toDate } from "date-fns";
 
-const today = getDate();
+const today = getToday();
 let focusedTask;
 // Show a full task on screen
 const renderTask = (task) => {
@@ -287,6 +287,9 @@ const editTask = (task) => {
     const editButton = document.querySelector('#task-edit-button');
     editButton.classList.add('hidden');
 
+    const deadlineContainer = document.querySelector(".task-deadline-container");
+    deadlineContainer.classList.add('disabled');
+
     // Prepare to replace with edit boxes and create save button
     const buttonBar = document.querySelector('.task-title-bar');
     const title = document.querySelector('.task-title');
@@ -357,17 +360,27 @@ const priorityStyle = (task) => {
 }
 const openDeadlineForm = (task) => {
 
-    
+    //Alter Task UI Elements
+    disableTaskUI();
+
+
     const container = element('div', {'class': 'form-container', 'id': 'deadline-form-container'});
   
-
-
     container.appendChild(deadlineForm(task));
     const parent = document.querySelector('body');
     parent.appendChild(container);
   
 
 }
+
+const disableTaskUI = () => {
+
+    const task = document.querySelector('.task');
+    task.classList.add('disabled');
+
+
+}
+
 
 
 const updateDeadline = (task, form) => {
@@ -402,8 +415,7 @@ const updateDeadline = (task, form) => {
 const deadlineForm = (task) => {
 
     const FORM_HEADER = "Select Deadline"
-    const DATE_TOOLTIP = "Select any future date"
-
+    
     const formContainer = element('div', {"id": "form-container"});
     const form = element('form', {"id": "deadline-form"});
 
@@ -424,9 +436,11 @@ const deadlineForm = (task) => {
   
         const close = element('input', {'type': 'image', 'src': closeTaskIcon, 'alt': 'close without changes', 'class': 'form-button task-button', 'id': 'close-deadline-button'})
             close.addEventListener('click', (e) => {
-                const form = document.querySelector("#deadline-form-container")
+               
                 e.preventDefault();
                 formContainer.remove();
+                renderTask(task);
+                
             })
     appendChildren(buttonBar, submitDeadline, close)
     
@@ -454,7 +468,7 @@ const deadlineForm = (task) => {
         e.preventDefault();
         updateDeadline(task, form)
         formContainer.remove();
-        renderTaskList(task.getParent());
+        renderTaskList(task.getParent())
     });
     const formHeader = element("h2", {'class':'form-header deadline-form'});
     formHeader.textContent = FORM_HEADER;

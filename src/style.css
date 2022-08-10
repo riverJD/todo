@@ -175,7 +175,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-area: deadline;
 }
 
-#deadline-form{
+#deadline-form, #project-deadline-form{
 
     align-self: center;
     justify-self: center;
@@ -185,7 +185,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     background-color: rgb(255, 255, 255);
     position: relative;
     z-index: 10;
-    height: 300px;
+    gap: 20px;
     width: min(400px, 100%);
     display: grid;
     padding: 10% 10% 0% 10%;
@@ -196,8 +196,13 @@ h1,h2,h3,h4,h5,p, ul, li{
     "repeat"
     "buttons";
     
-
 }
+
+.project-deadline-form{
+
+    
+}
+
 .form-input{
     margin-left: 10px;
 }
@@ -235,6 +240,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-area: buttons;
     display: flex;
     flex-direction: row-reverse;
+    justify-content: space-between;
 }
 
 
@@ -250,7 +256,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 
 #content{
-    background-color: var(--happyBlue, white);
+    background-color: rgb(244, 246, 253);
     height: 100%;
     width: 100%;
     display: flex;
@@ -261,7 +267,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 .blockscreen{
     pointer-events: none;
-    background-color: rgb(238, 237, 237);
+    background-color:rgb(244, 246, 253);
     opacity: .5;
 }
 
@@ -281,8 +287,8 @@ h1,h2,h3,h4,h5,p, ul, li{
     z-index: 10;
 
     border-radius: 5px;
-    background-color: rgb(255, 255, 255);
-    box-shadow: 3px 3px 20px 5px var(--greyBlue)
+    background-color: rgb(253, 251, 226);
+    box-shadow: 3px 3px 20px 5px rgb(211, 211, 203);
     
     
     
@@ -292,7 +298,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .project-content{
     
-    height: 90%;
+    height: 100%;
     width: 98%;
     gap: 5px;
     display: grid;
@@ -306,7 +312,8 @@ h1,h2,h3,h4,h5,p, ul, li{
     "tasks tasks"
     "tasks tasks"
     "tasks tasks"
-    "objective deadline";
+    "objective ."
+    "buttons deadline";
 
 
 }
@@ -565,13 +572,15 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .button-bar{
     display: flex;
-    justify-content: space-between;
+   
 
     grid-area: buttons;
 }
 
 #project-button-bar{
-    flex-direction: row-reverse;
+
+    grid-area: buttons;
+    
 }
 
 
@@ -613,7 +622,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     justify-self: center;
     width: 100%;
   
-    background-color: rgb(195, 210, 245);
+    background-color: rgb(244, 246, 253);
     border-radius: 10px;
     gap: 5px;
     
@@ -653,10 +662,11 @@ h1,h2,h3,h4,h5,p, ul, li{
     height: 200px;
     width: 100%;
 
-    background-color: rgb(242, 243, 221);
+   /* background-color: rgb(242, 243, 221);*/
+    background-color: rgb(255, 255, 200);
 
     border-radius: 5px;
-    box-shadow: 3px 3px 5px 5px var(--greyBlue);
+    box-shadow: 3px 3px 5px 5px rgb(224, 228, 235);
     outline: 1px solid var(--greyBlue);
  }
 
@@ -943,6 +953,7 @@ margin-bottom: 10px;
 /* disable content and lower opacity */
 
 .disabled{
-    opacity: .5;
+    filter: grayscale(90%);
+    opacity: .6;
     pointer-events: none;
 }

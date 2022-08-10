@@ -16,9 +16,7 @@ const createElement = (type, attributes) => {
 // for appending multiple children in one call
 const appendChildren = (parent, ...children) => {
 
-    
-    console.log(parent);
-    console.log(children)
+
 
     const childCount = children.length;
 
@@ -27,7 +25,6 @@ const appendChildren = (parent, ...children) => {
 
     }
 
-    console.log(parent);
    // return childCount;
 }
 
