@@ -73,7 +73,7 @@ const renderProject = (projectObject) => {
         content.appendChild(description())
 
         // Deadline/Priority/Urgency Container (These will interact a lot)
-        const deadline = () => {
+        const deadline1 = () => {
 
             const deadlineContainer = makeContainer("Deadline", calendarIcon);
             const deadlineContent = deadlineContainer.querySelector('.deadline-content');     
@@ -86,6 +86,36 @@ const renderProject = (projectObject) => {
         
             return deadlineContainer;
         }
+
+        const deadline = () => {
+
+           
+           // const priority = makeContainer('task-deadline', editDeadlineIcon);
+           const priority = element('div', {'class': `project-deadline-container`});
+           
+           const priorityHeader = element ('h3', {'class': `project-deadline-header`});  
+           priorityHeader.textContent = "Priority: "   
+           
+           const editDeadlineButton = element('input', {'type': 'image', 'src': calendarIcon,  'id': `project-deadline-button`, 'class': 'container-button project-button expand-content-btn', }, );
+           editDeadlineButton.addEventListener('click', () => {
+           
+           //openDeadlineForm(task))
+        
+        });
+            const switchPriorityButton = element('input', {'type': 'button', 'class': `priority-button task-item ${priorityStyle(proj).priorityValue}`, 'value': priorityStyle(proj).priorityText});
+            switchPriorityButton.addEventListener('click', () => cyclePriority(projectObject));
+
+            const deadline = element('h4', {'class': "project-deadline", "id": `proj-deadline`});
+            deadline.textContent = format(proj.getDeadline(), "MM.dd.yyyy");
+            
+            appendChildren(priority, priorityHeader, editDeadlineButton, switchPriorityButton, deadline);
+
+            priority.value = proj.getPriority();
+        
+            return priority;
+        }
+
+
         content.appendChild(deadline())
 
         // Also known as objective
@@ -500,12 +530,7 @@ const createListeners = (project) => {
     })
     
     const deadline = document.querySelector('#deadline-button');
-    const priority = document.querySelector('.priority-button.project-item');
-    priority.addEventListener('click', (e) => {
-
-        cyclePriority(project);
-
-    })   
+  
 
 }
 
@@ -517,10 +542,10 @@ const cyclePriority = (project) => {
      
       const updatedPriority = (((currentPriority) +1 ) % 3) + 1;
       project.content.setPriority(updatedPriority);
-      closeProject();
+      closeProject(project);
+      renderProject(project);
 
-    const projectDOM = document.querySelector('.project');
-    if (projectDOM != null) renderProject(project);
+
       
 }
 

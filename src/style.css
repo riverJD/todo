@@ -140,7 +140,7 @@ h1,h2,h3,h4,h5,p, ul, li{
   
 }
 
-.task-deadline-container{
+.task-deadline-container, .project-deadline-container{
     grid-area: deadline;
     flex: 0;
     display: grid;
@@ -158,11 +158,11 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 
 
-.task-deadline-header{
+.task-deadline-header, .project-deadline-container{
     grid-area: header;
 }
 
-#task-deadline-button{
+#task-deadline-button, #project-deadline-button{
     border: none;
     grid-area: editDeadline
 }
@@ -171,7 +171,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-area: priority;
 }
 
-.task-deadline{
+.task-deadline.project-deadline{
     grid-area: deadline;
 }
 
@@ -267,9 +267,9 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .project{
     height: min(500px, 90%);
-    width: min(600px, 95%);
+    width: min(500px, 95%);
     min-width: 300px;
-    top: 20%;
+    top: 10%;
     font-family: inter;
     display: flex;
     position: fixed;
@@ -415,7 +415,7 @@ h1,h2,h3,h4,h5,p, ul, li{
    
 }
 
-.deadline-container{
+.deadline-container, .project-deadline-container{
     display: grid;
     grid-area: deadline;
     
