@@ -175,6 +175,8 @@ const renderProject = (projectObject) => {
             title.textContent = 'Tasks';
 
         const finishTasksButton = element('input', {'type': 'image', 'src': finishTasksIcon,  'id': `tasks-button`, 'class': 'container-button expand-content-btn', }, );
+ 
+        
         appendChildren(titleContainer, title, finishTasksButton);
 
         const content = element('div', {'class': "tasks-content"});
@@ -215,11 +217,12 @@ const renderProject = (projectObject) => {
 
         const buttonContainer = element('div', {'class': 'button-bar', 'id': 'project-button-bar'});
 
-        const closeProject = element('input', {'type': 'image', 'src': closeProjectIcon,'class': 'project-button', 'id': 'close-project', 'value': 'Close'});
+        const closeProjectButton = element('input', {'type': 'image', 'src': closeProjectIcon,'class': 'project-button', 'id': 'close-project', 'value': 'Close'});
         const editProject = element('input', {'type': 'image', 'src': editProjectIcon, 'class': 'project-button', 'id': 'edit-project', 'value': 'Edit'})
         editProject.addEventListener('click', () => {
             
         
+
 
         editProjectBox(projectObject);
             
@@ -227,7 +230,7 @@ const renderProject = (projectObject) => {
             
         })
         
-        buttonContainer.appendChild(closeProject)
+        buttonContainer.appendChild(closeProjectButton)
         buttonContainer.appendChild(editProject)
 
         return buttonContainer;
@@ -530,6 +533,8 @@ const deleteMini = (task) => {
 
 const openDeadlineForm = (project) => {
 
+    // Alter project UI
+    disableProjUI();
     
     const container = element('div', {'class': 'form-container', 'id': 'deadline-form-container'});
   
@@ -562,6 +567,8 @@ const deadlineForm = (project) => {
                 const form = document.querySelector("#deadline-form-container")
                 e.preventDefault();
                 formContainer.remove();
+                closeProject();
+                renderProject(project);
             })
     appendChildren(buttonBar, submitDeadline, close)
     
@@ -571,6 +578,8 @@ const deadlineForm = (project) => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         updateDeadline(project, form)
+        closeProject();
+        renderProject(project);
         formContainer.remove();
     });
     const formHeader = element("h2", {'class':'form-header deadline-form'});
@@ -596,7 +605,6 @@ const updateDeadline = (project, form) => {
 
     project.content.setDeadline(newDeadline);
     console.log(format(project.content.getDeadline(), "yyyy-MM-dd"));
-    renderProject(project);
 
 
 }
@@ -609,6 +617,7 @@ const createListeners = (project) => {
     const close = document.querySelector('#close-project');
     close.addEventListener('click', () => closeProject());
     // Content button (expand content)
+
     const tasks = document.querySelector('#tasks-button');
     tasks.addEventListener('click', () => {
 
@@ -678,7 +687,7 @@ const setAllTasks = (project) => {
 
 
 const closeProject = () => {
-
+    console.log("wtf?");
     const project = document.querySelector('.project')
     
     //Reenable interaction 
@@ -713,10 +722,13 @@ const deleteProject = (project) => {
 
 const settingsMenu = (parent, project) => {
 
-    const oldContainer = document.querySelector('.menu-container');
+    
+
+     const oldContainer = document.querySelector('.menu-container');
     if (oldContainer != null) oldContainer.remove();
 
     const container = element('div', {'class': 'menu-container'});
+    container.addEventListener('click', () => container.remove())
     container.style.visibility = 'visible';
     const menu = element('div', {'class': 'context-menu', 'id': 'sort-menu'});
     const menuItems = element('ul', {'class': 'menu-items menu-list', 'id': 'sort-menu-items'});
