@@ -118,7 +118,7 @@ const renderTask = (task) => {
 
             const container = element('div', {'class': 'task-deadline-complete', 'id': 'task-deadline-complete'});
             const header = element('h4', {'class': 'task-complete-header'});
-           
+            console.log(task.getCompletionDate())
             header.textContent = `Task completed ${format(task.getCompletionDate(), 'MM.dd.yyyy')}`
             container.appendChild(header);
 
@@ -194,7 +194,11 @@ const renderTask = (task) => {
     
     content.appendChild(taskPopup());
 }
+
+// Toggle between completion states and update completion date.  Allow override and explicitely set status.
 const toggleTaskStatus = (task) => {
+
+    
 
     if (task == null) return;
 
@@ -207,7 +211,7 @@ const toggleTaskStatus = (task) => {
     }
     else{
         task.setStatus(false)
-        task.setCompletionDate(null);
+        
         task.getParent().tasks.removeComplete(task);
     }
   

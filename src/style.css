@@ -272,7 +272,7 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .project{
-    height: min(500px, 90%);
+    
     width: min(500px, 95%);
     min-width: 300px;
     top: 10%;
@@ -298,13 +298,14 @@ h1,h2,h3,h4,h5,p, ul, li{
 
 .project-content{
     
-    height: 100%;
+   
     width: 98%;
     gap: 5px;
     display: grid;
+    flex: 0;
 
     grid-template-columns: 3fr 2fr;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 100px);
 
     grid-template-areas: 
     
@@ -369,9 +370,9 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .project-goal{
-    width: 98%;
+    max-width: 98%;
    
-
+    
     grid-area: objective;
 }
 
