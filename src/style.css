@@ -29,7 +29,7 @@
 body{
 
     background-color: var(--happyBlue);
-  
+    
     height: 100vh;
     width: 100vw;
     margin: 0;
@@ -39,10 +39,11 @@ body{
     align-items: center;
 }
 
-h1,h2,h3,h4,h5,p, ul, li{
+h1,h2,h3,h4,h5,p, ul, li, div{
+    font-family: 'PT Sans Caption', sans-serif;
     margin: 0;
     padding: 0;
-    list-style: none;;
+    list-style: none;
 }
 
 
@@ -120,14 +121,18 @@ h1,h2,h3,h4,h5,p, ul, li{
 }
 
 .task-title{
+    overflow: auto;
     font-size: clamp(1rem, 32px, 2rem);
     text-align: center;
     justify-self: center;
 }
 
 .task-desc{
+    overflow: auto;
     grid-area: content;
 }
+
+
 
 #deadline-form-container{
 
@@ -283,7 +288,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     flex-direction: column-reverse;
     justify-content: center;
     margin: 0;
-    padding: 10px;
+    padding: 20px;
     z-index: 10;
 
     border-radius: 5px;
@@ -305,7 +310,7 @@ h1,h2,h3,h4,h5,p, ul, li{
     flex: 0;
 
     grid-template-columns: 3fr 2fr;
-    grid-template-rows: repeat(5, 100px);
+    grid-template-rows: repeat(5, 80px);
 
     grid-template-areas: 
     
@@ -481,12 +486,18 @@ h1,h2,h3,h4,h5,p, ul, li{
     grid-row: 1 / 2;
 }
 
-.mini-title{
+.mini-title-bar{
     border: none;
+    display: flex;
+    gap: 5%;
+    
+    align-items: center;
     
   
 }
-
+.mini-title-bar > *{
+    margin-left: 10px;
+}
 
 .mini-finish, .mini-delete{
     flex: 0;
@@ -540,7 +551,7 @@ h1,h2,h3,h4,h5,p, ul, li{
      border: 2px dashed var(--alt-card-border-color);
      border-radius: 5px;
      box-shadow: 2px 2px 5px;
-     background-color: var(--card-border-color, #647431);
+     background-color: var(--card-border-color, #000000);
  
  }
  
@@ -554,7 +565,7 @@ h1,h2,h3,h4,h5,p, ul, li{
      background-color: var(--card-bg-color)
  }
 
- .project-button, .task-button{
+ .project-button, .task-button, .mini-task-urgency{
     padding: 5px;
     font-size: clamp(1rem, 24px, 2rem);
     border-radius: 5px;
@@ -882,6 +893,8 @@ margin-bottom: 10px;
 
 .completed > .mini-finish{
     background-image:  url(./img/minicheckmarked.svg);
+    background-position: 0%;
+    background-repeat: no-repeat;
   
 }
 

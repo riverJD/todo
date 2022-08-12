@@ -23,6 +23,9 @@ import finishTasksIcon from './img/finish-task.svg';
 import calendarIcon from './img/calendar-edit.svg';
 import addMiniTaskIcon from './img/plus-box-multiple.svg';
 import saveDeadlineIcon from './img/save-task.svg';
+import lowUrgencyIcon from './img/snowflake.svg';
+import medUrgencyIcon from './img/progress-clock.svg';
+import highUrgencyIcon from './img//fire-alert.svg';
 
 
 // Interface for adding tasks and projects.
@@ -267,6 +270,11 @@ const createTask = (project) => {
     editTask(task);
 
     project.tasks.addTask(task);
+    const exampleJSON = JSON.stringify(task);
+    console.log(exampleJSON);
+    const newObj = JSON.parse(exampleJSON);
+    console.log(newObj);
+ 
 }
 
 // Proj is original project being edited;
@@ -335,12 +343,12 @@ const disableProjUI = () => {
 
 }
 
-// Enable editing of title of project. Returns DOM Object. Target is string either 'project' or 'task'
+// Enable editing of title of project or task. Returns DOM Object. Target is string either 'project' or 'task'
 const editTitle = (target) => {
 
     const title = document.querySelector(`.${target}-title`);
    
-    const editTitleBox = element('textarea',  {'name': 'textarea', 'placeholder': title.innerText, "class": `edit-${target}-box ${target}-title ${target}-item`});
+    const editTitleBox = element('textarea',  {'name': 'textarea', 'placeholder': title.innerText, "class": `edit-${target}-box ${target}-title ${target}-item`, 'maxlength': 14});
     editTitleBox.textContent = title.innerText;
     title.parentNode.insertBefore(editTitleBox, title);
 
@@ -412,6 +420,10 @@ const sortList = (list, method) => {
 //Handles display of 'Tasks list'
 const renderTaskList = (project) => {
 
+    // Threshold for styling with urgency.  Lower is more urgent. 
+    const LOWURGENCYLEVEL = 400;
+    const HIGHURGENCYLEVEL = 100;
+
     const parent = document.querySelector('.tasks-container')
     const list = element('div', {'class': 'task-list'});
     parent.insertBefore(list, parent.lastElementChild)
@@ -475,21 +487,46 @@ const createMiniTask = (project, task) => {
 
     //console.log(task);
     // Delete mini
-    const removeMini = element('input', {'type': 'image', 'src': miniDeleteIcon, 'class': 'mini-button mini-delete', 'value': '-'})
+    const removeMini = element('input', {'type': 'image', 'src': miniDeleteIcon, 'class': 'mini-button mini-delete', 'alt': 'Delete task'})
     // Pass on DOM of Minilist and Task to delete
     removeMini.addEventListener('click', (e) => deleteMini(task));
     // Mark mini as complete
-    const finishMini = element('input', {'type': 'image', 'src': miniCheckbox, 'class': 'mini-button mini-finish', 'value': 'F'});
+    const finishMini = element('input', {'type': 'image', 'src': miniCheckbox, 'class': 'mini-button mini-finish', 'alt': "Finish task"});
     finishMini.addEventListener('click', (e) => toggleTaskStatus(task));
     //Open Task in full view
-    const miniButton = element('input', {'type': 'button', 'class': 'mini-button mini-title', 'value': `${task.getTitle()}`});
+    //const miniButton = element('input', {'type': 'button', 'class': 'mini-button mini-title', 'value': `${task.getTitle()}`});
+    const miniBar = element('div', {'class': 'mini-button mini-title-bar'});
+    const miniTitle = element('h4', {"class": 'mini-task-item mini-task-title'});
+    miniTitle.textContent = task.getTitle();
+    const dueDate = element('h4', {"class": "mini-task-item mini-task-date"});
+    dueDate.textContent = format(task.getDeadline(), "MM.dd.yy");
+
+    // Style urgency icon based on urgency status
+    const setUrgencyStatus = () => {
+
+        const LOWURGENCYLEVEL = 400;
+        const HIGHURGENCYLEVEL = 30;
         
-    
+        let icon = medUrgencyIcon;
+        const urgency = task.getUrgency();
+        console.log(urgency);
+
+        if (urgency >= LOWURGENCYLEVEL) icon = lowUrgencyIcon;
+        else if (urgency <= HIGHURGENCYLEVEL) icon = highUrgencyIcon;
+        
+        return icon
+
+    }
+    const urgencyStatus = element("img", {"src": setUrgencyStatus(), 'class': 'urgency-icon mini-task-item mini-task-urgency', 'alt': 'Task urgency indicator'})
+
+       
+    appendChildren(miniBar, miniTitle, dueDate);
+    if (!task.getStatus()) miniBar.appendChild(urgencyStatus)
 
 
-    miniButton.addEventListener('click', () => renderTask(task))
+    miniBar.addEventListener('click', () => renderTask(task))
     minitask.appendChild(removeMini);
-    minitask.appendChild(miniButton);
+    minitask.appendChild(miniBar);
     minitask.appendChild(finishMini)
     let bgcolor = minitask.style.backgroundColor;
     const title = element('h4', {'class': 'mini-task-title'})

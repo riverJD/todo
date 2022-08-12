@@ -12,6 +12,7 @@ import { appendChildren, element, makeContainer, makeRadio, getDate as getToday}
 import { addDays, addMonths, addWeeks, format, parseISO, toDate } from "date-fns";
 import {clone } from 'just-clone';
 import { cloneDeep } from "lodash";
+import { storage } from "./settings";
 
 const today = getToday();
 let focusedTask;
@@ -101,18 +102,7 @@ const renderTask = (task) => {
             return priority;
         }
 
-        // Creation of goal element
-        const goal = () => {
-            const goal = element('div', {'class': "task-goal-header", "id": `${task.title}-goal`});
-            const goalHeader = element('h3', {'class': 'goal-title'})
-            const goalContent = element('p', {'class': 'task-goal'});
-            goalContent.textContent = task.getGoal();
-            goalHeader.textContent = "Goal"
-            goal.appendChild(goalHeader)
-            goal.appendChild(goalContent)
-        
-            return goal;
-        }
+ 
         // Show date of completed task when checked
         const complete = () => {
 
@@ -181,7 +171,6 @@ const renderTask = (task) => {
         newTask.appendChild(title());
         newTask.appendChild(description());
         newTask.appendChild(priority());
-        //newTask.appendChild(goal());
         newTask.appendChild(buttonBar());
         if (task.getStatus()){
           
@@ -224,18 +213,20 @@ const toggleTaskStatus = (task) => {
 const repeatTask = (task) => {
 
     const repeat = task.getRepeat();
+    console.log(repeat)
     const project = task.getParent();
 
     console.log(task.getParent().tasks.getTaskList())
 
+    if (repeat === 'none') return;
     // why doesnt this work??
     //const repeatedTask = cloneDeep(task);
-    const repeatedTask = Task(task.getTitle(), task.getDeadline(), task.getPriority(), task.getDescription(), task.getGoal(), task.getID(), false, task.getCompletionDate(), task.getRepeat());
+    const repeatedTask = Task(task.getTitle(), task.getDeadline(), task.getPriority(), task.getDescription(), task.getID(), false, task.getCompletionDate(), task.getRepeat());
 
     console.log(task === repeatedTask);
     console.log(repeatedTask);
 
-    if (repeat === 'none') return;
+  
 
     switch(repeat){
 
@@ -286,6 +277,7 @@ const changePriority = (task, priority) => {
 
 const closeTask = (DOM) => {
 
+    storage.storeTask(focusedTask);
     const project = document.querySelector('.project');
     project.classList.remove('blockproject');
 
@@ -295,6 +287,9 @@ const closeTask = (DOM) => {
     }
     const task = document.querySelector('.task');
     task.remove();
+    console.log(focusedTask)
+
+    
 
 
 
@@ -313,6 +308,7 @@ const createTask = (container, project) => {
     // Add to object
     project.tasks.addTask(task);
     task.getID();
+   
 
 }
 
@@ -347,7 +343,6 @@ const editTask = (task) => {
 
         content.setTitle(newTitle.value);
         content.setDescription(newDescription.value);
-        //content.setGoal(newGoal.value);
         saveButton.remove();
         editButton.classList.remove('hidden');
 
@@ -359,12 +354,13 @@ const editTask = (task) => {
 
         task.setTitle(content.getTitle());
         task.setDescription(content.getDescription());
-        task.setGoal(content.getGoal());
    
         closeTask(buttonBar.parentNode);
         closeProject();
         renderProject(task.getParent());
+
         renderTask(task);
+        
 
     }
 
@@ -377,6 +373,7 @@ const editTask = (task) => {
 
 
 }
+
 
 
 const priorityStyle = (task) => {
@@ -498,7 +495,7 @@ const deadlineForm = (task) => {
         const legend = element('legend',{"value": 'repeat?'})
         legend.textContent = "Repeat every..."
           
-        const none = makeRadio('repeat', 'weekly', `Don't repeat`, true);
+        const none = makeRadio('repeat', 'none', `Don't repeat`, true);
         const daily = makeRadio ('repeat', 'daily', 'Once per day');
         const weekly =  makeRadio('repeat', 'weekly', 'Every week');
         const monthly = makeRadio('repeat', 'monthly', 'Once a month');

@@ -8,7 +8,7 @@ import { parseISO, toDate } from "date-fns";
 // Project object factory
 // Project(title, date, deadline, priority, description, goal)
 // Load defaults from default-project.json
-const Project = (title = defaultProject.title, deadline = defaultProject.deadline, priority = defaultProject.priority, description = defaultProject.description, goal = defaultProject.goal ) => {
+const Project = (title = defaultProject.title, deadline = defaultProject.deadline, priority = defaultProject.priority, description = defaultProject.description, goal = defaultProject.goal, id = defaultProject["data-project-id"] ) => {
 
     // Define own info with Task object
     //const info = Task(defaultProject.title, defaultProject.deadline, defaultProject.priority, defaultProject.description)
@@ -24,6 +24,8 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
     let _taskList = [];
     let _completedTasks = [];
     let _incompleteTasks = [];
+    // stores reference to tasks by Id.
+    let _taskIdList = [];
 
    
 
@@ -33,6 +35,7 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
         const addTask = (task) => {
              setTaskID(task);
             _taskList.push(task)
+            _taskIdList.push(task.getID())
         }
     
         const removeTask = (task) => {
@@ -68,6 +71,7 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
 
 
         const getTaskList = () => _taskList;
+        const getTaskIdList = () => _taskIdList
         const getCompletedTasks = () => _completedTasks;
         const getInCompleteTasks = () => _incompleteTasks;
         const taskCount = _taskList.length;
@@ -105,7 +109,11 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
             return {title, deadline, priority, description};
         }
 
-        return {setTitle, getTitle, getDeadline, setDeadline, setDescription, getDescription, getContent, setPriority, getPriority, setGoal, getGoal, }
+        const setID = (newID) => id = newID;
+        const getID = () => id;
+
+
+        return {getID, setTitle, getTitle, getDeadline, setDeadline, setDescription, getDescription, getContent, setPriority, getPriority, setGoal, getGoal, }
 })();
 
 
