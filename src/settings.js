@@ -21,6 +21,7 @@ const UI = (() => {
 
 const storage = (() => {
 
+  const savedData = window.localStorage;
   let taskCount = localStorage.length;
   console.log(taskCount);
 
@@ -32,18 +33,56 @@ const storage = (() => {
     console.log(parseTask(task));
     window.localStorage.setItem(storageName, JSON.stringify(parseTask(task)));
   
-     loadTask(storageName);
-     console.log(window.localStorage.getItem(storageName));
+    // loadTask(storageName);
+    // console.log(window.localStorage.getItem(storageName));
   
   }
+  
+
 
   const loadTask = (taskName) => {
 
-   console.log(JSON.parse(window.localStorage.getItem(taskName)));
+   const taskStorage = JSON.parse(savedData).getItem(taskName);
+   const newTask = Task(taskStorage.title, taskStorage.deadline, taskStorage.priority, taskStorage.description, taskStorage.taskID, taskStorage.completed, taskStorage.completionDate, taskStorage.repeat, taskStorage.parent);
+  }
+
+  const storeProj = (project) => {
+
+    let storageName = project.content.getID()
+
+    savedData.setItem(storageName, JSON.stringify(parseProj(project)))
+    
+  }
+
+
+  const loadDataFromStorage = () => {
+
+    let loadedTasks = [];
+    let loadedProjs = [];
+    
+    const storageCount = savedData.length;
+    console.log(storageCount)
+  
+    for (let data of savedData){
+
+      if ('data-project-id' in data){
+      
+      loadedProjs.push(data)
+
+      }
+
+      
+    }
+
+    console.log(loadedProjs);
 
   }
 
-  return {storeTask, loadTask}
+
+
+
+
+  return {storeTask, loadTask, loadDataFromStorage}
 
 })();
 
@@ -65,6 +104,24 @@ const parseTask = (task) => {
   }
 
   return taskData;
+
+}
+
+const parseProj = (project) => {
+
+  
+const projData = {
+
+  "title": project.content.getTitle(),
+  "deadline": project.content.getDeadline(),
+  "priority": project.content.getPriority(),
+  "description": project.content.getDescription(),
+  "goal": project.content.getGoal(),
+  "data-project-id": project.content.getID(),
+  "taskCount": project.tasks.getTaskList().length
+}
+
+return projData
 
 }
 

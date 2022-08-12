@@ -10,6 +10,8 @@ import { format } from "date-fns";
 
 // Create workspace
 
+let projectCount = 0;
+
 const createWorkSpace = () => {
 
     const main = element('div', {'class': 'main-container', 'id': 'workspace-container'});
@@ -43,7 +45,8 @@ const addNewProject = (proj) => {
     (proj != null) ? project = proj : project = Project();
     const card = renderProjectCard(project);
     projectList.addProject(project)
- 
+    project.content.setID(projectCount);
+    projectCount++;
     renderProject(project);
     return card;
 

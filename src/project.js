@@ -124,5 +124,13 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
   return { tasks, _taskList, content}
 }
 
+const addTaskFromID = (project, taskID) => {
+
+    task = 
+    project.tasks.addTask()
+
+
+}
+
 
 export { Project}
