@@ -62,7 +62,7 @@ const createTask = (title = task.title, deadline = task.deadline, priority = tas
 
         const today = new Date();
         const hoursRemain = differenceInHours(getDeadline(), today)
-        console.log(hoursRemain);
+
         const urgency = hoursRemain * getPriority();
         console.log(`debug: urgency: ${urgency}`);
         return(urgency);

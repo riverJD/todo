@@ -1,9 +1,10 @@
 import { element } from "./utils"
 import newProjIcon from "./img/note-plus.svg"
-import { addProjectButton, renderProject } from "./projectUI.js";
+import { addProjectButton, renderProject, settingsMenu } from "./projectUI.js";
 import { createProjectCard as renderProjectCard} from "./cards";
 import { Project } from "./project";
 import { format } from "date-fns";
+import { storage } from "./settings";
 
 
 //  Content space that holds projects
@@ -44,7 +45,7 @@ const projectContainer = () => {
 const addNewProject = (project) => {
   
     
-    
+
     const card = renderProjectCard(project);
     projectList.addProject(project)
     project.content.setID(projectCount);
@@ -68,6 +69,7 @@ const projectList = ((project) => {
 
     const removeProject = (project) => {
 
+        storage.deleteProject(project);
         list.splice(project, 1);
         renderProjectList();
     }

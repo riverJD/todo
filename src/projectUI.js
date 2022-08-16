@@ -274,9 +274,9 @@ const createTask = (project) => {
 
     project.tasks.addTask(task);
     const exampleJSON = JSON.stringify(task);
-    console.log(exampleJSON);
+
     const newObj = JSON.parse(exampleJSON);
-    console.log(newObj);
+
  
 }
 
@@ -470,6 +470,7 @@ const deleteTask = (task) => {
 
 
     const project = task.getParent();
+    storage.deleteTask(task);
     project.tasks.removeTask(task);
     renderTaskList(project);
 }
@@ -512,7 +513,7 @@ const createMiniTask = (project, task) => {
         
         let icon = medUrgencyIcon;
         const urgency = task.getUrgency();
-        console.log(urgency);
+   
 
         if (urgency >= LOWURGENCYLEVEL) icon = lowUrgencyIcon;
         else if (urgency <= HIGHURGENCYLEVEL) icon = highUrgencyIcon;
@@ -555,7 +556,7 @@ const deleteMini = (task) => {
     const project = task.getParent();
 
 
-    project.tasks.removeTask(task);
+   
     
     const taskCard = document.querySelector('.task');
     if (taskCard != null){
@@ -563,8 +564,9 @@ const deleteMini = (task) => {
     }
 
     // Refresh task list
-    renderTaskList(project);
 
+    deleteTask(task);
+   
 
 }
 

@@ -57,19 +57,7 @@ const storage = (() => {
    return newTask;
   }
 
-  const loadTasksToProject = (project) => {
 
-    const taskCount = project.tasks.taskCount;
-   
-    for (let i = 0; i <= taskCount; i++){
-      let task = loadTask(`${project.content.getID()}.${i}`)
-      console.log(task)
-      project.tasks.addTask(task);
-      task.setParent(project);
-
-    }
-
-  }
 
   const storeProj = (project) => {
 
@@ -77,6 +65,7 @@ const storage = (() => {
     const storageJSON = JSON.stringify(parseProj(project));
     console.log(`Storing project as ${storageName}.`)
     console.log(`Data to store: ${storageJSON}`)
+    console.log(`Project stored with ${project.tasks.taskCount}`)
 
     savedData.setItem(storageName, JSON.stringify(parseProj(project)))
     
@@ -86,16 +75,60 @@ const storage = (() => {
 
 
     const projData = JSON.parse(savedData.getItem(projectID));
-    
-    const loadedProject = Project(projData.title, projData.deadline, projData.priority, projData.description, projData.goal, projData["data-project-id"]);
-    loadTasksToProject(loadedProject);
-    return loadedProject;   
+    const taskCount = projData.taskIDs.length
+    console.log(projData.taskIDs);
+   
 
+    console.log(`There should be ${projData.taskCount} tasks`)
+    const loadedProject = Project(projData.title, projData.deadline, projData.priority, projData.description, projData.goal, projData["data-project-id"]);
+    
+   
+    
+
+    const loadTasksToProject = (project) => {
+
+      let tasks = projData.taskIDs;
+      console.log(`loading ${taskCount} tasks`);
+      for (let index in tasks){
+        console.log(index)
+        console.log(`loading task located at ${project.content.getID()}.${index}}`)
+        let task = loadTask(`${project.content.getID()}.${index}`)
+        project.tasks.addTask(task);
+        task.setParent(project);
+      }
+ 
+      
+      
+    
+     
+       // task.setParent(project);
+  
+      
+  
+    }
+   
+    loadTasksToProject(loadedProject);
+    return loadedProject;  
+
+  }
+
+  const deleteProject = (project) => {
+
+    const storageLoc = project.content.getID()
+    savedData.removeItem(storageLoc);
+
+  }
+
+  const deleteTask = (task) => {
+
+    const storageLoc = `${task.getParent().content.getID()}.${task.getID()}`
+    console.log(`removing item at ${storageLoc}`)
+    savedData.removeItem(storageLoc);
   }
 
 
 
-  return {storeProj, loadProject, storeTask, loadTask}
+  return {deleteProject, deleteTask, storeProj, loadProject, storeTask, loadTask}
 
 })();
 
@@ -116,8 +149,6 @@ const parseTask = (task) => {
 
   }
 
-  console.log(task.getStatus());
-
   return taskData;
 
 }
@@ -133,9 +164,12 @@ const projData = {
   "description": project.content.getDescription(),
   "goal": project.content.getGoal(),
   "data-project-id": project.content.getID(),
-  "taskCount": project.tasks.taskCount
+  "taskCount": project.tasks.getTaskCount(),
+  "taskIDs": project.tasks.getTaskIdList()
 }
 
+console.log(project.tasks.getTaskIdList() + " WTF?")
+console.log(projData.taskCount)
 return projData
 
 }

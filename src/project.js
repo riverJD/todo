@@ -36,12 +36,14 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
              setTaskID(task);
             _taskList.push(task)
             _taskIdList.push(task.getID())
+            console.log(_taskList.length)
         }
     
         const removeTask = (task) => {
             
             const taskElement = _taskList.indexOf(task);
             _taskList.splice(taskElement, 1); 
+            _taskIdList.splice(task.getID(), 1)
         }
     
         const completeTask = (task => {
@@ -74,9 +76,10 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
         const getTaskIdList = () => _taskIdList
         const getCompletedTasks = () => _completedTasks;
         const getInCompleteTasks = () => _incompleteTasks;
-        const taskCount = _taskList.length;
+        const getTaskCount = () => _taskList.length;
+        
 
-        return {clearFinishedList, removeComplete, taskCount, addTask, removeTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks, _taskList}
+        return {clearFinishedList, removeComplete, getTaskIdList ,getTaskCount, addTask, removeTask, completeTask, getTaskList, getCompletedTasks, getInCompleteTasks, _taskList}
 
     })();
   

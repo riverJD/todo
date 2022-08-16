@@ -12,7 +12,14 @@ const subHeader = element('div', {'id': 'sub-header'});
 const toggleStyle = element('input', {'type': 'button', 'id': 'style-toggle', 'value': 'switch mode'});
     toggleStyle.addEventListener('click', () => {loadProjects()})
 
+
+const clearStorage = element('input', {'type': 'button', 'id': 'clear-data', 'value': 'clear data'});
+    clearStorage.addEventListener('click', () => {clearSavedData()})
+
+
+
 header.appendChild(toggleStyle)
+header.appendChild(clearStorage);
 header.appendChild(stats);
 header.appendChild(subHeader);
 
@@ -25,6 +32,12 @@ const loadProjects = () => {
     console.log(storage.loadProject('0').content.getTitle());
     addNewProject(storage.loadProject('0'))
 
+}
+
+const clearSavedData = () => {
+
+    console.log("ERASING STORED DATA")
+    window.localStorage.clear();
 
 }
 
