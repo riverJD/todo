@@ -6,7 +6,7 @@ import { getUrgency, Task } from "./todo";
 import { Project } from "./project";
 import { projectList, renderProjectList } from "./content";
 import { renderTask, priorityStyle, toggleTaskStatus, editTask} from "./taskUI";
-import { UI } from "./settings";
+import { storage, UI } from "./settings";
 
 
 
@@ -45,6 +45,9 @@ const renderProject = (projectObject) => {
     container.style.display = 'flex';
     //const cards = document.querySelectorAll('.card');
     //cards.forEach(card => card.classList.add('blockscreen'))
+
+    // Store project data locally
+    storage.storeProj(projectObject);
 
 
     let proj = projectObject.content;

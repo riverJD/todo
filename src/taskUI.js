@@ -20,7 +20,7 @@ let focusedTask;
 const renderTask = (task) => {
 
     focusedTask = task;
-
+    storage.storeTask(task);
     // Values
    
     const oldTaskDOM = document.querySelector(".task");
@@ -277,7 +277,7 @@ const changePriority = (task, priority) => {
 
 const closeTask = (DOM) => {
 
-    storage.storeTask(focusedTask);
+   
     const project = document.querySelector('.project');
     project.classList.remove('blockproject');
 

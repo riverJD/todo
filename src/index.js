@@ -14,7 +14,7 @@ body.insertBefore(menu(), main);
 main.appendChild(projectContainer())
 main.appendChild(content());
 
-storage.loadDataFromStorage();
+//storage.loadDataFromStorage();
 
 
 //const testProj = renderProject(testProject);

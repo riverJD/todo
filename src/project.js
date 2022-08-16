@@ -113,7 +113,7 @@ const Project = (title = defaultProject.title, deadline = defaultProject.deadlin
         const getID = () => id;
 
 
-        return {getID, setTitle, getTitle, getDeadline, setDeadline, setDescription, getDescription, getContent, setPriority, getPriority, setGoal, getGoal, }
+        return {setID, getID, setTitle, getTitle, getDeadline, setDeadline, setDescription, getDescription, getContent, setPriority, getPriority, setGoal, getGoal, }
 })();
 
 

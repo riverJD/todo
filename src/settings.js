@@ -1,6 +1,9 @@
 
 // The idea is to store this seperately from the project, to allow for loading UI settings detached from data
 
+import { Project } from "./project";
+import { Task } from "./todo";
+
 const UI = (() => {
 
    
@@ -28,10 +31,13 @@ const storage = (() => {
   const storeTask = (task) => {
     
     // Store task in local storage with reference to parent and self id
-    let storageName = `${task.parent.content.getID()}.${task.getID()}`
-    console.log(storageName);
+    //console.log(task.getParent)
+    const parentProj = task.getParent();
+    const storageName = `${parentProj.content.getID()}.${task.getID()}`
+    console.log('storing task as ' + storageName);
     console.log(parseTask(task));
-    window.localStorage.setItem(storageName, JSON.stringify(parseTask(task)));
+    const taskStorage = JSON.stringify(parseTask(task));
+    window.localStorage.setItem(storageName, taskStorage);
   
     // loadTask(storageName);
     // console.log(window.localStorage.getItem(storageName));
@@ -42,47 +48,54 @@ const storage = (() => {
 
   const loadTask = (taskName) => {
 
-   const taskStorage = JSON.parse(savedData).getItem(taskName);
+   console.log(taskName)
+   const taskStorage = JSON.parse(savedData.getItem(taskName));
+   console.log(taskStorage)
+   console.log(taskStorage.completed)
    const newTask = Task(taskStorage.title, taskStorage.deadline, taskStorage.priority, taskStorage.description, taskStorage.taskID, taskStorage.completed, taskStorage.completionDate, taskStorage.repeat, taskStorage.parent);
+   
+   return newTask;
+  }
+
+  const loadTasksToProject = (project) => {
+
+    const taskCount = project.tasks.taskCount;
+   
+    for (let i = 0; i <= taskCount; i++){
+      let task = loadTask(`${project.content.getID()}.${i}`)
+      console.log(task)
+      project.tasks.addTask(task);
+      task.setParent(project);
+
+    }
+
   }
 
   const storeProj = (project) => {
 
-    let storageName = project.content.getID()
+    const storageName = project.content.getID();
+    const storageJSON = JSON.stringify(parseProj(project));
+    console.log(`Storing project as ${storageName}.`)
+    console.log(`Data to store: ${storageJSON}`)
 
     savedData.setItem(storageName, JSON.stringify(parseProj(project)))
     
   }
 
+  const loadProject = (projectID) => {
 
-  const loadDataFromStorage = () => {
 
-    let loadedTasks = [];
-    let loadedProjs = [];
+    const projData = JSON.parse(savedData.getItem(projectID));
     
-    const storageCount = savedData.length;
-    console.log(storageCount)
-  
-    for (let data of savedData){
-
-      if ('data-project-id' in data){
-      
-      loadedProjs.push(data)
-
-      }
-
-      
-    }
-
-    console.log(loadedProjs);
+    const loadedProject = Project(projData.title, projData.deadline, projData.priority, projData.description, projData.goal, projData["data-project-id"]);
+    loadTasksToProject(loadedProject);
+    return loadedProject;   
 
   }
 
 
 
-
-
-  return {storeTask, loadTask, loadDataFromStorage}
+  return {storeProj, loadProject, storeTask, loadTask}
 
 })();
 
@@ -99,9 +112,11 @@ const parseTask = (task) => {
     "completionDate": task.getCompletionDate(),
     "repeat": task.getRepeat(),
     "parent": task.getParent().content.getTitle()
-
+   
 
   }
+
+  console.log(task.getStatus());
 
   return taskData;
 
@@ -118,7 +133,7 @@ const projData = {
   "description": project.content.getDescription(),
   "goal": project.content.getGoal(),
   "data-project-id": project.content.getID(),
-  "taskCount": project.tasks.getTaskList().length
+  "taskCount": project.tasks.taskCount
 }
 
 return projData

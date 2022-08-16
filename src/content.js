@@ -21,7 +21,8 @@ const createWorkSpace = () => {
     const addProjectButton = element('input', {'type': 'image', 'src': newProjIcon, 'alt': "Create new project", 'class': 'content-button', 'id': 'add-new-project'});
         addProjectButton.addEventListener('click', () => {
             
-            workspace.insertBefore(addNewProject(), addProjectButton);            
+            const newProject = Project();
+            workspace.insertBefore(addNewProject(newProject), addProjectButton);            
             
 
 
@@ -40,17 +41,20 @@ const projectContainer = () => {
     return container;
 }
 
-const addNewProject = (proj) => {
-    let project;
-    (proj != null) ? project = proj : project = Project();
+const addNewProject = (project) => {
+  
+    
+    
     const card = renderProjectCard(project);
     projectList.addProject(project)
     project.content.setID(projectCount);
+    console.log(`debug:project count is ${projectCount}`)
     projectCount++;
     renderProject(project);
     return card;
 
 }
+
 
 const projectList = ((project) => {
 
