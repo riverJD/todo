@@ -12,9 +12,10 @@ import finishIcon from "./img/finish-task.svg";
 import { compare } from "semver";
 import { priorityStyle } from "./taskUI";
 import { addNewProject } from "./content";
-// Create cards to display projects in workspace
+import {storage, UI} from "./settings";
 
 
+// Create cards to display projects in workspace.  Cards are attached to Projects.
 
 // Create a card to represent the project in small detail, and return reference to the DOM object of that card.
 // The card is divided vertically into different sections which are customizable here
@@ -132,7 +133,7 @@ const openSettings = (parentButton, project) => {
 
 // Gear menu for quick access to various options
 const settingsMenu = (card, project) => {
-
+    
     const container = element('div', {'class': 'menu-container shift-left'});
     container.style.visibility = 'visible';
     const menu = element('div', {'class': 'context-menu', 'id': 'cog-menu'});
@@ -162,10 +163,9 @@ const settingsMenu = (card, project) => {
             finish.addEventListener('click', () => {finishProject(project)})        
         
     const del = element('li', {'class': 'menu-delete menu-item'});
+    console.log(project.content.getID());
     del.textContent = 'delete project';
-        del.addEventListener('click', () => {
-            console.log('cli')
-            deleteProject(project);
+        del.addEventListener('click', () => {storage.deleteProject(project);
         })
 
    

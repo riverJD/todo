@@ -6,8 +6,6 @@ import { Task } from "./todo";
 
 const UI = (() => {
 
-   
-
         let sortType = 'priority'
         let ascending = true
 
@@ -26,7 +24,10 @@ const storage = (() => {
 
   const savedData = window.localStorage;
   let taskCount = localStorage.length;
-  console.log(taskCount);
+  console.log('projects in storage: ' + taskCount);
+
+
+  const storageSize = () => taskCount;
 
   const storeTask = (task) => {
     
@@ -65,9 +66,9 @@ const storage = (() => {
     const storageJSON = JSON.stringify(parseProj(project));
     console.log(`Storing project as ${storageName}.`)
     console.log(`Data to store: ${storageJSON}`)
-    console.log(`Project stored with ${project.tasks.taskCount}`)
+    console.log(`Project stored with ${project.tasks.getTaskCount()}`)
 
-    savedData.setItem(storageName, JSON.stringify(parseProj(project)))
+    savedData.setItem(storageName, storageJSON);
     
   }
 
@@ -79,7 +80,8 @@ const storage = (() => {
     console.log(projData.taskIDs);
    
 
-    console.log(`There should be ${projData.taskCount} tasks`)
+    console.log(`There should be ${projData.taskCount} tasks\n Project location: ${projectID}`);
+    console.log(`Loading Project Data: ${projData}`);
     const loadedProject = Project(projData.title, projData.deadline, projData.priority, projData.description, projData.goal, projData["data-project-id"]);
     
    
@@ -112,15 +114,22 @@ const storage = (() => {
 
   }
 
+  // Load list of stored projects to active project list
+
+
+
   const deleteProject = (project) => {
 
-    const storageLoc = project.content.getID()
+    console.log(project.content.getID());
+    const storageLoc = project.content.getID();
+    console.log(`Attempting to delete data at ${storageLoc}`);;
     savedData.removeItem(storageLoc);
+    console.log(savedData)
 
   }
 
   const deleteTask = (task) => {
-
+    console.log(task)
     const storageLoc = `${task.getParent().content.getID()}.${task.getID()}`
     console.log(`removing item at ${storageLoc}`)
     savedData.removeItem(storageLoc);
@@ -128,7 +137,7 @@ const storage = (() => {
 
 
 
-  return {deleteProject, deleteTask, storeProj, loadProject, storeTask, loadTask}
+  return {deleteProject, deleteTask, storeProj, loadProject, storeTask, loadTask, storageSize}
 
 })();
 

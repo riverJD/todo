@@ -44,8 +44,6 @@ const projectContainer = () => {
 
 const addNewProject = (project) => {
   
-    
-
     const card = renderProjectCard(project);
     projectList.addProject(project)
     project.content.setID(projectCount);
@@ -53,7 +51,6 @@ const addNewProject = (project) => {
     projectCount++;
     renderProject(project);
     return card;
-
 }
 
 
@@ -81,6 +78,28 @@ const projectList = ((project) => {
 
 })();
 
+const loadProjectsFromStorage = () => {
+
+    const projectStoredCount = storage.storageSize();
+    console.log(projectStoredCount)
+    console.log(projectList.getProjects.length)
+    if (projectList.length != null){
+    
+        console.log ("Active Projects Exist")
+        console.log(projectList.length)
+        return;
+    }
+    console.log(`Attempting to load ${projectStoredCount} projects...`);
+    for (let i = 0; i < projectStoredCount; i++){
+        console.log(`Adding project[ ${i} ]`)
+        projectList.addProject(storage.loadProject(i));
+        console.log(projectList.getProjects.length)
+    } 
+    renderProjectList();
+
+}
+
+
 const renderProjectList = () => {
     
     const workSpace = document.querySelector('#workspace')
@@ -93,7 +112,7 @@ const renderProjectList = () => {
     })
     console.log(projectList.getProjects())
     for (let project of projectList.getProjects()){
-        
+        console.log(project.content.getID());
         const card = renderProjectCard(project)
         workSpace.insertBefore(card, workSpaceButton)
 
@@ -124,7 +143,7 @@ const switchDisplayStyle = () => {
 
 
 
-export {createWorkSpace as content, projectList, renderProjectList, addNewProject, switchDisplayStyle, projectContainer}
+export {createWorkSpace as content, projectList, renderProjectList, addNewProject, switchDisplayStyle, projectContainer, loadProjectsFromStorage}
 
 // Button for adding new project
 

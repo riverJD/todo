@@ -3,7 +3,7 @@ import defaultIcon from './img/close-task.svg';
 
 // Helper functions
 
-// create element of specific type, with attributes attached
+// Create element of specific type, with attributes attached
 const createElement = (type, attributes) => {
     
     const newElement = document.createElement(`${type}`);
@@ -13,7 +13,7 @@ const createElement = (type, attributes) => {
     return newElement;
 }
 
-// for appending multiple children in one call
+// For appending multiple children in one call
 const appendChildren = (parent, ...children) => {
 
 
@@ -49,6 +49,7 @@ const getDate = () => {
     return today;
 }
 
+// Set multiple attributes for an element at the same time
 function setAttributes(element, attributes)
 {
     Object.entries(attributes).forEach(([key, value]) => {
@@ -56,26 +57,21 @@ function setAttributes(element, attributes)
     });
 }
 
-// turn into object
+// Create an image as a link with one command
 function createImageLink(url, image, alt){
 
-    
     const ahref = createElement("a", {"class": "link", "href": url});
     const linkImage = createElement("img", {"class": "image-link", "src": image, "alt": alt});
 
     ahref.appendChild(linkImage);
 
     return ahref;
-    
-
 }
 
 // Make a generic display element, with a container, title, and content section
 // ID and class will be generated from name (string)
 // [Container]-->  [TitleContainer-->Title+Button] + Content
 const makeContainer = (name, inputImage) => {
-
- 
 
     const container = createElement('div', {'class': `${name.toLowerCase()}-container`})
     // Title and Button
@@ -85,7 +81,6 @@ const makeContainer = (name, inputImage) => {
     titleContainer.appendChild(title);
     titleContainer.appendChild(titleButton);
 
-
     const content = createElement('div', {'class':  `${name.toLowerCase()}-content`});
 
     title.textContent = name;
@@ -94,6 +89,7 @@ const makeContainer = (name, inputImage) => {
 
     return container;
 }
+
 
 const makeMenu = (menuName, tooltipText) => {
 
@@ -120,7 +116,6 @@ const makeMenu = (menuName, tooltipText) => {
 // return a radio object to be attached to a fieldset
 const  makeRadio = (name, selection, labelText, checked) => {
 
-   
 
     const container = createElement('div', {'class': 'radio-container form-element', 'id': `${name}-label-container`});         
     const label = createElement('label', {'for': `${name}`, "class": "form-label radio-label", "id": `${name}-label ${name}-${selection}`})    

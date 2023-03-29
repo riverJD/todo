@@ -1,4 +1,4 @@
-//  To do object, creation and modification
+//  To do object, creation and modification. Ocassionally referred to as a Task.
 
 // Helper functions located in utils file
 import { isThisSecond, isEqual, formatDistance, formatISO, format, getHours, differenceInHours } from 'date-fns';
@@ -23,7 +23,6 @@ const createTask = (title = task.title, deadline = task.deadline, priority = tas
     const setTitle = (newTitle) => {
         title = newTitle;
     }
-
     const getTitle = () => title;
 
     const setDescription = (newDescription) => {
@@ -42,13 +41,11 @@ const createTask = (title = task.title, deadline = task.deadline, priority = tas
     }
     const getPriority = () => priority;
  
- 
     const setParent = (newParent) => parent = newParent;
     const getParent = () => parent;
 
     const setID = (newID) => taskID = newID;
     const getID = () => taskID;
-
 
     const setStatus = (newStatus) => completed = newStatus;
     const getStatus = () => completed;

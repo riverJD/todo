@@ -43,8 +43,6 @@ const renderProject = (projectObject) => {
     // Remove interaction with rest of workspace;
     const container = document.querySelector("#project-container");
     container.style.display = 'flex';
-    //const cards = document.querySelectorAll('.card');
-    //cards.forEach(card => card.classList.add('blockscreen'))
 
     // Store project data locally
     storage.storeProj(projectObject);
@@ -62,15 +60,10 @@ const renderProject = (projectObject) => {
     // Loading of data into specified containers
     const renderData = () => {
         
-        // create titgle bar
+        // create title bar
         const title = () => {
-
-
             const title = element('h2', {'class': "project-title project-item"});
-            title.textContent = projectTitle;
-           
-
-           
+            title.textContent = projectTitle;          
             return title;
         }
         content.appendChild(title());
